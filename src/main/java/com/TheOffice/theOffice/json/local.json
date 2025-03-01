@@ -1,0 +1,26 @@
+{
+  "local": [
+    {
+      "level": "Petit local",
+      "size": 5000,
+      "rent": 10000,
+      "max_employees": 10,
+      "max_machines": 3
+    },
+    {
+      "level": "Moyenne machine",
+      "size": 12000,
+      "rent": 1000000,
+      "max_employees": 100,
+      "max_machines": 15
+    },
+    {
+      "level": "Grande machine",
+      "size": 30000,
+      "rent": 12000000,
+      "max_employees": 1000,
+      "max_machines": 50
+    }
+  ]
+}
+

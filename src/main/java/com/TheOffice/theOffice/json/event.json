@@ -1,0 +1,605 @@
+{
+  "events": [
+    {
+      "title": "Grève des salariés - demande d'augmentation",
+      "description": "Un mouvement social secoue votre entreprise : les salariés réclament une revalorisation salariale. Cette décision pourrait impacter aussi bien votre gestion financière que l’image de votre société. Allez-vous accéder à leur demande ou maintenir votre position ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1" : {
+        "costs": 1.1, //coefficient de 1.2
+        "mood": 1, // +1
+        "production": 0, //aucun impact
+        "popularity": 1.1 // coefficient de 1.1
+      },
+      "consequencesChoice2" : {
+        "costs": 1, //aucun impact
+        "mood": -1, // -1
+        "production": 0.8, // coefficient de 0.8
+        "popularity": 0.9 // coefficient de 0.9
+      }
+    },
+    {
+      "title": "Pandémie = inflation",
+      "description":"Une nouvelle vague de pandémie frappe votre région. Face à l'incertitude, vous devez décider : mettre votre entreprise en pause pour protéger vos employés et renforcer votre image, ou maintenir la production à tout prix pour assurer la stabilité financière, quitte à risquer des tensions ? Quel choix ferez-vous ?",
+      "firstChoice": "Arrêt de l'entreprise pendant 1 semaine",
+      "SecondChoice": "Continuité de la production",
+      "consequencesChoice1": {
+        "costs": 0.7,
+        "mood": 0,
+        "production": 0.7,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Demande de formation des salariés",
+      "description" : "Vos salariés expriment le besoin de suivre une formation pour améliorer leurs compétences. Cette initiative pourrait impacter l’avenir de votre entreprise, mais représente aussi un investissement. Accepterez-vous de financer leur développement ou choisirez-vous de préserver vos ressources ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Panne d'une machine",
+      "description": "Une machine essentielle à votre production vient de tomber en panne. Vous avez deux options : effectuer une réparation immédiate accompagnée d’une révision préventive des autres machines, ou vous contenter de réparer uniquement celle qui est défectueuse. Quelle approche choisirez-vous ?",
+      "firstChoice": "On la répare et on révise les autres",
+      "SecondChoice": "On la répare sans réviser les autres",
+      "consequencesChoice1": {
+        "costs": 1.3,
+        "mood": 0,
+        "production": 1.2,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1.2,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Installation d'un nouveau concurrent dans le secteur",
+      "description" : "Un nouvel acteur fait son entrée sur le marché et risque de capter une part de votre clientèle. Face à cette concurrence, vous pouvez réagir en renforçant votre position ou choisir d’observer sans modifier votre stratégie. Quelle sera votre approche ?",
+      "firstChoice": "Passer à l'offensive",
+      "SecondChoice": "Ne rien faire",
+      "consequencesChoice1": {
+        "costs": 1.2,
+        "mood": 0,
+        "production": 1.2,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 0.7,
+        "popularity": 0.8
+      }
+    },
+    {
+      "title": "Accident de travail (durée : jusqu'au prochain cycle)",
+      "description" : "Un accident de travail vient de se produire, mettant temporairement un salarié hors service. Vous devez décider si vous comblez immédiatement son absence en recrutant un remplaçant ou si vous choisissez d’attendre son retour, au risque de ralentir la production. Quelle sera votre décision ?",
+      "firstChoice": "Remplacer",
+      "SecondChoice": "Ne rien faire",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1.2,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -1,
+        "production": 0.9,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Optimisation fiscale illégale ?",
+      "description": "Un conseiller vous propose une stratégie d’optimisation fiscale aux contours juridiques flous. Cette solution permettrait de réduire vos coûts, mais comporte peut-être des risques. Allez-vous saisir cette opportunité ou rester dans une gestion plus prudente ?",
+      "firstChoice": "Oui",
+      "SecondChoice": "Non",
+      "consequencesChoice1": {
+        "costs": 0.7,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Entrer en bourse",
+      "description" : "Votre entreprise a atteint une taille qui lui permet d’entrer en bourse. Cette opportunité pourrait dynamiser votre croissance, mais implique aussi de nouvelles contraintes et attentes de la part des investisseurs. Allez-vous franchir le pas ou rester indépendant ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 0.8,
+        "mood": 0,
+        "production": 1.2,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Proposition de fusion",
+      "description" : "Une entreprise concurrente vous propose une fusion. Cette opportunité pourrait renforcer votre position sur le marché, mais risque aussi de bouleverser votre organisation interne. Allez-vous accepter cette offre ou rester indépendant ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.2,
+        "mood": -2,
+        "production": 1.2,
+        "popularity": 1.2
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 1,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Panne d'électricité",
+      "description" : "Une panne d'électricité soudaine a plongé votre entreprise dans l'obscurité, perturbant les opérations et créant un sentiment d'urgence parmi vos employés58. En tant que dirigeant, vous devez prendre une décision rapide pour résoudre cette situation critique. Allez-vous opter pour une approche approfondie en réparant et vérifiant l'ensemble du système électrique, ou préférez-vous une solution plus rapide en vous concentrant uniquement sur la réparation de la panne actuelle ?",
+      "firstChoice": "Réparer et vérifier le système électrique",
+      "SecondChoice": "Réparer uniquement la panne sans faire de vérification",
+      "consequencesChoice1": {
+        "costs": 1.2,
+        "mood": -1,
+        "production": 0.8,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1.1,
+        "mood": -1,
+        "production": 0.9,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Demande d'augmentation des salaires",
+      "description" : "Une délégation de vos employés vient de vous soumettre une demande formelle d'augmentation des salaires. Ils arguent que le coût de la vie a augmenté et que leurs efforts ont contribué à la croissance de l'entreprise. En tant que dirigeant, vous devez peser soigneusement les implications de votre décision. Allez-vous accéder à leur demande, reconnaissant ainsi leur contribution et leurs besoins, ou devrez-vous la refuser, privilégiant la stabilité financière de l'entreprise ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.2,
+        "mood": 2,
+        "production": 1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -2,
+        "production": 0.9,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Congés parentales jusqu'à la fin du cycle",
+      "description" : "Un de vos employés clés vient d'annoncer qu'il prendra un congé parental prolongé jusqu'à la fin du cycle de production actuel. Cette nouvelle soulève des questions importantes sur la gestion de la charge de travail et le maintien de la productivité de l'équipe. En tant que dirigeant, vous devez décider de la meilleure façon de gérer cette situation. Allez-vous recruter un remplaçant temporaire pour assurer la continuité des opérations, ou préférez-vous répartir les tâches entre les membres de l'équipe existante ?",
+      "firstChoice": "Remplacer",
+      "SecondChoice": "Ne rien faire",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -1,
+        "production": 0.9,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Arrêt maladie jusqu'à la fin du cycle",
+      "description" : "Un membre important de votre équipe vient d'être placé en arrêt maladie pour une durée indéterminée, qui pourrait s'étendre jusqu'à la fin du cycle de production actuel. Cette situation inattendue soulève des inquiétudes quant à la répartition des tâches et au maintien du rythme de travail. En tant que dirigeant, vous devez prendre une décision rapide pour gérer cette absence. Allez-vous embaucher un remplaçant temporaire pour combler le vide laissé par cet employé, ou préférez-vous redistribuer ses responsabilités au sein de l'équipe existante ?",
+      "firstChoice": "Remplacer",
+      "SecondChoice": "Ne rien faire",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -1,
+        "production": 0.9,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Chute du marché",
+      "description" : "Une soudaine chute du marché secoue votre secteur d'activité, menaçant la stabilité de votre entreprise et celle de vos concurrents. Cette situation critique vous place face à un dilemme stratégique crucial. En tant que dirigeant, vous devez décider rapidement de la meilleure façon de naviguer dans ces eaux tumultueuses. Allez-vous saisir cette opportunité pour investir davantage dans la recherche et le développement, espérant ainsi vous démarquer lorsque le marché se redressera ? Ou préférez-vous adopter une approche plus prudente en maintenant l'activité actuelle, dans l'espoir que la tempête passe d'elle-même ?",
+      "firstChoice": "Investir des frais en recherche et développement",
+      "SecondChoice": "Ne rien faire",
+      "consequencesChoice1": {
+        "costs": 1.2,
+        "mood": 0,
+        "production": 0.8,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 0.6,
+        "popularity": 0.8
+      }
+    },
+    {
+      "title": "Départ à la retraite",
+      "description" : "Un employé de longue date, pilier de votre entreprise, vient d'annoncer son départ à la retraite imminent. Avec lui, c'est une mine de connaissances et d'expérience qui s'apprête à quitter vos rangs. Cette transition soulève des questions importantes sur la continuité des opérations et le transfert des compétences. En tant que dirigeant, vous devez décider de la meilleure façon de gérer ce changement. Allez-vous recruter un nouveau talent pour combler ce poste vacant, apportant potentiellement de nouvelles idées à l'entreprise ? Ou préférez-vous redistribuer les responsabilités au sein de l'équipe existante, capitalisant sur les compétences internes ?",
+      "firstChoice": "Remplacer",
+      "SecondChoice": "Ne rien faire",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -1,
+        "production": 0.9,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Demande d'absence de maintenance des machines sur un temps donné",
+      "description" : "Votre équipe de production a soumis une proposition audacieuse : suspendre temporairement la maintenance régulière des machines pour augmenter la cadence de production. Ils argumentent que cela permettrait de répondre à une demande croissante du marché. Cependant, cette décision n'est pas sans risque pour la longévité et la fiabilité de vos équipements. En tant que dirigeant, vous devez évaluer soigneusement les avantages et les inconvénients de cette stratégie. Allez-vous accepter cette demande, privilégiant une augmentation à court terme de la production ? Ou préférez-vous maintenir le programme de maintenance habituel, assurant ainsi la stabilité et la sécurité des opérations ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 0.9,
+        "mood": -1,
+        "production": 1.1,
+        "popularity": 0.9
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Demande de collaboration",
+      "description" : "Une entreprise innovante de votre secteur vous a récemment approché avec une proposition de collaboration intéressante. Ils suggèrent de combiner vos ressources et expertises sur un projet commun qui pourrait potentiellement révolutionner le marché. Cette opportunité semble prometteuse, mais elle comporte également des risques et des incertitudes. En tant que dirigeant, vous devez évaluer soigneusement les implications de cette alliance potentielle. Allez-vous accepter cette collaboration, ouvrant ainsi de nouvelles perspectives pour votre entreprise ? Ou préférez-vous décliner l'offre, conservant votre indépendance et votre focus actuel ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 0.9,
+        "mood": 0,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Recrutement ou non de stagiaire",
+      "description" : "Votre département des ressources humaines vous a présenté une opportunité de recruter des stagiaires pour la prochaine période. Cette initiative pourrait apporter un nouveau dynamisme à l'entreprise et potentiellement révéler de futurs talents. Cependant, l'encadrement de stagiaires nécessite du temps et des ressources. En tant que dirigeant, vous devez peser les avantages et les inconvénients de cette décision. Allez-vous accueillir ces jeunes talents, investissant ainsi dans l'avenir de votre entreprise et dans la formation de la prochaine génération de professionnels ? Ou préférez-vous maintenir votre structure actuelle, vous concentrant sur les employés déjà en place ?",
+      "firstChoice": "Oui",
+      "SecondChoice": "Non",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 1,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Recrutement ou non d'alternants",
+      "description" : "Votre service des ressources humaines vous a soumis une proposition pour recruter des alternants dans différents départements de l'entreprise. Cette initiative pourrait apporter un mélange unique de formation académique et d'expérience pratique à votre équipe. Cependant, l'intégration et l'encadrement d'alternants nécessitent un investissement en temps et en ressources. En tant que dirigeant, vous devez évaluer attentivement cette opportunité. Allez-vous ouvrir vos portes à ces jeunes talents en formation, contribuant ainsi à leur développement professionnel tout en bénéficiant de leurs compétences émergentes ? Ou préférez-vous maintenir votre structure actuelle, en vous concentrant sur les employés à temps plein déjà en place ?",
+      "firstChoice": "Oui",
+      "SecondChoice": "Non",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 1,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Contrôle de l'URSSAF",
+      "description" : "Un contrôleur de l'URSSAF se présente à l'entrée de votre entreprise pour effectuer une inspection. Cette visite inattendue vous place face à un dilemme crucial. En tant que dirigeant, vous devez décider rapidement de la manière de gérer cette situation délicate. Allez-vous tenter de bloquer l'entrée du contrôleur, espérant ainsi éviter ou retarder l'inspection ? Ou choisirez-vous de coopérer pleinement en laissant entrer le contrôleur, démontrant ainsi votre transparence et votre respect des procédures ?",
+      "firstChoice": "Bloquer l'entrée du contrôleur",
+      "SecondChoice": "Laisser entrer le contrôleur",
+      "consequencesChoice1": {
+        "costs": 1.3,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.9
+      },
+      "consequencesChoice2legal": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      },
+      "consequencesChoice2illegal": {
+        "costs": 1.6,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.5
+      }
+    },
+    {
+      "title": "Demande de prime de Noël",
+      "description" : "À l'approche des fêtes de fin d'année, les représentants du personnel vous ont soumis une demande de prime de Noël pour l'ensemble des employés. Ils argumentent que cette prime serait un geste fort de reconnaissance pour les efforts fournis tout au long de l'année et contribuerait à renforcer l'esprit d'équipe. En tant que dirigeant, vous devez évaluer cette proposition en tenant compte de ses implications financières et de son impact sur le moral des troupes. Allez-vous accéder à cette demande, offrant ainsi un bonus festif à vos employés ? Ou préférez-vous maintenir le statu quo, privilégiant la stabilité financière de l'entreprise ?",
+      "firstChoice": "Accepter la proposition",
+      "SecondChoice": "Refuser la proposition",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 2,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -1,
+        "production": 0.9,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Grêve des salariés - amélioration du bien-être au travail",
+      "description" : "Une grève des salariés vient d'éclater dans votre entreprise, réclamant une amélioration significative du bien-être au travail. Les employés, unis dans leur mouvement, exigent des changements concrets pour améliorer leurs conditions de travail et leur qualité de vie professionnelle. Face à cette mobilisation, vous vous trouvez à un carrefour décisionnel crucial. Allez-vous accéder aux demandes des salariés, reconnaissant ainsi l'importance du bien-être au travail et investissant dans l'amélioration des conditions de travail ? Ou choisirez-vous de maintenir le statu quo, privilégiant la stabilité financière à court terme de l'entreprise ?",
+      "firstChoice": "Donner ce que veulent les salariés",
+      "SecondChoice": "Ne pas donner ce que veulent les salariés",
+      "consequencesChoice1": {
+        "costs": 1.2,
+        "mood": 2,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -2,
+        "production": 0.8,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Demande de mise en place d'un séminaire",
+      "description" : "Les représentants du personnel vous ont soumis une proposition intéressante : organiser un séminaire d'entreprise. Ils argumentent que cet événement pourrait renforcer la cohésion d'équipe, stimuler la créativité et offrir une opportunité unique de réflexion collective sur l'avenir de l'entreprise. Cependant, l'organisation d'un tel événement nécessiterait un investissement en temps et en ressources. En tant que dirigeant, vous devez évaluer cette proposition en pesant ses avantages potentiels et ses implications pratiques. Allez-vous donner votre feu vert à ce projet de séminaire, misant sur ses bénéfices à long terme pour l'entreprise ? Ou préférez-vous décliner cette proposition, privilégiant la continuité des opérations quotidiennes ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 1,
+        "production": 1.1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Demande de mise en place d'une journée parents/enfants",
+      "description" : "Le comité d'entreprise vous a récemment présenté une idée innovante : organiser une journée parents/enfants au sein de l'entreprise. Cette initiative viserait à permettre aux employés de partager leur environnement de travail avec leurs enfants, favorisant ainsi une meilleure compréhension de la vie professionnelle des parents et renforçant le lien entre vie personnelle et professionnelle. Cependant, l'organisation d'un tel événement nécessiterait une planification minutieuse et pourrait avoir un impact sur les opérations quotidiennes. En tant que dirigeant, vous devez évaluer cette proposition en considérant ses potentiels bénéfices pour le moral des employés et l'image de l'entreprise, tout en tenant compte des défis logistiques et de productivité qu'elle pourrait engendrer. Allez-vous donner votre accord pour cette journée spéciale, pariant sur son impact positif sur l'ambiance de travail ? Ou préférez-vous maintenir la séparation traditionnelle entre vie professionnelle et personnelle ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 1,
+        "production": 0.9,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Réalisation d'une interview sur une chaine TV locale",
+      "description" : "Une chaîne de télévision locale vous a contacté pour réaliser une interview sur votre entreprise. Cette opportunité unique pourrait accroître considérablement la visibilité de votre société et renforcer sa crédibilité auprès du public. Cependant, vous devez décider de l'angle à adopter pour cette interview. Allez-vous mettre l'accent sur les réalisations et les perspectives de l'entreprise, soulignant ainsi sa position sur le marché et ses ambitions ? Ou choisirez-vous plutôt de mettre en avant votre personnel, leurs compétences et leur contribution au succès de l'entreprise ?",
+      "firstChoice": "Valoriser l'entreprise",
+      "SecondChoice": "Valoriser le personnel",
+      "consequencesChoice1": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 1,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Proposition d'une visite du président",
+      "description" : "Une nouvelle inattendue vient de tomber : le Président de la République souhaite inclure votre entreprise dans son prochain déplacement officiel axé sur l'innovation et l'économie locale. Cette visite présidentielle potentielle représente une opportunité rare de mettre en lumière votre entreprise à l'échelle nationale. Cependant, accueillir une telle personnalité nécessiterait une préparation minutieuse et pourrait perturber temporairement le fonctionnement habituel de l'entreprise. En tant que dirigeant, vous devez évaluer cette proposition en tenant compte de ses implications à court et long terme. Allez-vous accepter cet honneur, misant sur les retombées positives d'une telle exposition médiatique ? Ou préférez-vous décliner poliment, privilégiant la stabilité et la continuité de vos opérations ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 0.9,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.1
+      }
+    },
+    {
+      "title": "Investir dans un site Internet",
+      "description" : "Votre équipe marketing a récemment proposé d'investir dans la création d'un site Internet de l'entreprise. Ils argumentent que dans l'ère numérique actuelle, une présence en ligne solide est cruciale pour la visibilité et la crédibilité de l'entreprise. Ce projet pourrait potentiellement ouvrir de nouvelles opportunités commerciales et améliorer la communication avec les clients. Cependant, le développement d'un site web professionnel nécessite un investissement financier et en ressources humaines. En tant que dirigeant, vous devez évaluer si les bénéfices potentiels d'une présence en ligne renforcée justifient cet investissement. Allez-vous donner le feu vert à ce projet digital, pariant sur son impact positif à long terme ? Ou préférez-vous maintenir le statu quo, concentrant vos ressources sur d'autres aspects de l'entreprise ?",
+      "firstChoice": "Oui",
+      "SecondChoice": "Non",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Proposition d'une publicité au cinéma",
+      "description" : "Une agence de publicité vous a récemment approché avec une proposition intrigante : diffuser une publicité pour votre entreprise dans les salles de cinéma locales avant les films. Ils argumentent que ce format offre une opportunité unique de captiver l'attention d'un public diversifié dans un environnement immersif. Cette campagne pourrait potentiellement augmenter la notoriété de votre marque et atteindre de nouveaux segments de clientèle. Cependant, la production d'une publicité de qualité cinématographique et l'achat d'espace publicitaire représentent un investissement conséquent. En tant que dirigeant, vous devez évaluer si les bénéfices potentiels de cette exposition médiatique justifient les coûts associés. Allez-vous donner le feu vert à ce projet publicitaire innovant, pariant sur son impact visuel et émotionnel ? Ou préférez-vous conserver vos ressources pour d'autres initiatives marketing plus traditionnelles ?",
+      "firstChoice": "Accepter",
+      "SecondChoice": "Refuser",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 1,
+        "production": 1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Un tweet dénonce un fait réél qui dénigre l'entreprise",
+      "description" : "Un tweet critiquant votre entreprise vient d'être publié, mettant en lumière un fait réel qui ternit votre image. Cette situation délicate vous place face à un dilemme crucial en tant que dirigeant. Allez-vous choisir de répondre directement au tweet, démontrant ainsi votre engagement à traiter les problèmes de front et à maintenir un dialogue ouvert avec le public ? Ou préférez-vous ne pas répondre et signaler le tweet, espérant ainsi limiter sa visibilité et son impact potentiel ?",
+      "firstChoice": "Répondre au tweet",
+      "SecondChoice": "Ne pas répondre au tweet et le signaler",
+      "consequencesChoice1": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.8
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 0.9
+      }
+    },
+    {
+      "title": "Un tweet dénonce un fait imaginaire qui dénigre l'entreprise",
+      "description" : "Un tweet contenant des dénonciations vient d'être publié, dénigrant votre entreprise sur la base de faits totalement imaginaires. Cette désinformation se propage rapidement sur les réseaux sociaux, menaçant potentiellement la réputation que vous avez soigneusement construite. En tant que dirigeant, vous devez décider rapidement de la meilleure façon de gérer cette situation délicate. Allez-vous choisir de répondre directement au tweet, rétablissant la vérité et défendant l'intégrité de votre entreprise publiquement ? Ou préférez-vous ne pas répondre et simplement signaler le tweet à la plateforme, espérant ainsi limiter sa visibilité sans attirer davantage l'attention sur ces fausses allégations ?",
+      "firstChoice": "Répondre au tweet",
+      "SecondChoice": "Ne pas répondre au tweet et le signaler",
+      "consequencesChoice1": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.2
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.1
+      }
+    },
+    {
+      "title": "Un journaliste dénonce l'harcèlement du meilleur salarié de l'entreprise",
+      "description" : "Un journaliste vient de publier un article dénonçant des comportements de harcèlement attribués à votre meilleur employé. Cette révélation place votre entreprise dans une situation délicate, mettant en lumière des enjeux cruciaux de culture d'entreprise, de productivité et d'image publique. En tant que dirigeant, vous êtes confronté à un dilemme complexe qui nécessite une réflexion approfondie.\n\nAllez-vous prendre la décision difficile de licencier cet employé performant, démontrant ainsi votre engagement ferme contre le harcèlement et votre volonté de maintenir un environnement de travail sain ? Ou choisirez-vous de le conserver, misant sur sa valeur pour l'entreprise tout en cherchant d'autres moyens de résoudre la situation ?",
+      "firstChoice": "Licencier le salarié",
+      "SecondChoice": "Conserver le salarié",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 2,
+        "production": 0.8,
+        "popularity": 1.2
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": -2,
+        "production": 0.9,
+        "popularity": 0.8
+      }
+    },
+    {
+      "title": "Participer à un salon de l'entreprise",
+      "description" : "Votre équipe marketing vient de vous présenter une opportunité intéressante : participer à un important salon professionnel de votre secteur. Ce salon rassemble chaque année les acteurs majeurs de l'industrie, offrant une plateforme unique pour présenter vos produits, établir des contacts et rester à l'affût des dernières tendances du marché.\n\nEn tant que dirigeant, vous devez évaluer si cette participation est stratégiquement bénéfique pour votre entreprise. D'un côté, le salon pourrait vous offrir une visibilité accrue, des opportunités de networking précieuses et potentiellement de nouveaux clients ou partenaires. De l'autre, la participation nécessite un investissement significatif en temps, en ressources humaines et financières, sans garantie de retour immédiat.\n\nAllez-vous saisir cette occasion de mettre en avant votre entreprise sur cette scène professionnelle importante ? Ou préférez-vous allouer ces ressources à d'autres initiatives marketing plus ciblées ?",
+      "firstChoice": "Oui",
+      "SecondChoice": "Non",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    },
+    {
+      "title": "Sponsoriser un club de football",
+      "description" : "Une opportunité unique vient de se présenter à votre entreprise : devenir sponsor officiel d'un club de football local. Cette proposition soulève des questions intéressantes sur votre stratégie de marketing et votre engagement communautaire.\n\nEn tant que dirigeant, vous devez évaluer soigneusement les implications de cette décision. Le sponsoring sportif pourrait offrir une visibilité accrue à votre marque, touchant un public passionné et fidèle. Il pourrait également renforcer votre image d'entreprise engagée dans la vie locale et potentiellement ouvrir de nouvelles opportunités de networking.\n\nCependant, un tel partenariat représente aussi un investissement financier significatif, sans garantie de retour immédiat. De plus, l'association avec une équipe sportive comporte ses propres risques, liés aux performances de l'équipe ou à d'éventuelles controverses.\n\nAllez-vous saisir cette opportunité de lier votre marque à la passion du football et à l'esprit communautaire ? Ou préférez-vous conserver vos ressources pour d'autres initiatives marketing plus traditionnelles ou ciblées ?",
+      "firstChoice": "Oui",
+      "SecondChoice": "Non",
+      "consequencesChoice1": {
+        "costs": 1.1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1.1
+      },
+      "consequencesChoice2": {
+        "costs": 1,
+        "mood": 0,
+        "production": 1,
+        "popularity": 1
+      }
+    }
+  ]
+}
+
