@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS Local
     rent          DECIMAL(10, 2)     NOT NULL,
     maxEmployees INT                NOT NULL,
     maxMachines  INT                NOT NULL,
+    background_image LONGBLOB NOT NULL,
     id_company    INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );

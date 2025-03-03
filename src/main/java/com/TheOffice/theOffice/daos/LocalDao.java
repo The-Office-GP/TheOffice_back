@@ -48,7 +48,7 @@ public class LocalDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Local non trouvé"));
     }
 
-    public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, Byte background_image, Long id_company) {
+    public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {
         String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -60,7 +60,7 @@ public class LocalDao {
             ps.setBigDecimal(3, rent);
             ps.setInt(4, maxEmployees);
             ps.setInt(5, maxMachines);
-            ps.setByte(6, background_image);
+            ps.setBytes(6, background_image);
             ps.setLong(7, id_company);
             return ps;
         }, keyHolder);
