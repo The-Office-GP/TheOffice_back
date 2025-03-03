@@ -31,6 +31,7 @@ public class LocalDao {
             rs.getBigDecimal("rent"),
             rs.getInt("maxEmployees"),
             rs.getInt("maxMachines"),
+            rs.getBytes("background_image"),
             rs.getLong("id_company")
     );
 
@@ -47,8 +48,8 @@ public class LocalDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Local non trouvé"));
     }
 
-    public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, Long id_company) {
-        String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, id_company) VALUES (?, ?, ?, ?, ?, ?)";
+    public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, Byte background_image, Long id_company) {
+        String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -59,7 +60,8 @@ public class LocalDao {
             ps.setBigDecimal(3, rent);
             ps.setInt(4, maxEmployees);
             ps.setInt(5, maxMachines);
-            ps.setLong(6, id_company);
+            ps.setByte(6, background_image);
+            ps.setLong(7, id_company);
             return ps;
         }, keyHolder);
 
@@ -71,8 +73,8 @@ public class LocalDao {
             throw new ResourceNotFoundException("Local avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Local SET level = ?, size = ?, rent = ?, maxEmployees = ?, maxMachines = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, local.getLevel().name(), local.getSize(), local.getRent(), local.getMaxEmployees(), local.getMaxMachines(), local.getId_company(), id);
+        String sql = "UPDATE Local SET level = ?, size = ?, rent = ?, maxEmployees = ?, maxMachines = ?, background_image = ?, id_company = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, local.getLevel().name(), local.getSize(), local.getRent(), local.getMaxEmployees(), local.getMaxMachines(), local.getBackground_image(),local.getId_company(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du local avec l'ID : " + id);

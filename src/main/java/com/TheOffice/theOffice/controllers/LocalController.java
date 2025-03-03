@@ -36,9 +36,10 @@ public class LocalController {
         BigDecimal rent = new BigDecimal(request.get("rent").toString());
         Integer maxEmployees = (Integer) request.get("maxEmployees");
         Integer maxMachines = (Integer) request.get("maxMachines");
+        Byte background_image = (Byte) request.get("background_image");
         Long id_company = ((Number) request.get("id_company")).longValue();
 
-        int id_local = localDao.save(level, size, rent, maxEmployees, maxMachines, id_company);
+        int id_local = localDao.save(level, size, rent, maxEmployees, maxMachines, background_image,id_company);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "id_local", id_local,
@@ -47,6 +48,7 @@ public class LocalController {
                 "rent", rent,
                 "maxEmployees", maxEmployees,
                 "maxMachines", maxMachines,
+                "background_image", background_image,
                 "id_company", id_company
         ));
     }
