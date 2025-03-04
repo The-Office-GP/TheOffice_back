@@ -13,12 +13,12 @@ public class Employee {
     private Status status;
     private Job job;
     private Integer health;
-    private String image;
+    private byte[] image;
 
     public Employee() {
     }
 
-    public Employee(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, String image) {
+    public Employee(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, byte [] image) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -62,7 +62,7 @@ public class Employee {
     public Integer getHealth() { return health; }
     public void setHealth(Integer health) { this.health = health; }
 
-    public String getImage() {return image;}
-    public void setImage(String image) {this.image = image;}
+    public byte [] getImage() {return image;}
+    public void setImage(byte[] image) {this.image = image;}
 }
 

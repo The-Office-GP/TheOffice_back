@@ -40,7 +40,7 @@ public class EmployeeController {
         String status = String.valueOf(employee.getStatus());
         String job = String.valueOf(employee.getJob());
         Integer health = employee.getHealth();
-        String image = employee.getImage();
+        byte[] image = employee.getImage();
 
         int id_employee = employeeDao.save(name, gender, seniority, salary, level, mood, status, job, health, image);
         employee.setId((long) id_employee);
