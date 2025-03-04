@@ -17,6 +17,7 @@ public class User {
     private String role;
     private BigDecimal wallet;
 
+
     // Constructor
     public User(Long id,String email, String username, String password, String role, BigDecimal wallet) {
         this.id = id;
@@ -25,6 +26,9 @@ public class User {
         this.password = password;
         this.role = role;
         this.wallet = wallet;
+    }
+
+    public User(String email, String encode, String user) {
     }
 
     // Getters and Setters
