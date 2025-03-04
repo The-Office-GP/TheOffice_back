@@ -40,6 +40,20 @@ public class UserDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvée"));
     }
 
+    public User findByEmail(String email) {
+        String sql = "SELECT * FROM User WHERE email = ?";
+        return jdbcTemplate.query(sql, userRowMapper, email)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvée"));
+    }
+
+    public boolean save(User user) {
+        String sql = "INSERT INTO `user` (email, password, role) VALUES (?, ?, ?)";
+        int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getRole());
+        return rowsAffected > 0;
+    }
+
     public List<User> findAll(){
         String sql = "SELECT * FROM User";
         return jdbcTemplate.query(sql, userRowMapper);
@@ -85,5 +99,10 @@ public class UserDao {
     public boolean userExists(Long id) {
         String sql = "SELECT COUNT(*) FROM User WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
+    }
+
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, email) > 0;
     }
 }
