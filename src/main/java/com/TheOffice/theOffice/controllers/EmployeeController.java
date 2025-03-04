@@ -5,9 +5,13 @@ import com.TheOffice.theOffice.entities.Employee.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employees")
@@ -28,23 +32,44 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDao.findById(id));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        Long id = employee.getId();
-        String name = employee.getName();
-        String gender = String.valueOf(employee.getGender());
-        Integer seniority = employee.getSeniority();
-        BigDecimal salary = employee.getSalary();
-        Integer level = employee.getLevel();
-        String mood = String.valueOf(employee.getMood());
-        String status = String.valueOf(employee.getStatus());
-        String job = String.valueOf(employee.getJob());
-        Integer health = employee.getHealth();
-        byte[] image = employee.getImage();
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
+    public ResponseEntity<Map<String, Object>> createEmployee(
+            @RequestParam("name") String name,
+            @RequestParam("gender") String gender,
+            @RequestParam("seniority") Integer seniority,
+            @RequestParam("salary") BigDecimal salary,
+            @RequestParam("level") Integer level,
+            @RequestParam("mood") String mood,
+            @RequestParam("status") String status,
+            @RequestParam("job") String job,
+            @RequestParam("health") Integer health,
+            @RequestParam("image") MultipartFile image) {
 
-        int id_employee = employeeDao.save(name, gender, seniority, salary, level, mood, status, job, health, image);
-        employee.setId((long) id_employee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
+        try {
+            byte[] imageBytes = image.getBytes(); // ✅ Convertir l'image en byte[]
+
+            int id_employee = employeeDao.save(name, gender, seniority, salary, level, mood, status, job, health, imageBytes);
+
+            // ✅ Utilisation de HashMap pour contourner la limite de 10 arguments
+            Map<String, Object> response = new HashMap<>();
+            response.put("id_employee", id_employee);
+            response.put("name", name);
+            response.put("gender", gender);
+            response.put("seniority", seniority);
+            response.put("salary", salary);
+            response.put("level", level);
+            response.put("mood", mood);
+            response.put("status", status);
+            response.put("job", job);
+            response.put("health", health);
+            response.put("image", "Uploaded Successfully");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "error", "Erreur lors du traitement de l'image"
+            ));
+        }
     }
 
     @PutMapping("/{id}")
