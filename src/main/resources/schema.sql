@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS Machine
     production_quality ENUM ('MEDIOCRE', 'NORMAL', 'BONNE', 'PERFORMANTE') NOT NULL,
     price            DECIMAL(10, 2)     NOT NULL,
     maintenance_cost DECIMAL(10, 2)     NOT NULL,
-    image VARCHAR(255) NOT NULL
+    image LONGBLOB NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS MachineInCompany
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS Employee
     status   ENUM ('ACTIF', 'CONGES', 'GREVE') NOT NULL DEFAULT 'ACTIF',
     job ENUM ('MARKETING', 'VENTE', 'PRODUCTION') NOT NULL,
     health INT NOT NULL,
-    image VARCHAR(255) NOT NULL
+    image LONGBLOB NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS EmployeeInCompany
