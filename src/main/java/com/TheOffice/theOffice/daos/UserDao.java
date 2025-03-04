@@ -49,8 +49,8 @@ public class UserDao {
     }
 
     public boolean save(User user) {
-        String sql = "INSERT INTO `user` (email, password, role) VALUES (?, ?, ?)";
-        int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getRole());
+        String sql = "INSERT INTO User (email, username, password, role, wallet) VALUES (?, ?, ?, ?, ?)";
+        int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.getPassword(), user.getRole(), user.getWallet());
         return rowsAffected > 0;
     }
 
@@ -102,7 +102,7 @@ public class UserDao {
     }
 
     public boolean existsByEmail(String email) {
-        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        String sql = "SELECT COUNT(*) FROM User WHERE email = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, email) > 0;
     }
 }

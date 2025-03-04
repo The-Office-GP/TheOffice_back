@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -37,9 +39,12 @@ public class AuthController {
         }
 
             User newUser = new User(
-                user.getEmail(),
-                encoder.encode(user.getPassword()),
-                "USER"
+                    null,
+                    user.getEmail(),
+                    user.getUsername(),
+                    encoder.encode(user.getPassword()),
+                    user.getRole() != null ? user.getRole() : "USER",
+                    BigDecimal.ZERO
             );
         boolean isUserSaved = userDao.save(newUser);
 	        return isUserSaved ? ResponseEntity.ok("User registered successfully!") : ResponseEntity.badRequest().body("Error: User registration failed!");

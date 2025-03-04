@@ -28,9 +28,6 @@ public class User {
         this.wallet = wallet;
     }
 
-    public User(String email, String encode, String user) {
-    }
-
     // Getters and Setters
     public Long getId() {
         return id;
