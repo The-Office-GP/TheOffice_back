@@ -30,7 +30,7 @@ public class MachineDao {
             ProductionQuality.valueOf(rs.getString("production_quality")),
             rs.getBigDecimal("price"),
             rs.getBigDecimal("maintenance_cost"),
-            rs.getString("image")
+            rs.getBytes("image")
     );
 
     public List<Machine> findAll(){
@@ -46,7 +46,7 @@ public class MachineDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Machine non trouvée"));
     }
 
-    public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, String image) {
+    public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
         String sql ="INSERT INTO Machine (name, production_quality, price, maintenance_cost, image) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -57,7 +57,7 @@ public class MachineDao {
             ps.setString(2, production_quality);
             ps.setBigDecimal(3, price);
             ps.setBigDecimal(4, maintenance_cost);
-            ps.setString(5, image);
+            ps.setBytes(5, image);
             return ps;
         }, keyHolder);
 
