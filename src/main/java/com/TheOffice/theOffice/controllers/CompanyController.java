@@ -30,6 +30,12 @@ public class CompanyController {
         return ResponseEntity.ok(companyDao.findById(id));
     }
 
+    @GetMapping("/{id}/machines")
+    public ResponseEntity<List<Machine>> getCompanyMachines(@PathVariable Long id) {
+        Company company = companyDao.findById(id);
+        return ResponseEntity.ok(company.getMachines());
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createCompany(@Valid @RequestBody Map<String, Object> request) {
         String sector = (String) request.get("sector");
