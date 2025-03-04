@@ -37,7 +37,7 @@ public class EmployeeDao {
             Status.valueOf(rs.getString("status")),
             Job.valueOf(rs.getString("job")),
             rs.getInt("health"),
-            rs.getString("image")
+            rs.getBytes("image")
     );
 
     public List<Employee> findAll() {
@@ -53,7 +53,7 @@ public class EmployeeDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Salarié non trouvé"));
     }
 
-    public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, String image) {
+    public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, byte[] image) {
         String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -69,7 +69,7 @@ public class EmployeeDao {
             ps.setString(7, status);
             ps.setString(8, job);
             ps.setInt(9, health);
-            ps.setString(10, image);
+            ps.setBytes(10, image);
             return ps;
         }, keyHolder);
 
