@@ -46,11 +46,10 @@ public class EmployeeController {
             @RequestParam("image") MultipartFile image) {
 
         try {
-            byte[] imageBytes = image.getBytes(); // ✅ Convertir l'image en byte[]
+            byte[] imageBytes = image.getBytes();
 
             int id_employee = employeeDao.save(name, gender, seniority, salary, level, mood, status, job, health, imageBytes);
 
-            // ✅ Utilisation de HashMap pour contourner la limite de 10 arguments
             Map<String, Object> response = new HashMap<>();
             response.put("id_employee", id_employee);
             response.put("name", name);
