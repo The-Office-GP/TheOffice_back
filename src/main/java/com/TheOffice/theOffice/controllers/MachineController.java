@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.MachineDao;
-import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class MachineController {
         String production_quality = String.valueOf(request.get("production_quality"));
         BigDecimal price = new BigDecimal(request.get("price").toString());
         BigDecimal maintenance_cost = new BigDecimal(request.get("maintenance_cost").toString());
-        String image = String.valueOf(request.get("image"));
+        byte[] image = (byte[]) request.get("image");
 
         int id_machine = machineDao.save(name, production_quality, price, maintenance_cost, image);
 
