@@ -6,24 +6,26 @@ import java.util.Date;
 import java.util.List;
 
 public class Company {
-    Long id;
-    String sector;
+    private Long id;
+    private String sector;
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
-    String name;
-    Date creation_date;
-    Long id_user;
-    List<Machine> machines;
+    private String name;
+    private Date creation_date;
+    private Long id_user;
+    private List<Machine> machines;
+    private List<Employee> employees;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines) {
+    public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines, List<Employee> employees) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creation_date = creation_date;
         this.id_user = id_user;
         this.machines = machines;
+        this.employees = employees;
     }
 
     public Long getId() {
@@ -69,4 +71,12 @@ public class Company {
     public List<Machine> getMachines() {return machines;}
 
     public void setMachines(List<Machine> machines) {this.machines = machines;}
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
 }
