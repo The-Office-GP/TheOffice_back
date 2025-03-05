@@ -1,18 +1,19 @@
 package com.TheOffice.theOffice.entities;
 
+import com.TheOffice.theOffice.entities.Machine.Machine;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
 import java.util.List;
 
 public class Company {
-    Long id;
-    String sector;
+    private Long id;
+    private String sector;
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
-    String name;
-    Date creation_date;
-    Long id_user;
-    List<Machine> machines;
+    private String name;
+    private Date creation_date;
+    private Long id_user;
+    private List<Machine> machines;
 
     public Company (){
     }

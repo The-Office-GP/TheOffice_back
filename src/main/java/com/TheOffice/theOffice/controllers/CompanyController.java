@@ -2,6 +2,7 @@ package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.entities.Machine.Machine;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
