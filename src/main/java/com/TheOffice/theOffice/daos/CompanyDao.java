@@ -1,6 +1,8 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,6 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Date;
@@ -31,39 +34,27 @@ public class CompanyDao {
             null
     );
 
+    private final RowMapper<Machine> machineRowMapper = (rs, _) -> new Machine(
+            rs.getLong("id"),
+            rs.getString("name"),
+            ProductionQuality.valueOf(rs.getString("production_quality")),
+            rs.getBigDecimal("price"),
+            rs.getBigDecimal("maintenance_cost"),
+            rs.getBytes("image"),
+            null
+    );
+
     public Company findById(Long id) {
         String sql = "SELECT * FROM Company WHERE id = ?";
-        Company company = jdbcTemplate.query(sql, companyRowMapper, id)
+        return jdbcTemplate.query(sql, companyRowMapper, id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
-
-        // Récupération des machines associées
-        company.setMachines(getMachinesByCompanyId(id));
-
-        return company;
     }
 
     public List<Company> findAll() {
         String sql = "SELECT * FROM Company";
-        List<Company> companies = jdbcTemplate.query(sql, companyRowMapper);
-
-        // Récupération des machines associées pour chaque entreprise
-        for (Company company : companies) {
-            company.setMachines(getMachinesByCompanyId(company.getId()));
-        }
-
-        return companies;
-    }
-
-    private List<Machine> getMachinesByCompanyId(Long companyId) {
-        String sql = """
-            SELECT m.* FROM Machine m
-            INNER JOIN MachineInCompany mc ON m.id = mc.id_machine
-            WHERE mc.id_company = ?
-        """;
-
-        return jdbcTemplate.query(sql, machineRowMapper, companyId);
+        return jdbcTemplate.query(sql, companyRowMapper);
     }
 
     public int save(String sector, String name, Date creation_date, Long id_user) {
@@ -105,5 +96,21 @@ public class CompanyDao {
     public boolean companyExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Company WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
+    }
+
+    // 🔹 Récupérer toutes les machines d'une entreprise spécifique
+    public List<Machine> findMachinesByCompanyId(Long companyId) {
+        String sql = """
+            SELECT m.* FROM Machine m
+            INNER JOIN MachineInCompany mic ON m.id = mic.id_machine
+            WHERE mic.id_company = ?
+        """;
+        return jdbcTemplate.query(sql, machineRowMapper, companyId);
+    }
+
+    // 🔹 Associer une machine à une entreprise
+    public void addMachineToCompany(Long companyId, Long machineId) {
+        String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
+        jdbcTemplate.update(sql, machineId, companyId);
     }
 }

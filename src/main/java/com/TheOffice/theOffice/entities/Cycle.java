@@ -1,13 +1,13 @@
 package com.TheOffice.theOffice.entities;
 
 public class Cycle {
-    Long id;
-    Double cost;
-    Long employees;
-    Long productivity;
-    Long popularity;
-    Long step;
-    Long id_company;
+    private Long id;
+    private Double cost;
+    private Long employees;
+    private Long productivity;
+    private Long popularity;
+    private Long step;
+    private Long id_company;
 
     public Cycle(){}
 
