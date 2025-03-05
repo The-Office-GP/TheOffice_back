@@ -40,17 +40,22 @@ public class CompanyDao {
             ProductionQuality.valueOf(rs.getString("production_quality")),
             rs.getBigDecimal("price"),
             rs.getBigDecimal("maintenance_cost"),
-            rs.getBytes("image"),
-            null
+            rs.getBytes("image")
     );
 
     public Company findById(Long id) {
         String sql = "SELECT * FROM Company WHERE id = ?";
-        return jdbcTemplate.query(sql, companyRowMapper, id)
+        Company company = jdbcTemplate.query(sql, companyRowMapper, id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
+
+        // Ajouter les machines associées
+        company.setMachines(findMachinesByCompanyId(id));
+
+        return company;
     }
+
 
     public List<Company> findAll() {
         String sql = "SELECT * FROM Company";
@@ -100,11 +105,7 @@ public class CompanyDao {
 
     // 🔹 Récupérer toutes les machines d'une entreprise spécifique
     public List<Machine> findMachinesByCompanyId(Long companyId) {
-        String sql = """
-            SELECT m.* FROM Machine m
-            INNER JOIN MachineInCompany mic ON m.id = mic.id_machine
-            WHERE mic.id_company = ?
-        """;
+        String sql = " SELECT Machine.* FROM Machine INNER JOIN MachineInCompany mic ON Machine.id = mic.id_machine WHERE mic.id_company = ? ";
         return jdbcTemplate.query(sql, machineRowMapper, companyId);
     }
 

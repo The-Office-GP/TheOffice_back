@@ -32,9 +32,9 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/machines")
-    public ResponseEntity<List<Machine>> getCompanyMachines(@PathVariable Long id) {
-        Company company = companyDao.findById(id);
-        return ResponseEntity.ok(company.getMachines());
+    public ResponseEntity<List<Machine>> getMachinesByCompanyId(@PathVariable Long id) {
+        List<Machine> machines = companyDao.findMachinesByCompanyId(id);
+        return ResponseEntity.ok(machines);
     }
 
     @PostMapping("/create")

@@ -30,8 +30,7 @@ public class MachineDao {
             ProductionQuality.valueOf(rs.getString("production_quality")),
             rs.getBigDecimal("price"),
             rs.getBigDecimal("maintenance_cost"),
-            rs.getBytes("image"),
-            rs.getLong("id_company")
+            rs.getBytes("image")
     );
 
     public List<Machine> findAll(){
@@ -48,7 +47,7 @@ public class MachineDao {
     }
 
     public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
-        String sql = "INSERT INTO Machine (name, production_quality, price, maintenance_cost, image) VALUES (?, ?, ?, ?, ?)";
+        String sql ="INSERT INTO Machine (name, production_quality, price, maintenance_cost, image) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -62,15 +61,8 @@ public class MachineDao {
             return ps;
         }, keyHolder);
 
-        int machineId = keyHolder.getKey().intValue();
-
-        // Lier la machine à la company dans MachineInCompany
-        String sqlAssociation = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
-        jdbcTemplate.update(sqlAssociation, machineId);
-
-        return machineId;
+        return keyHolder.getKey().intValue();
     }
-
 
     public Machine update(Long id, Machine machine) {
         if (!machineExists(id)) {
@@ -94,5 +86,10 @@ public class MachineDao {
     public boolean machineExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Machine WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
+    }
+
+    public void linkMachineToCompany(Long machineId, Long companyId) {
+        String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
+        jdbcTemplate.update(sql, machineId, companyId);
     }
 }
