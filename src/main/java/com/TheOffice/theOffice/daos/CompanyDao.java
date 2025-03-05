@@ -31,6 +31,7 @@ public class CompanyDao {
             rs.getString("name"),
             rs.getDate("creation_date"),
             rs.getLong("id_user"),
+            null,
             null
     );
 
@@ -43,19 +44,47 @@ public class CompanyDao {
             rs.getBytes("image")
     );
 
+    private final RowMapper<Employee> employeeRowMapper = (rs, _) -> new Employee(
+            rs.getLong("id"),
+            rs.getString("name"),
+            Gender.valueOf(rs.getString("gender")),
+            rs.getInt("seniority"),
+            rs.getBigDecimal("salary"),
+            rs.getInt("level"),
+            Mood.valueOf(rs.getString("mood")),
+            Status.valueOf(rs.getString("status")),
+            Job.valueOf(rs.getString("job")),
+            rs.getInt("health"),
+            rs.getBytes("image")
+    );
+
     public Company findById(Long id) {
-        String sql = "SELECT * FROM Company WHERE id = ?";
-        Company company = jdbcTemplate.query(sql, companyRowMapper, id)
+        // Récupérer l'entreprise
+        String sqlCompany = "SELECT * FROM Company WHERE id = ?";
+        Company company = jdbcTemplate.query(sqlCompany, companyRowMapper, id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
+
+        // Récupérer les machines associées
+        String sqlMachines = "SELECT m.* FROM Machine m " +
+                "JOIN MachineInCompany mic ON m.id = mic.id_machine " +
+                "WHERE mic.id_company = ?";
+        List<Machine> machines = jdbcTemplate.query(sqlMachines, machineRowMapper, id);
+        company.setMachines(machines);
+
+        // Récupérer les employés associés
+        String sqlEmployees = "SELECT e.* FROM Employee e " +
+                "JOIN EmployeeInCompany eic ON e.id = eic.id_employee " +
+                "WHERE eic.id_company = ?";
+        List<Employee> employees = jdbcTemplate.query(sqlEmployees, employeeRowMapper, id);
+        company.setEmployees(employees);
 
         // Ajouter les machines associées
         company.setMachines(findMachinesByCompanyId(id));
 
         return company;
     }
-
 
     public List<Company> findAll() {
         String sql = "SELECT * FROM Company";
@@ -113,5 +142,16 @@ public class CompanyDao {
     public void addMachineToCompany(Long companyId, Long machineId) {
         String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
         jdbcTemplate.update(sql, machineId, companyId);
+    }
+
+
+    public List<Employee> findEmployeesByCompanyId(Long companyId){
+        String sql = "SELECT Employee.* FROM Employee INNER JOIN EmployeeInCompany eic ON Employee.id = eic.id_employee WHERE eic.id_company = ?";
+        return jdbcTemplate.query(sql,employeeRowMapper, companyId);
+    }
+
+    public void addEmployeeToCompany(Long companyId, Long employeeId){
+        String sql = "INSERT INTO EmployeeInCompany (id_employee, id_company) VALUES (?,?)";
+        jdbcTemplate.update(sql, employeeId, companyId);
     }
 }

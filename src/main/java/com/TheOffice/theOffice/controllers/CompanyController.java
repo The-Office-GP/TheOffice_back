@@ -35,6 +35,13 @@ public class CompanyController {
     public ResponseEntity<List<Machine>> getMachinesByCompanyId(@PathVariable Long id) {
         List<Machine> machines = companyDao.findMachinesByCompanyId(id);
         return ResponseEntity.ok(machines);
+
+    }
+
+    @GetMapping("/{id}employees")
+    public ResponseEntity<List<Employee>> getEmployeesByCompanyId(@PathVariable Long id) {
+        List<Employee> employees = companyDao.findEmployeesByCompanyId(id);
+        return ResponseEntity.ok(employees);
     }
 
     @PostMapping("/create")
