@@ -43,7 +43,8 @@ public class EmployeeController {
             @RequestParam("status") String status,
             @RequestParam("job") String job,
             @RequestParam("health") Integer health,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("id_company") Long id_company) {
 
         try {
             byte[] imageBytes = image.getBytes();
@@ -62,6 +63,9 @@ public class EmployeeController {
             response.put("job", job);
             response.put("health", health);
             response.put("image", "Uploaded Successfully");
+            response.put("id_company", id_company);
+
+            employeeDao.linkEmployeeToCompany((long) id_employee, id_company);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IOException e) {

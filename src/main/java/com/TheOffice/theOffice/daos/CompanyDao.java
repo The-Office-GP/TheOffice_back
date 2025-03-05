@@ -1,6 +1,7 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
@@ -10,7 +11,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Date;
@@ -59,29 +59,22 @@ public class CompanyDao {
     );
 
     public Company findById(Long id) {
-        // Récupérer l'entreprise
+        // 1. Récupérer l'entreprise
         String sqlCompany = "SELECT * FROM Company WHERE id = ?";
         Company company = jdbcTemplate.query(sqlCompany, companyRowMapper, id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
 
-        // Récupérer les machines associées
-        String sqlMachines = "SELECT m.* FROM Machine m " +
-                "JOIN MachineInCompany mic ON m.id = mic.id_machine " +
-                "WHERE mic.id_company = ?";
+        // 2. Récupérer les machines de l'entreprise
+        String sqlMachines = "SELECT m.* FROM Machine m JOIN MachineInCompany mic ON m.id = mic.id_machine WHERE mic.id_company = ?";
         List<Machine> machines = jdbcTemplate.query(sqlMachines, machineRowMapper, id);
         company.setMachines(machines);
 
-        // Récupérer les employés associés
-        String sqlEmployees = "SELECT e.* FROM Employee e " +
-                "JOIN EmployeeInCompany eic ON e.id = eic.id_employee " +
-                "WHERE eic.id_company = ?";
+        // 3. Récupérer les employés de l'entreprise
+        String sqlEmployees = "SELECT e.* FROM Employee e JOIN EmployeeInCompany eic ON e.id = eic.id_employee WHERE eic.id_company = ?";
         List<Employee> employees = jdbcTemplate.query(sqlEmployees, employeeRowMapper, id);
         company.setEmployees(employees);
-
-        // Ajouter les machines associées
-        company.setMachines(findMachinesByCompanyId(id));
 
         return company;
     }

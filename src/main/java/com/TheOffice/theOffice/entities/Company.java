@@ -1,8 +1,10 @@
 package com.TheOffice.theOffice.entities;
 
+import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +15,8 @@ public class Company {
     private String name;
     private Date creation_date;
     private Long id_user;
-    private List<Machine> machines;
-    private List<Employee> employees;
+    private List<Machine> machines = new ArrayList<>();
+    private List<Employee> employees = new ArrayList<>();
 
     public Company (){
     }
@@ -71,13 +73,15 @@ public class Company {
 
     public List<Machine> getMachines() {return machines;}
 
-    public void setMachines(List<Machine> machines) {this.machines = machines;}
+    public void setMachines(List<Machine> machines) {
+        this.machines = (machines != null) ? machines : new ArrayList<>();
+    }
 
     public List<Employee> getEmployees() {
         return employees;
     }
 
     public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
+        this.employees = (employees != null) ? employees : new ArrayList<>();
     }
 }

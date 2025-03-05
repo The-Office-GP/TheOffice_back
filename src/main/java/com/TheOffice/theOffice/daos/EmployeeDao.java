@@ -111,4 +111,9 @@ public class EmployeeDao {
         String sql = "SELECT COUNT(*) FROM Employee WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
     }
+
+    public void linkEmployeeToCompany(Long employeeId, Long companyId) {
+        String sql = "INSERT INTO EmployeeInCompany (id_employee, id_company) VALUES (?, ?)";
+        jdbcTemplate.update(sql, employeeId, companyId);
+    }
 }
