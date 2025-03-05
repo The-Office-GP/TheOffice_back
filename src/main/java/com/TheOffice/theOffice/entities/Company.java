@@ -3,6 +3,7 @@ package com.TheOffice.theOffice.entities;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
+import java.util.List;
 
 public class Company {
     Long id;
@@ -11,16 +12,18 @@ public class Company {
     String name;
     Date creation_date;
     Long id_user;
+    List<Machine> machines;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creation_date, Long id_user) {
+    public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creation_date = creation_date;
         this.id_user = id_user;
+        this.machines = machines;
     }
 
     public Long getId() {
@@ -62,4 +65,8 @@ public class Company {
     public void setId_user(Long id_user) {
         this.id_user = id_user;
     }
+
+    public List<Machine> getMachines() {return machines;}
+
+    public void setMachines(List<Machine> machines) {this.machines = machines;}
 }

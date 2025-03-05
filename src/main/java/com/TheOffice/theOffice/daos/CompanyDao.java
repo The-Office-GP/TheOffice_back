@@ -27,20 +27,43 @@ public class CompanyDao {
             rs.getString("sector"),
             rs.getString("name"),
             rs.getDate("creation_date"),
-            rs.getLong("id_user")
+            rs.getLong("id_user"),
+            null
     );
 
     public Company findById(Long id) {
         String sql = "SELECT * FROM Company WHERE id = ?";
-        return jdbcTemplate.query(sql, companyRowMapper, id)
+        Company company = jdbcTemplate.query(sql, companyRowMapper, id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
+
+        // Récupération des machines associées
+        company.setMachines(getMachinesByCompanyId(id));
+
+        return company;
     }
 
-    public List<Company> findAll(){
+    public List<Company> findAll() {
         String sql = "SELECT * FROM Company";
-        return jdbcTemplate.query(sql, companyRowMapper);
+        List<Company> companies = jdbcTemplate.query(sql, companyRowMapper);
+
+        // Récupération des machines associées pour chaque entreprise
+        for (Company company : companies) {
+            company.setMachines(getMachinesByCompanyId(company.getId()));
+        }
+
+        return companies;
+    }
+
+    private List<Machine> getMachinesByCompanyId(Long companyId) {
+        String sql = """
+            SELECT m.* FROM Machine m
+            INNER JOIN MachineInCompany mc ON m.id = mc.id_machine
+            WHERE mc.id_company = ?
+        """;
+
+        return jdbcTemplate.query(sql, machineRowMapper, companyId);
     }
 
     public int save(String sector, String name, Date creation_date, Long id_user) {
