@@ -80,6 +80,9 @@ public class CompanyDao {
         List<Employee> employees = jdbcTemplate.query(sqlEmployees, employeeRowMapper, id);
         company.setEmployees(employees);
 
+        // Ajouter les machines associées
+        company.setMachines(findMachinesByCompanyId(id));
+
         return company;
     }
 
@@ -140,6 +143,7 @@ public class CompanyDao {
         String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
         jdbcTemplate.update(sql, machineId, companyId);
     }
+
 
     public List<Employee> findEmployeesByCompanyId(Long companyId){
         String sql = "SELECT Employee.* FROM Employee INNER JOIN EmployeeInCompany eic ON Employee.id = eic.id_employee WHERE eic.id_company = ?";

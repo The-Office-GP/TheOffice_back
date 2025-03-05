@@ -1,0 +1,33 @@
+{
+  "machines": [
+    {
+      "name": "Petite machine",
+      "production_quality": "médiocre",
+      "price": 50000,
+      "maintenance_cost": 12000,
+      "image" : "image.png"
+    },
+    {
+      "name": "Moyenne machine",
+      "production_quality": "normal",
+      "price": 200000,
+      "maintenance_cost": 30000,
+      "image" : "image.png"
+    },
+    {
+      "name": "Grande machine",
+      "production_quality": "bonne",
+      "price": 600000,
+      "maintenance_cost": 100000,
+      "image" : "image.png"
+    },
+    {
+      "name": "Machine de luxe",
+      "production_quality": "performante",
+      "price": 1000000,
+      "maintenance_cost": 200000,
+      "image" : "image.png"
+    }
+  ]
+}
+

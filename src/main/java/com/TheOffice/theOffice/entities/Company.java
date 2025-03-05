@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.entities;
 
+import com.TheOffice.theOffice.entities.Machine.Machine;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
