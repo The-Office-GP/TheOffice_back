@@ -1,6 +1,8 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.Event;
+import com.TheOffice.theOffice.entities.Loan;
+import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -28,17 +30,17 @@ public class EventDao {
             rs.getBytes("image")
     );
 
-    public static List<Event> findAll() {
-      String sql="SELECT * FROM Event";
-      return jdbcTemplate.query(sql, eventRowMapper);
-    };
+    public List<Event> findAll(){
+        String sql = "SELECT * FROM Event";
+        return jdbcTemplate.query(sql, eventRowMapper);
+    }
 
     public Event findById(Long id){
         String sql = "SELECT * FROM Event WHERE id=?";
         return jdbcTemplate.query(sql, eventRowMapper, id)
                 .stream()
                 .findFirst()
-                .orElseThrow(()-> new ResourceNotFoundException("Evènement non trouvé"));
+                .orElseThrow(()-> new ResourceNotFoundException("Event non trouvé"));
     };
 
     public int save (Boolean renewable, Integer recurrence, byte[] image){

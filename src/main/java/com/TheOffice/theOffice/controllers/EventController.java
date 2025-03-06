@@ -2,6 +2,7 @@ package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.EventDao;
 import com.TheOffice.theOffice.entities.Event;
+import com.TheOffice.theOffice.entities.Local.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class EventController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Event>> getAllEvents() {
-        return ResponseEntity.ok(EventDao.findAll());
+        return ResponseEntity.ok(eventDao.findAll());
     }
 
     @GetMapping("/{id}")
