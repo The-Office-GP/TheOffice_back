@@ -37,11 +37,15 @@ public class MachineController {
             @RequestParam("production_quality") String production_quality,
             @RequestParam("price") BigDecimal price,
             @RequestParam("maintenance_cost") BigDecimal maintenance_cost,
-            @RequestParam("image") MultipartFile image) {
-        try{
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("id_company") Long id_company) {  // Ajout du paramètre id_company
+        try {
             byte[] imageBytes = image.getBytes();
 
             int id_machine = machineDao.save(name, production_quality, price, maintenance_cost, imageBytes);
+
+            // Lier la machine à l'entreprise
+            machineDao.linkMachineToCompany((long) id_machine, id_company);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                     "id_machine", id_machine,
@@ -49,10 +53,11 @@ public class MachineController {
                     "production_quality", production_quality,
                     "price", price,
                     "maintenance_cost", maintenance_cost,
-                    "image", "Uploaded Successfully"
+                    "image", "Uploaded Successfully",
+                    "id_company", id_company  // Retourne aussi l'association
             ));
-        } catch (IOException e){
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "error", "Erreur lors du traitement de l'image"
             ));
         }

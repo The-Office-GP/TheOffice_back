@@ -9,20 +9,17 @@ public class Machine {
     private BigDecimal price;
     private BigDecimal maintenance_cost;
     private byte[] image;
-    private Long id_company;
-
 
     public Machine() {
     }
 
-    public Machine(Long id, String name, ProductionQuality production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image, Long id_company) {
+    public Machine(Long id, String name, ProductionQuality production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
         this.id = id;
         this.name = name;
         this.production_quality = production_quality;
         this.price = price;
         this.maintenance_cost = maintenance_cost;
         this.image = image;
-        this.id_company = id_company;
     }
 
     public Long getId() { return id; }
@@ -42,8 +39,4 @@ public class Machine {
 
     public byte[] getImage() {return image;}
     public void setImage(byte[] image) {this.image = image;}
-
-    public Long getId_company() {return id_company;}
-    public void setId_company(Long id_company) {this.id_company = id_company;}
 }
-

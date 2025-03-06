@@ -2,6 +2,8 @@ package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.entities.Employee.Employee;
+import com.TheOffice.theOffice.entities.Event;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,22 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/machines")
-    public ResponseEntity<List<Machine>> getCompanyMachines(@PathVariable Long id) {
-        Company company = companyDao.findById(id);
-        return ResponseEntity.ok(company.getMachines());
+    public ResponseEntity<List<Machine>> getMachinesByCompanyId(@PathVariable Long id) {
+        List<Machine> machines = companyDao.findMachinesByCompanyId(id);
+        return ResponseEntity.ok(machines);
+
+    }
+
+    @GetMapping("/{id}/employees")
+    public ResponseEntity<List<Employee>> getEmployeesByCompanyId(@PathVariable Long id) {
+        List<Employee> employees = companyDao.findEmployeesByCompanyId(id);
+        return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/{id}/events")
+    public ResponseEntity<List<Event>> getEventsByCompanyId(@PathVariable Long id){
+        List<Event> events = companyDao.findEventsByCompanyId(id);
+        return ResponseEntity.ok(events);
     }
 
     @PostMapping("/create")
