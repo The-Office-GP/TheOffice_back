@@ -1,7 +1,9 @@
 package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.UserDao;
+import com.TheOffice.theOffice.dtos.UserDto;
 import com.TheOffice.theOffice.entities.User;
+import com.TheOffice.theOffice.security.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,11 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
     private final UserDao userDao;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserDao userDao) {
+    public UserController(UserDao userDao, JwtUtil jwtUtil) {
         this.userDao = userDao;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/all")
@@ -28,6 +32,13 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
         return ResponseEntity.ok(userDao.findById(id));
+    }
+
+    @GetMapping("/connected")
+    public ResponseEntity<UserDto> getUserByToken(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String email = jwtUtil.getEmailFromToken(token);
+        return ResponseEntity.ok(UserDto.fromEntity(userDao.findByEmail(email)));
     }
 
     @PostMapping("/create")
@@ -48,8 +59,6 @@ public class UserController {
                 "wallet", wallet
         ));
     }
-
-
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
