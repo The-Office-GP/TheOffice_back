@@ -17,11 +17,12 @@ public class Company {
     private Long id_user;
     private List<Machine> machines = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines, List<Employee> employees) {
+    public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines, List<Employee> employees,  List<Event> events) {
         this.id = id;
         this.sector = sector;
         this.name = name;
@@ -29,6 +30,7 @@ public class Company {
         this.id_user = id_user;
         this.machines = machines;
         this.employees = employees;
+        this.events = events;
     }
 
     public Long getId() {
@@ -83,5 +85,13 @@ public class Company {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = (employees != null) ? employees : new ArrayList<>();
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }

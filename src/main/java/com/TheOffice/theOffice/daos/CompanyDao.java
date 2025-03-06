@@ -2,6 +2,7 @@ package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
+import com.TheOffice.theOffice.entities.Event;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
@@ -32,6 +33,7 @@ public class CompanyDao {
             rs.getDate("creation_date"),
             rs.getLong("id_user"),
             null,
+            null,
             null
     );
 
@@ -58,6 +60,13 @@ public class CompanyDao {
             rs.getBytes("image")
     );
 
+    private final RowMapper<Event> eventRowMapper = (rs, _) -> new Event(
+            rs.getLong("id"),
+            rs.getBoolean("renewable"),
+            rs.getInt("ocurrence"),
+            rs.getBytes("image")
+    );
+
     public Company findById(Long id) {
         // 1. Récupérer l'entreprise
         String sqlCompany = "SELECT * FROM Company WHERE id = ?";
@@ -75,6 +84,11 @@ public class CompanyDao {
         String sqlEmployees = "SELECT e.* FROM Employee e JOIN EmployeeInCompany eic ON e.id = eic.id_employee WHERE eic.id_company = ?";
         List<Employee> employees = jdbcTemplate.query(sqlEmployees, employeeRowMapper, id);
         company.setEmployees(employees);
+
+        // 4. Récupérer les events de l'entreprise
+        String sqlEvents = "SELECT e.* FROM Event e JOIN CompanyEvent cd ON e.id = cd.id_event WHERE cd.id_company = ?";
+        List<Event> events = jdbcTemplate.query(sqlEvents, eventRowMapper, id);
+        company.setEvents(events);
 
         return company;
     }
@@ -125,26 +139,39 @@ public class CompanyDao {
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
     }
 
-    // 🔹 Récupérer toutes les machines d'une entreprise spécifique
+    // Récupérer toutes les machines d'une entreprise spécifique
     public List<Machine> findMachinesByCompanyId(Long companyId) {
         String sql = " SELECT Machine.* FROM Machine INNER JOIN MachineInCompany mic ON Machine.id = mic.id_machine WHERE mic.id_company = ? ";
         return jdbcTemplate.query(sql, machineRowMapper, companyId);
     }
 
-    // 🔹 Associer une machine à une entreprise
+    // Associer une machine à une entreprise
     public void addMachineToCompany(Long companyId, Long machineId) {
         String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
         jdbcTemplate.update(sql, machineId, companyId);
     }
 
-
+    // Récupérer tous les employés d'une entreprise spécifique
     public List<Employee> findEmployeesByCompanyId(Long companyId){
         String sql = "SELECT Employee.* FROM Employee INNER JOIN EmployeeInCompany eic ON Employee.id = eic.id_employee WHERE eic.id_company = ?";
         return jdbcTemplate.query(sql,employeeRowMapper, companyId);
     }
 
+    // Associer un employé à une entreprise
     public void addEmployeeToCompany(Long companyId, Long employeeId){
         String sql = "INSERT INTO EmployeeInCompany (id_employee, id_company) VALUES (?,?)";
         jdbcTemplate.update(sql, employeeId, companyId);
+    }
+
+    // Récupérer tous les events d'une entreprise spécifique
+    public List<Event> findEventsByCompanyId(Long companyId){
+        String sql = "SELECT Event.* FROM Event  INNER JOIN CompanyEvent ce ON Event.id = cd.id_event WHERE cd.id_company = ?";
+        return jdbcTemplate.query(sql,eventRowMapper, companyId);
+    }
+
+    // Associer un event à une entreprise
+    public void addEventToCompany(Long companyId, Long eventId){
+        String sql = "INSERT INTO CompanyEvent (id_event, id_company) VALUES (?,?)";
+        jdbcTemplate.update(sql, eventId, companyId);
     }
 }
