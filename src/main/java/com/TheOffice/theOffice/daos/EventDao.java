@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.Event;
-import com.TheOffice.theOffice.entities.Loan;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -76,5 +75,10 @@ public class EventDao {
     public boolean eventExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Event WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
+    }
+
+    public void linkEventToCompany(Long companyId, Long eventId){
+        String sql = "INSERT INTO CompanyEvent (id_event, id_company) VALUES (?,?)";
+        jdbcTemplate.update(sql, eventId, companyId);
     }
 }

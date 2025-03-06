@@ -63,7 +63,7 @@ public class CompanyDao {
     private final RowMapper<Event> eventRowMapper = (rs, _) -> new Event(
             rs.getLong("id"),
             rs.getBoolean("renewable"),
-            rs.getInt("ocurrence"),
+            rs.getLong("recurrence"),
             rs.getBytes("image")
     );
 
@@ -86,7 +86,7 @@ public class CompanyDao {
         company.setEmployees(employees);
 
         // 4. Récupérer les events de l'entreprise
-        String sqlEvents = "SELECT e.* FROM Event e JOIN CompanyEvent cd ON e.id = cd.id_event WHERE cd.id_company = ?";
+        String sqlEvents = "SELECT e.* FROM Event e JOIN CompanyEvent ce ON e.id = ce.id_event WHERE ce.id_company = ?";
         List<Event> events = jdbcTemplate.query(sqlEvents, eventRowMapper, id);
         company.setEvents(events);
 
@@ -165,7 +165,7 @@ public class CompanyDao {
 
     // Récupérer tous les events d'une entreprise spécifique
     public List<Event> findEventsByCompanyId(Long companyId){
-        String sql = "SELECT Event.* FROM Event  INNER JOIN CompanyEvent ce ON Event.id = cd.id_event WHERE cd.id_company = ?";
+        String sql = "SELECT Event.* FROM Event INNER JOIN CompanyEvent ce ON Event.id = ce.id_event WHERE ce.id_company = ?";
         return jdbcTemplate.query(sql,eventRowMapper, companyId);
     }
 

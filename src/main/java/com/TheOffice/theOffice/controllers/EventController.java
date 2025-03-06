@@ -1,8 +1,8 @@
 package com.TheOffice.theOffice.controllers;
 
+import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.daos.EventDao;
 import com.TheOffice.theOffice.entities.Event;
-import com.TheOffice.theOffice.entities.Local.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +16,11 @@ import java.util.Map;
 @RequestMapping("/events")
 public class EventController {
     private final EventDao eventDao;
+    private final CompanyDao companyDao;
 
-    public EventController(EventDao eventDao) {
+    public EventController(EventDao eventDao, CompanyDao companyDao) {
         this.eventDao = eventDao;
+        this.companyDao = companyDao;
     }
 
     @GetMapping("/all")
@@ -35,16 +37,27 @@ public class EventController {
     public ResponseEntity<Map<String, Object>> createEvent(
             @RequestParam("renewable") Boolean renewable,
             @RequestParam("recurrence") Integer recurrence,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("id_company") Long id_company) {
         try {
+            // Vérifier si l'entreprise existe avant de lier l'événement
+            if (!companyDao.companyExists(id_company)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                        "error", "L'entreprise avec l'ID " + id_company + " n'existe pas"
+                ));
+            }
+
             byte[] imageBytes = image.getBytes();
 
             int id_event = eventDao.save(renewable, recurrence, imageBytes);
 
+            eventDao.linkEventToCompany((long) id_event, id_company);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                     "renewable", renewable,
                     "recurrence", recurrence,
-                    "image", "Uploaded Successfully"
+                    "image", "Uploaded Successfully",
+                    "id_company", id_company
             ));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
