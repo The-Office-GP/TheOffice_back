@@ -46,7 +46,6 @@ public class EventDao {
         String sql = "INSERT INTO Event (renewable, recurrence, image) VALUES (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setBoolean(1, renewable);
@@ -77,7 +76,7 @@ public class EventDao {
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
     }
 
-    public void linkEventToCompany(Long companyId, Long eventId){
+    public void linkEventToCompany(Long eventId, Long companyId){
         String sql = "INSERT INTO CompanyEvent (id_event, id_company) VALUES (?,?)";
         jdbcTemplate.update(sql, eventId, companyId);
     }

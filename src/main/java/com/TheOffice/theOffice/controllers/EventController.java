@@ -40,12 +40,6 @@ public class EventController {
             @RequestParam("image") MultipartFile image,
             @RequestParam("id_company") Long id_company) {
         try {
-            // Vérifier si l'entreprise existe avant de lier l'événement
-            if (!companyDao.companyExists(id_company)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                        "error", "L'entreprise avec l'ID " + id_company + " n'existe pas"
-                ));
-            }
 
             byte[] imageBytes = image.getBytes();
 

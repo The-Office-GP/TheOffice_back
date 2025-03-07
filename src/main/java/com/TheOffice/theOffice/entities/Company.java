@@ -92,6 +92,6 @@ public class Company {
     }
 
     public void setEvents(List<Event> events) {
-        this.events = events;
+        this.events = (events != null) ? events : new ArrayList<>();
     }
 }
