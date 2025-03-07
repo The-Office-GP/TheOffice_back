@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Company
 (
     id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     sector       VARCHAR(255)       NOT NULL,
-    name          VARCHAR(255)       NOT NULL,
+    name          VARCHAR(35)       NOT NULL,
     creation_date DATE               NOT NULL,
     id_user       INT,
     FOREIGN KEY (id_user) REFERENCES User (id)
