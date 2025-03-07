@@ -16,11 +16,9 @@ import java.util.Map;
 @RequestMapping("/events")
 public class EventController {
     private final EventDao eventDao;
-    private final CompanyDao companyDao;
 
     public EventController(EventDao eventDao, CompanyDao companyDao) {
         this.eventDao = eventDao;
-        this.companyDao = companyDao;
     }
 
     @GetMapping("/all")
@@ -35,7 +33,6 @@ public class EventController {
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")
     public ResponseEntity<Map<String, Object>> createEvent(
-            @RequestParam("renewable") Boolean renewable,
             @RequestParam("recurrence") Integer recurrence,
             @RequestParam("image") MultipartFile image,
             @RequestParam("id_company") Long id_company) {
@@ -43,12 +40,11 @@ public class EventController {
 
             byte[] imageBytes = image.getBytes();
 
-            int id_event = eventDao.save(renewable, recurrence, imageBytes);
+            int id_event = eventDao.save(recurrence, imageBytes);
 
             eventDao.linkEventToCompany((long) id_event, id_company);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                    "renewable", renewable,
                     "recurrence", recurrence,
                     "image", "Uploaded Successfully",
                     "id_company", id_company

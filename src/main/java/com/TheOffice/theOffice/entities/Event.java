@@ -2,16 +2,14 @@ package com.TheOffice.theOffice.entities;
 
 public class Event {
     private Long id;
-    private Boolean renewable;
     private Long recurrence;
     private byte[] image;
 
     public Event() {
     }
 
-    public Event(Long id, Boolean renewable, Long recurrence, byte[] image){
+    public Event(Long id, Long recurrence, byte[] image){
         this.id = id;
-        this.renewable = renewable;
         this.recurrence = recurrence;
         this.image = image;
     }
@@ -22,14 +20,6 @@ public class Event {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getRenewable() {
-        return renewable;
-    }
-
-    public void setRenewable(Boolean renewable) {
-        this.renewable = renewable;
     }
 
     public Long getRecurrence() {

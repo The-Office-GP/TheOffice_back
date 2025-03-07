@@ -62,7 +62,6 @@ public class CompanyDao {
 
     private final RowMapper<Event> eventRowMapper = (rs, _) -> new Event(
             rs.getLong("id"),
-            rs.getBoolean("renewable"),
             rs.getLong("recurrence"),
             rs.getBytes("image")
     );

@@ -24,7 +24,6 @@ public class EventDao {
 
     private final RowMapper<Event> eventRowMapper = (rs,_) -> new Event (
             rs.getLong("id"),
-            rs.getBoolean("renewable"),
             rs.getLong("recurrence"),
             rs.getBytes("image")
     );
@@ -42,15 +41,14 @@ public class EventDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Event non trouvé"));
     };
 
-    public int save (Boolean renewable, Integer recurrence, byte[] image){
-        String sql = "INSERT INTO Event (renewable, recurrence, image) VALUES (?, ?, ?)";
+    public int save (Integer recurrence, byte[] image){
+        String sql = "INSERT INTO Event (recurrence, image) VALUES (?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setBoolean(1, renewable);
-            ps.setInt(2, recurrence);
-            ps.setBytes(3, image);
+            ps.setInt(1, recurrence);
+            ps.setBytes(2, image);
             return ps;
         }, keyHolder);
 
@@ -62,8 +60,8 @@ public class EventDao {
             throw new ResourceNotFoundException("Event avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Event SET renewable = ?, recurrence = ?, image = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, event.getRenewable(), event.getRecurrence(), event.getImage(), id);
+        String sql = "UPDATE Event SET recurrence = ?, image = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, event.getRecurrence(), event.getImage(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'event avec l'ID : " + id);
