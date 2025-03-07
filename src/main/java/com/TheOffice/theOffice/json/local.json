@@ -1,6 +1,7 @@
 {
   "local": [
     {
+      "id" : 1,
       "level": "Petit local",
       "size": 5000,
       "rent": 10000,
@@ -8,6 +9,7 @@
       "max_machines": 3
     },
     {
+      "id" : 2,
       "level": "Moyenne machine",
       "size": 12000,
       "rent": 1000000,
@@ -15,6 +17,7 @@
       "max_machines": 15
     },
     {
+      "id" : 3,
       "level": "Grande machine",
       "size": 30000,
       "rent": 12000000,

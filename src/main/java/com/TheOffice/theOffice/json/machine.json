@@ -1,6 +1,7 @@
 {
   "machines": [
     {
+      "id" : 1,
       "name": "Petite machine",
       "production_quality": "médiocre",
       "price": 50000,
@@ -8,6 +9,7 @@
       "image" : "image.png"
     },
     {
+      "id" : 2,
       "name": "Moyenne machine",
       "production_quality": "normal",
       "price": 200000,
@@ -15,6 +17,7 @@
       "image" : "image.png"
     },
     {
+      "id" : 3,
       "name": "Grande machine",
       "production_quality": "bonne",
       "price": 600000,
@@ -22,6 +25,7 @@
       "image" : "image.png"
     },
     {
+      "id" : 4,
       "name": "Machine de luxe",
       "production_quality": "performante",
       "price": 1000000,
