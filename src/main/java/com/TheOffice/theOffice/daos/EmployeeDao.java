@@ -5,6 +5,7 @@ import com.TheOffice.theOffice.entities.Employee.Mood;
 import com.TheOffice.theOffice.entities.Employee.Gender;
 import com.TheOffice.theOffice.entities.Employee.Status;
 import com.TheOffice.theOffice.entities.Employee.Job;
+import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -51,6 +52,14 @@ public class EmployeeDao {
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Salarié non trouvé"));
+    }
+
+    public List<Employee> findByIdCompany(Long id_company) {
+        String sql = "SELECT e.* FROM Employee e " +
+                "JOIN EmployeeInCompany eic ON e.id = eic.id_employee " +
+                "WHERE eic.id_company = ?";
+
+        return jdbcTemplate.query(sql, employeeRowMapper, id_company);
     }
 
     public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, byte[] image) {

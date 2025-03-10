@@ -105,4 +105,9 @@ public class UserDao {
         String sql = "SELECT COUNT(*) FROM User WHERE email = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, email) > 0;
     }
+
+    public Double findWalletByUserId(Long userId) {
+        String sql = "SELECT wallet FROM User WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, Double.class, userId);
+    }
 }

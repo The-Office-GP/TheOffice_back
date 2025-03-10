@@ -33,6 +33,14 @@ public class MachineDao {
             rs.getBytes("image")
     );
 
+    public List<Machine> findByIdCompany(Long id_company) {
+        String sql = "SELECT m.* FROM Machine m " +
+                "JOIN MachineInCompany mic ON m.id = mic.id_machine " +
+                "WHERE mic.id_company = ?";
+
+        return jdbcTemplate.query(sql, machineRowMapper, id_company);
+    }
+
     public List<Machine> findAll(){
         String sql = "SELECT * FROM Machine";
         return jdbcTemplate.query(sql, machineRowMapper);
