@@ -1,10 +1,13 @@
 package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.CompanyDao;
+import com.TheOffice.theOffice.daos.UserDao;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Event;
 import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.TheOffice.theOffice.entities.User;
+import com.TheOffice.theOffice.security.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +21,13 @@ import java.util.Map;
 @RequestMapping("/companies")
 public class CompanyController {
     private final CompanyDao companyDao;
+    private final UserDao userDao;
+    private final JwtUtil jwtUtil;
 
-    public CompanyController(CompanyDao companyDao) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, JwtUtil jwtUtil) {
         this.companyDao = companyDao;
+        this.userDao = userDao;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/all")
@@ -50,6 +57,15 @@ public class CompanyController {
     public ResponseEntity<List<Event>> getEventsByCompanyId(@PathVariable Long id){
         List<Event> events = companyDao.findEventsByCompanyId(id);
         return ResponseEntity.ok(events);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<Company>> getUserCompanies(@RequestHeader("Authorization") String authorizationHeader){
+        String token = authorizationHeader.substring(7);
+        String email = jwtUtil.getEmailFromToken(token);
+        User user = userDao.findByEmail(email);
+        List<Company> companies = companyDao.findByUserId(user.getId());
+        return ResponseEntity.ok(companies);
     }
 
     @PostMapping("/create")
