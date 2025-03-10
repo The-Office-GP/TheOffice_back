@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Event;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -40,6 +41,14 @@ public class EventDao {
                 .findFirst()
                 .orElseThrow(()-> new ResourceNotFoundException("Event non trouvé"));
     };
+
+    public List<Event> findByIdCompany(Long id_company) {
+        String sql = "SELECT e.* FROM Event e " +
+                "JOIN CompanyEvent ce ON e.id = ce.id_event " +
+                "WHERE ce.id_company = ?";
+
+        return jdbcTemplate.query(sql, eventRowMapper, id_company);
+    }
 
     public int save (Integer recurrence, byte[] image){
         String sql = "INSERT INTO Event (recurrence, image) VALUES (?, ?)";
