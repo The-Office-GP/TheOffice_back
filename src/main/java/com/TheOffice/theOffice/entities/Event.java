@@ -8,12 +8,14 @@ public class Event {
     public Event() {
     }
 
+    //Constructor
     public Event(Long id, Long recurrence, byte[] image){
         this.id = id;
         this.recurrence = recurrence;
         this.image = image;
     }
 
+    //Getters and Setters
     public Long getId() {
         return id;
     }

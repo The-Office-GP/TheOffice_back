@@ -18,6 +18,7 @@ public class Employee {
     public Employee() {
     }
 
+    //Constructor
     public Employee(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, byte [] image) {
         this.id = id;
         this.name = name;
@@ -32,6 +33,7 @@ public class Employee {
         this.image = image;
     }
 
+    //Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

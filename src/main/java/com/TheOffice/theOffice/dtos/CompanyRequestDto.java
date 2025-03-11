@@ -11,6 +11,7 @@ public class CompanyRequestDto {
     private Long idUser;
     private Double wallet;
 
+    // DTOs associés
     private List<CycleDto> cycles;
     private List<MachineDto> machines;
     private List<EmployeeDto> employees;
@@ -44,7 +45,7 @@ public class CompanyRequestDto {
         return dto;
     }
 
-    // ✅ Getters & Setters
+    // Getters & Setters
     public String getSector() { return sector; }
     public void setSector(String sector) { this.sector = sector; }
 

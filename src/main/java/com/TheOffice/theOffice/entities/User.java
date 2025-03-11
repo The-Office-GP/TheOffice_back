@@ -28,6 +28,8 @@ public class User {
         this.wallet = wallet;
     }
 
+    public User(){}
+
     // Getters and Setters
     public Long getId() {
         return id;

@@ -12,7 +12,7 @@ public class Machine {
 
     public Machine() {
     }
-
+    // Constructor
     public Machine(Long id, String name, ProductionQuality production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
         this.id = id;
         this.name = name;
@@ -22,6 +22,7 @@ public class Machine {
         this.image = image;
     }
 
+    //Getter and Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

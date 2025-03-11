@@ -12,6 +12,7 @@ public class CycleDto {
 
     public CycleDto() {}
 
+    // Constructor
     public CycleDto(Long id, Double cost, Long employees, Long productivity, Long popularity, Long step) {
         this.id = id;
         this.cost = cost;
@@ -21,6 +22,7 @@ public class CycleDto {
         this.step = step;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

@@ -27,6 +27,7 @@ public class CompanyDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    //RowMapper pour les entreprises
     private final RowMapper<Company> companyRowMapper = (rs, _) -> new Company(
             rs.getLong("id"),
             rs.getString("sector"),
@@ -38,6 +39,7 @@ public class CompanyDao {
             null
     );
 
+    //RowMapper pour les machines
     private final RowMapper<Machine> machineRowMapper = (rs, _) -> new Machine(
             rs.getLong("id"),
             rs.getString("name"),
@@ -47,6 +49,7 @@ public class CompanyDao {
             rs.getBytes("image")
     );
 
+    //RowMapper pour les employés
     private final RowMapper<Employee> employeeRowMapper = (rs, _) -> new Employee(
             rs.getLong("id"),
             rs.getString("name"),
@@ -61,12 +64,14 @@ public class CompanyDao {
             rs.getBytes("image")
     );
 
+    //RowMapper pour les events
     private final RowMapper<Event> eventRowMapper = (rs, _) -> new Event(
             rs.getLong("id"),
             rs.getLong("recurrence"),
             rs.getBytes("image")
     );
 
+    //GET par id
     public Company findById(Long id) {
         // 1. Récupérer l'entreprise
         String sqlCompany = "SELECT * FROM Company WHERE id = ?";
@@ -93,6 +98,7 @@ public class CompanyDao {
         return company;
     }
 
+    //GET par nom
     public Optional<Company> findByName(String name) {
         String sql = "SELECT * FROM Company WHERE name = ?";
         return Optional.ofNullable(jdbcTemplate.query(sql, companyRowMapper, name)
@@ -101,16 +107,19 @@ public class CompanyDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée")));
     }
 
+    //GET de toutes les entreprises
     public List<Company> findAll() {
         String sql = "SELECT * FROM Company";
         return jdbcTemplate.query(sql, companyRowMapper);
     }
 
+    //GET par id de l'utilisateur
     public List<Company> findByUserId(Long id_user) {
         String sql = "SELECT * FROM Company WHERE id_user = ?";
         return jdbcTemplate.query(sql, companyRowMapper, id_user);
     }
 
+    //POST
     public int save(String sector, String name, Date creation_date, Long id_user) {
         String sql = "INSERT INTO Company (sector, name, creation_date, id_user) VALUES (?, ?, ?, ?)";
 
@@ -128,6 +137,7 @@ public class CompanyDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public Company update(Long id, Company company) {
         if (!companyExists(id)) {
             throw new ResourceNotFoundException("Entreprise avec l'ID : " + id + " n'existe pas");
@@ -142,11 +152,13 @@ public class CompanyDao {
         return company;
     }
 
+    //DELETE
     public boolean delete(Long id) {
         String sql = "DELETE FROM Company WHERE id = ?";
         return jdbcTemplate.update(sql, id) > 0;
     }
 
+    // Vérifier si une entreprise existe
     public boolean companyExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Company WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;

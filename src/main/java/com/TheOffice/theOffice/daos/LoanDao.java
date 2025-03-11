@@ -33,11 +33,13 @@ public class LoanDao {
             rs.getLong("id_user")
     );
 
+    //GET de tous les emprunts
     public List<Loan> findAll(){
         String sql = "SELECT * FROM Loan";
         return jdbcTemplate.query(sql, loanRowMapper);
     }
 
+    //GET par id
     public Loan findById(Long id) {
         String sql = "SELECT * FROM Loan WHERE id = ?";
         return jdbcTemplate.query(sql, loanRowMapper, id)
@@ -46,6 +48,7 @@ public class LoanDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Emprunt non trouvé"));
     }
 
+    //POST
     public int save(BigDecimal loanAmount, BigDecimal interestRate, Integer duration, BigDecimal rest, Long id_user) {
         String sql = "INSERT INTO Loan (loan_amount, interest_rate, duration, rest, id_user) VALUES (?, ?, ?, ?, ?)";
 
@@ -64,6 +67,7 @@ public class LoanDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public Loan update(Long id, Loan loan) {
         if (!loanExists(id)) {
             throw new RuntimeException("Emprunt avec l'ID : " + id + " n'existe pas");
@@ -78,6 +82,7 @@ public class LoanDao {
         return loan;
     }
 
+    //Vérifier si l'emprunt existe
     public boolean loanExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Loan WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;

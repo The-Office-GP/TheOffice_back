@@ -15,6 +15,7 @@ public class UserDto {
 
     }
 
+    // Constructor
     public UserDto(long id, String email, String username, String role, BigDecimal wallet) {
         this.id = id;
         this.email = email;
@@ -23,6 +24,7 @@ public class UserDto {
         this.wallet = wallet;
     }
 
+    // Getters and Setters
     public long getId() {
         return id;
     }

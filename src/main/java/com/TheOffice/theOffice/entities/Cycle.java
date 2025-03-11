@@ -13,6 +13,7 @@ public class Cycle {
 
     public Cycle(){}
 
+    //Constructor
     public Cycle(Long id, Double cost, Long employees, Long productivity, Long popularity, Long step, Long id_company){
         this.id = id;
         this.cost = cost;
@@ -23,6 +24,7 @@ public class Cycle {
         this.id_company = id_company;
     }
 
+    //Getters and Setters
     public Long getId() {
         return id;
     }

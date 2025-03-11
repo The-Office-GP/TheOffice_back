@@ -23,6 +23,7 @@ public class Company {
     public Company (){
     }
 
+    // Constructor
     public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines, List<Employee> employees,  List<Event> events) {
         this.id = id;
         this.sector = sector;
@@ -34,6 +35,7 @@ public class Company {
         this.events = events;
     }
 
+    //Getters and Setters
     public Long getId() {
         return id;
     }

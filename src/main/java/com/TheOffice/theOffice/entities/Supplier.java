@@ -9,6 +9,7 @@ public class Supplier {
     private String quality;
     private Long id_company;
 
+    //Constructor
     public Supplier(Long id, String name, BigDecimal price, String quality, Long id_company) {
         this.id = id;
         this.name = name;
@@ -17,6 +18,10 @@ public class Supplier {
         this.id_company = id_company;
     }
 
+    public Supplier() {
+    }
+
+    //Getters and Setters
     public long getId() {
         return id;
     }

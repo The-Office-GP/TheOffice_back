@@ -32,6 +32,7 @@ public class CycleDao {
             rs.getLong("id_company")
     );
 
+    // GET par id
     public Cycle findById(Long id) {
         String sql = "SELECT * FROM Cycle WHERE id = ?";
         return jdbcTemplate.query(sql, cycleRowMapper, id)
@@ -40,6 +41,7 @@ public class CycleDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Cycle non trouvée"));
     }
 
+    // GET par id de l'entreprise
     public List<Cycle> findByIdCompany(Long id_company) {
         String sql = "SELECT * FROM Cycle WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
@@ -54,11 +56,13 @@ public class CycleDao {
         );
     }
 
+    // GET de tous les cycles
     public List<Cycle> findAll(){
         String sql = "SELECT * FROM Cycle";
         return jdbcTemplate.query(sql, cycleRowMapper);
     }
 
+    // POST
     public int save(Double cost, Long employees, Long productivity, Long popularity, Long step, Long id_company) {
         String sql = "INSERT INTO Cycle (cost, employees, productivity, popularity, step, id_company) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -78,6 +82,7 @@ public class CycleDao {
         return keyHolder.getKey().intValue();
     }
 
+    // PUT
     public Cycle update(Long id, Cycle cycle) {
         if (!cycleExists(id)) {
             throw new ResourceNotFoundException("Cycle avec l'ID : " + id + " n'existe pas");
@@ -92,6 +97,7 @@ public class CycleDao {
         return cycle;
     }
 
+    //Vérifie si le cycle existe
     public boolean cycleExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Cycle WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;

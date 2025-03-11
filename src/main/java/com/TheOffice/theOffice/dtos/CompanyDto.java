@@ -11,6 +11,7 @@ public class CompanyDto {
     private Long idUser;
     private Double wallet;
 
+    // DTOs associés
     private List<CycleDto> cycles;
     private List<MachineDto> machines;
     private List<EmployeeDto> employees;
@@ -42,7 +43,7 @@ public class CompanyDto {
         dto.setStockMaterials(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
 
-        // 🔥 Convertir `Local` en `LocalDto` si `local` n'est pas `null`
+        //Convertir `Local` en `LocalDto` si `local` n'est pas `null`
         dto.setLocal((local != null) ? LocalDto.fromEntity(local) : null);
 
         return dto;

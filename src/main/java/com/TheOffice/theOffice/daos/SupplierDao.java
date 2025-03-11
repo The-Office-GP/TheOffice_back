@@ -33,11 +33,13 @@ public class SupplierDao {
             rs.getLong("id_company")
     );
 
+    //GET de tous les fournisseurs
     public List<Supplier> findAll() {
         String sql = "SELECT * FROM Supplier";
         return jdbcTemplate.query(sql, supplierRowMapper);
     }
 
+    //GET par id de l'entreprise
     public List<Supplier> findByIdCompany(Long id_company) {
         String sql = "SELECT * FROM Supplier WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
@@ -50,6 +52,7 @@ public class SupplierDao {
         );
     }
 
+    //GET par id
     public Supplier findById(Long id) {
         String sql = "SELECT * FROM Supplier WHERE id = ?";
         return jdbcTemplate.query(sql,supplierRowMapper, id)
@@ -58,6 +61,7 @@ public class SupplierDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Fournisseur non trouvé"));
     }
 
+    //POST
     public int save(String name, BigDecimal price, String quality, Long id_company) {
         String sql = "INSERT INTO Supplier (name, price, quality, id_company) VALUES (?, ?, ?, ?)";
 
@@ -74,7 +78,7 @@ public class SupplierDao {
 
         return keyHolder.getKey().intValue();
     }
-
+    //PUT
     public Supplier update(Long id, Supplier supplier) {
         if (!supplierExists(id)) {
             throw new ResourceNotFoundException("Fournisseur avec l'ID : " + id + " n'existe pas");

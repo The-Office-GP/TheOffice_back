@@ -30,11 +30,13 @@ public class StockMaterialDao {
             rs.getLong("id_company")
     );
 
+    //GET de tous les stocks des produits
     public List<StockMaterial> findAll() {
         String sql = "SELECT * FROM StockMaterial";
         return jdbcTemplate.query(sql, stockMaterialRowMapper);
     }
 
+    //GET par id
     public StockMaterial findById(Long id) {
         String sql = "SELECT * FROM StockMaterial WHERE id = ?";
         return jdbcTemplate.query(sql,stockMaterialRowMapper, id)
@@ -43,6 +45,7 @@ public class StockMaterialDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Stock des produits non trouvé"));
     }
 
+    //GET par id de l'entreprise
     public List<StockMaterial> findByIdCompany(Long id_company) {
         String sql = "SELECT * FROM StockMaterial WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
@@ -54,6 +57,7 @@ public class StockMaterialDao {
         );
     }
 
+    //POST
     public int save(String name, Integer quantity, Long id_company) {
         String sql = "INSERT INTO StockMaterial (name, quantity, id_company) VALUES (?, ?, ?)";
 
@@ -70,6 +74,7 @@ public class StockMaterialDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public StockMaterial update(Long id, StockMaterial stockMaterial) {
         if (!stockMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits avec l'ID : " + id + " n'existe pas");

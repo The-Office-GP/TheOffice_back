@@ -10,6 +10,7 @@ public class SupplierDto {
     private BigDecimal price;
     private String quality;
 
+    // Constructor
     public SupplierDto(Long id, String name, BigDecimal price, String quality) {
         this.id = id;
         this.name = name;
@@ -17,6 +18,7 @@ public class SupplierDto {
         this.quality = quality;
     }
 
+    // Getters and Setters
     public long getId() {
         return id;
     }

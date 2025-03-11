@@ -16,6 +16,7 @@ public class MachineDto {
     public MachineDto() {
     }
 
+    // Constructor
     public MachineDto(Long id, String name, ProductionQuality production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
         this.id = id;
         this.name = name;
@@ -25,6 +26,7 @@ public class MachineDto {
         this.image = image;
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

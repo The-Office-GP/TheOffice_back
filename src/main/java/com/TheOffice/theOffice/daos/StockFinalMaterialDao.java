@@ -31,11 +31,13 @@ public class StockFinalMaterialDao {
             rs.getLong("id_company")
     );
 
+    //GET de tous les stocks des produits finaux
     public List<StockFinalMaterial> findAll() {
         String sql = "SELECT * FROM StockFinalMaterial";
         return jdbcTemplate.query(sql, stockFinalMaterialRowMapper);
     }
 
+    //GET par id
     public StockFinalMaterial findById(Long id){
         String sql ="SELECT * FROM StockFinalMaterial WHERE id = ?";
         return jdbcTemplate.query(sql, stockFinalMaterialRowMapper, id)
@@ -44,6 +46,7 @@ public class StockFinalMaterialDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Stock des produits finaux non trouvé"));
     }
 
+    //GET par id de l'entreprise
     public List<StockFinalMaterial> findByIdCompany(Long id_company) {
         String sql = "SELECT * FROM StockFinalMaterial WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
@@ -56,6 +59,7 @@ public class StockFinalMaterialDao {
         );
     }
 
+    //POST
     public int save(String name, Integer quality, Integer quantity, Long id_company) {
         String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, id_company) VALUES (?, ?, ?, ?)";
 
@@ -73,6 +77,7 @@ public class StockFinalMaterialDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public StockFinalMaterial update(Long id, StockFinalMaterial stockFinalMaterial) {
         if (!stockFinalMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits finaux avec l'ID : " + id + " n'existe pas");
@@ -87,6 +92,7 @@ public class StockFinalMaterialDao {
         return stockFinalMaterial;
     }
 
+    //Vérifier si le stock des produits finaux existe
     public boolean stockFinalMaterialExists(Long id) {
         String sql = "SELECT COUNT(*) FROM StockFinalMaterial WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;

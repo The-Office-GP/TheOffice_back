@@ -34,6 +34,7 @@ public class UserController {
         return ResponseEntity.ok(userDao.findById(id));
     }
 
+    //dto User
     @GetMapping("/connected")
     public ResponseEntity<UserDto> getUserByToken(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.substring(7);

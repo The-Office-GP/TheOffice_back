@@ -41,11 +41,13 @@ public class EmployeeDao {
             rs.getBytes("image")
     );
 
+    //GET de tous les salariés
     public List<Employee> findAll() {
         String sql = "SELECT * FROM Employee";
         return jdbcTemplate.query(sql, employeeRowMapper);
     }
 
+    //GET par id
     public Employee findById(Long id) {
         String sql = "SELECT * FROM Employee WHERE id = ?";
         return jdbcTemplate.query(sql, employeeRowMapper, id)
@@ -54,6 +56,7 @@ public class EmployeeDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Salarié non trouvé"));
     }
 
+    //GET par id de l'entreprise
     public List<Employee> findByIdCompany(Long id_company) {
         String sql = "SELECT e.* FROM Employee e " +
                 "JOIN EmployeeInCompany eic ON e.id = eic.id_employee " +
@@ -62,6 +65,7 @@ public class EmployeeDao {
         return jdbcTemplate.query(sql, employeeRowMapper, id_company);
     }
 
+    //POST
     public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, byte[] image) {
         String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -85,6 +89,7 @@ public class EmployeeDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public Employee update(Long id, Employee employee) {
         if (!employeeExists(id)) {
             throw new ResourceNotFoundException("Salarié avec l'ID : " + id + " n'existe pas");
@@ -111,16 +116,19 @@ public class EmployeeDao {
         return employee;
     }
 
+    //DELETE
     public boolean delete(Long id) {
         String sql = "DELETE FROM Employee WHERE id = ?";
         return jdbcTemplate.update(sql, id) > 0;
     }
 
+    //Vérifie si le salarié existe
     public boolean employeeExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Employee WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
     }
 
+    //Lier un salarié à une entreprise
     public void linkEmployeeToCompany(Long employeeId, Long companyId) {
         String sql = "INSERT INTO EmployeeInCompany (id_employee, id_company) VALUES (?, ?)";
         jdbcTemplate.update(sql, employeeId, companyId);

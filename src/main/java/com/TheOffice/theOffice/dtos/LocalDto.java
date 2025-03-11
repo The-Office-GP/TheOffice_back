@@ -17,6 +17,7 @@ public class LocalDto {
     public LocalDto() {
     }
 
+    // Constructor
     public LocalDto(Long id, LocalLevel level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image) {
         this.id = id;
         this.level = level;
@@ -27,6 +28,7 @@ public class LocalDto {
         this.background_image = background_image;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

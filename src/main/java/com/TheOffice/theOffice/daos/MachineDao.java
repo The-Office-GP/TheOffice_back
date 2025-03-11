@@ -33,6 +33,7 @@ public class MachineDao {
             rs.getBytes("image")
     );
 
+    //GET par id de l'entreprise
     public List<Machine> findByIdCompany(Long id_company) {
         String sql = "SELECT m.* FROM Machine m " +
                 "JOIN MachineInCompany mic ON m.id = mic.id_machine " +
@@ -41,11 +42,13 @@ public class MachineDao {
         return jdbcTemplate.query(sql, machineRowMapper, id_company);
     }
 
+    //GET de toutes les machines
     public List<Machine> findAll(){
         String sql = "SELECT * FROM Machine";
         return jdbcTemplate.query(sql, machineRowMapper);
     }
 
+    //GET par id
     public Machine findById(Long id){
         String sql = "SELECT * FROM Machine WHERE id = ?";
         return jdbcTemplate.query(sql, machineRowMapper, id)
@@ -54,6 +57,7 @@ public class MachineDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Machine non trouvée"));
     }
 
+    //POST
     public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
         String sql ="INSERT INTO Machine (name, production_quality, price, maintenance_cost, image) VALUES (?, ?, ?, ?, ?)";
 
@@ -72,6 +76,7 @@ public class MachineDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public Machine update(Long id, Machine machine) {
         if (!machineExists(id)) {
             throw new ResourceNotFoundException("Machine avec l'ID : " + id + " n'existe pas");
@@ -86,16 +91,19 @@ public class MachineDao {
         return machine;
     }
 
+    //DELETE
     public boolean delete(Long id) {
         String sql = "DELETE FROM Machine WHERE id = ?";
         return jdbcTemplate.update(sql, id) > 0;
     }
 
+    //Vérifie si la machine existe
     public boolean machineExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Machine WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
     }
 
+    //Lier une machine à une entreprise
     public void linkMachineToCompany(Long machineId, Long companyId) {
         String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
         jdbcTemplate.update(sql, machineId, companyId);

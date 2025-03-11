@@ -11,6 +11,7 @@ public class StockFinalMaterialDto { private Long id;
     public StockFinalMaterialDto() {
     }
 
+    // Constructor
     public StockFinalMaterialDto(Long id, String name, Integer quality, Integer quantity, Long id_company) {
         this.id = id;
         this.name = name;

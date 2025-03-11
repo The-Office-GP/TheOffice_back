@@ -39,11 +39,13 @@ public class LocalDao {
             rs.getLong("id_company")
     );
 
+    //GET de tous les locaux
     public List<Local> findAll() {
         String sql = "SELECT * FROM Local";
         return jdbcTemplate.query(sql, localRowMapper);
     }
 
+    //GET par id
     public Local findById(Long id){
         String sql = "SELECT * FROM Local WHERE id = ?";
         return jdbcTemplate.query(sql, localRowMapper, id)
@@ -52,6 +54,7 @@ public class LocalDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Local non trouvé"));
     }
 
+    //GET par id de l'entreprise
     public Local findByIdCompany(Long id_company) {
         String sql = "SELECT * FROM Local WHERE id_company = ?";
         return jdbcTemplate.query(sql, localRowMapper, id_company)
@@ -60,9 +63,11 @@ public class LocalDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Local non trouvé"));
     }
 
+    //POST
     public void saveDefaultLocal(Long id_company, String sector) {
         String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        // Récupérer l'image par défaut en fonction du secteur
         byte[] defaultImage = getDefaultImage(sector);
 
         jdbcTemplate.update(sql,
@@ -76,6 +81,7 @@ public class LocalDao {
         );
     }
 
+    // Récupérer l'image par défaut en fonction du secteur
     private byte[] getDefaultImage(String sector) {
         String imagePath;
 
@@ -93,6 +99,7 @@ public class LocalDao {
         return new byte[0];
     }
 
+    //POST
     public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {
         String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -113,6 +120,7 @@ public class LocalDao {
         return keyHolder.getKey().intValue();
     }
 
+    //PUT
     public Local update(Long id, Local local) {
         if (!localExists(id)) {
             throw new ResourceNotFoundException("Local avec l'ID : " + id + " n'existe pas");
@@ -127,6 +135,7 @@ public class LocalDao {
         return local;
     }
 
+    //Vérifie si le local existe
     public boolean localExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Local WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;

@@ -15,6 +15,7 @@ public class Local {
     public Local() {
     }
 
+    //Constructor
     public Local(Long id, LocalLevel level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {
         this.id = id;
         this.level = level;
@@ -26,6 +27,7 @@ public class Local {
         this.id_company = id_company;
     }
 
+    //Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

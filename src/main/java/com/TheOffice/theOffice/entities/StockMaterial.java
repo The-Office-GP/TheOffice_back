@@ -9,6 +9,7 @@ public class StockMaterial {
     public StockMaterial() {
     }
 
+    // Constructor
     public StockMaterial(Long id, String name, Integer quantity, Long id_company) {
         this.id = id;
         this.name = name;
