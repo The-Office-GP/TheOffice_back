@@ -28,13 +28,6 @@ import java.util.stream.Collectors;
 public class CompanyController {
     private final CompanyDao companyDao;
     private final UserDao userDao;
-    private final JwtUtil jwtUtil;
-
-    public CompanyController(CompanyDao companyDao, UserDao userDao, JwtUtil jwtUtil) {
-        this.companyDao = companyDao;
-        this.userDao = userDao;
-        this.jwtUtil = jwtUtil;
-
     private final CycleDao cycleDao;
     private final MachineDao machineDao;
     private final EmployeeDao employeeDao;
@@ -43,8 +36,9 @@ public class CompanyController {
     private final StockMaterialDao stockMaterialDao;
     private final StockFinalMaterialDao stockFinalMaterialDao;
     private final LocalDao localDao;
+    private final JwtUtil jwtUtil;
 
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, LocalDao localDao) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, LocalDao localDao, JwtUtil jwtUtil) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -55,6 +49,7 @@ public class CompanyController {
         this.stockMaterialDao = stockMaterialDao;
         this.stockFinalMaterialDao = stockFinalMaterialDao;
         this.localDao = localDao;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/all")
