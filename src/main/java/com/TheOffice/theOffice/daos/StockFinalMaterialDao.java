@@ -1,6 +1,7 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.StockFinalMaterial;
+import com.TheOffice.theOffice.entities.StockMaterial;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,6 +42,18 @@ public class StockFinalMaterialDao {
                 .stream()
                 .findFirst()
                 .orElseThrow(()-> new ResourceNotFoundException("Stock des produits finaux non trouvé"));
+    }
+
+    public List<StockFinalMaterial> findByIdCompany(Long id_company) {
+        String sql = "SELECT * FROM StockFinalMaterial WHERE id_company = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new StockFinalMaterial(rs.getLong("id"),
+                                rs.getString("name"),
+                                rs.getInt("quality"),
+                                rs.getInt("quantity"),
+                                rs.getLong("id_company")),
+                id_company
+        );
     }
 
     public int save(String name, Integer quality, Integer quantity, Long id_company) {

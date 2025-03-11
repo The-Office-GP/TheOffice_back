@@ -40,6 +40,20 @@ public class CycleDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Cycle non trouvée"));
     }
 
+    public List<Cycle> findByIdCompany(Long id_company) {
+        String sql = "SELECT * FROM Cycle WHERE id_company = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new Cycle(rs.getLong("id"),
+                                rs.getDouble("cost"),
+                                rs.getLong("employees"),
+                                rs.getLong("productivity"),
+                                rs.getLong("popularity"),
+                                rs.getLong("step"),
+                                rs.getLong("id_company")),
+                id_company
+        );
+    }
+
     public List<Cycle> findAll(){
         String sql = "SELECT * FROM Cycle";
         return jdbcTemplate.query(sql, cycleRowMapper);

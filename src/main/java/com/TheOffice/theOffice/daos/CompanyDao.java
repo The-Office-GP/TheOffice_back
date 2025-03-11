@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CompanyDao {
@@ -90,6 +91,14 @@ public class CompanyDao {
         company.setEvents(events);
 
         return company;
+    }
+
+    public Optional<Company> findByName(String name) {
+        String sql = "SELECT * FROM Company WHERE name = ?";
+        return Optional.ofNullable(jdbcTemplate.query(sql, companyRowMapper, name)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée")));
     }
 
     public List<Company> findAll() {

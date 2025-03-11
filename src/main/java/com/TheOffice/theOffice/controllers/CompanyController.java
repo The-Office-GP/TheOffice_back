@@ -1,13 +1,18 @@
 package com.TheOffice.theOffice.controllers;
 
+
 import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.daos.UserDao;
+import com.TheOffice.theOffice.daos.*;
+import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Event;
+import com.TheOffice.theOffice.entities.Local.Local;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
+import com.TheOffice.theOffice.entities.StockMaterial;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
@@ -28,6 +34,27 @@ public class CompanyController {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.jwtUtil = jwtUtil;
+
+    private final CycleDao cycleDao;
+    private final MachineDao machineDao;
+    private final EmployeeDao employeeDao;
+    private final SupplierDao supplierDao;
+    private final EventDao eventDao;
+    private final StockMaterialDao stockMaterialDao;
+    private final StockFinalMaterialDao stockFinalMaterialDao;
+    private final LocalDao localDao;
+
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, LocalDao localDao) {
+        this.companyDao = companyDao;
+        this.userDao = userDao;
+        this.cycleDao = cycleDao;
+        this.machineDao = machineDao;
+        this.employeeDao = employeeDao;
+        this.supplierDao = supplierDao;
+        this.eventDao = eventDao;
+        this.stockMaterialDao = stockMaterialDao;
+        this.stockFinalMaterialDao = stockFinalMaterialDao;
+        this.localDao = localDao;
     }
 
     @GetMapping("/all")
@@ -36,9 +63,24 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
-        return ResponseEntity.ok(companyDao.findById(id));
+    public ResponseEntity<CompanyRequestDto> getCompanyById(@PathVariable Long id) {
+        Company company = companyDao.findById(id);
+        Double wallet = userDao.findWalletByUserId(company.getId_user());
+
+        List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
+        List<MachineDto> machines = machineDao.findByIdCompany(id).stream().map(MachineDto::fromEntity).collect(Collectors.toList());
+        List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
+        List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
+        List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
+        List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
+        List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
+        Local local = localDao.findByIdCompany(id); // ✅ On récupère Local sans le convertir ici
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials, local); // ✅ Conversion dans `CompanyDto`
+
+
+        return ResponseEntity.ok(CompanyRequestDto.fromDto(companyDto));
     }
+
 
     @GetMapping("/{id}/machines")
     public ResponseEntity<List<Machine>> getMachinesByCompanyId(@PathVariable Long id) {

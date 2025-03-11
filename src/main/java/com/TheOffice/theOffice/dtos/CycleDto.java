@@ -1,26 +1,24 @@
-package com.TheOffice.theOffice.entities;
+package com.TheOffice.theOffice.dtos;
 
-import java.util.Optional;
+import com.TheOffice.theOffice.entities.Cycle;
 
-public class Cycle {
+public class CycleDto {
     private Long id;
     private Double cost;
     private Long employees;
     private Long productivity;
     private Long popularity;
     private Long step;
-    private Long id_company;
 
-    public Cycle(){}
+    public CycleDto() {}
 
-    public Cycle(Long id, Double cost, Long employees, Long productivity, Long popularity, Long step, Long id_company){
+    public CycleDto(Long id, Double cost, Long employees, Long productivity, Long popularity, Long step) {
         this.id = id;
         this.cost = cost;
         this.employees = employees;
         this.productivity = productivity;
         this.popularity = popularity;
         this.step = step;
-        this.id_company = id_company;
     }
 
     public Long getId() {
@@ -71,12 +69,7 @@ public class Cycle {
         this.step = step;
     }
 
-    public Long getId_company() {
-        return id_company;
+    public static CycleDto fromEntity(Cycle cycle){
+        return new CycleDto(cycle.getId(), cycle.getCost(), cycle.getEmployees(), cycle.getProductivity(), cycle.getPopularity(), cycle.getStep());
     }
-
-    public void setId_company(Long id_company) {
-        this.id_company = id_company;
-    }
-
 }

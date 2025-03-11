@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.entities.Cycle;
 import com.TheOffice.theOffice.entities.Local.Local;
 import com.TheOffice.theOffice.entities.Local.LocalLevel;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
@@ -46,6 +47,14 @@ public class LocalDao {
                 .stream()
                 .findFirst()
                 .orElseThrow(()-> new ResourceNotFoundException("Local non trouvé"));
+    }
+
+    public Local findByIdCompany(Long id_company) {
+        String sql = "SELECT * FROM Local WHERE id_company = ?";
+        return jdbcTemplate.query(sql, localRowMapper, id_company)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Local non trouvé"));
     }
 
     public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {

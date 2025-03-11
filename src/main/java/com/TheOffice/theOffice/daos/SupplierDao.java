@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.entities.Cycle;
 import com.TheOffice.theOffice.entities.StockMaterial;
 import com.TheOffice.theOffice.entities.Supplier;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
@@ -35,6 +36,18 @@ public class SupplierDao {
     public List<Supplier> findAll() {
         String sql = "SELECT * FROM Supplier";
         return jdbcTemplate.query(sql, supplierRowMapper);
+    }
+
+    public List<Supplier> findByIdCompany(Long id_company) {
+        String sql = "SELECT * FROM Supplier WHERE id_company = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new Supplier(rs.getLong("id"),
+                                rs.getString("name"),
+                                rs.getBigDecimal("price"),
+                                rs.getString("quality"),
+                                rs.getLong("id_company")),
+                id_company
+        );
     }
 
     public Supplier findById(Long id) {
