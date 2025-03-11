@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Company {
     private Long id;
+    @NotBlank (message = "Le secteur de l'entreprise ne peut pas être vide")
     private String sector;
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
     private String name;
