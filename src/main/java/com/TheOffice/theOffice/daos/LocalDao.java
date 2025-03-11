@@ -4,13 +4,16 @@ import com.TheOffice.theOffice.entities.Cycle;
 import com.TheOffice.theOffice.entities.Local.Local;
 import com.TheOffice.theOffice.entities.Local.LocalLevel;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
@@ -55,6 +58,39 @@ public class LocalDao {
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Local non trouvé"));
+    }
+
+    public void saveDefaultLocal(Long id_company, String sector) {
+        String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        byte[] defaultImage = getDefaultImage(sector);
+
+        jdbcTemplate.update(sql,
+                "PETIT_LOCAL", // Valeur par défaut pour level
+                50,            // Taille par défaut
+                new BigDecimal("100000.00"), // Cout par défaut
+                10,            // Nombre max d'employés
+                5,             // Nombre max de machines
+                defaultImage,   // Image vide par défaut
+                id_company     // Associer au nouvel ID de l'entreprise
+        );
+    }
+
+    private byte[] getDefaultImage(String sector) {
+        String imagePath;
+
+        switch (sector.toLowerCase()) {
+            case "carpentry":
+                imagePath = "static/carpentry1.png"; // Menuiserie
+                break;
+            case "creamery":
+                imagePath = "static/creamery1.png"; // Crémerie
+                break;
+            case "quarry":
+                imagePath = "static/quarry1.png"; // Carrière
+                break;
+        }
+        return new byte[0];
     }
 
     public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {

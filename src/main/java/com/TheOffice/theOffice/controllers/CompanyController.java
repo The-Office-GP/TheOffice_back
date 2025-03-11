@@ -114,12 +114,15 @@ public class CompanyController {
 
         int id_company = companyDao.save(sector, name, creation_date, id_user);
 
+        localDao.saveDefaultLocal((long) id_company, sector);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "id_company", id_company,
                 "sector", sector,
                 "name", name,
                 "creation_date", creation_date,
-                "id_user", id_user
+                "id_user", id_user,
+                "message", "Entreprise et Local créés avec succès !"
         ));
     }
 
