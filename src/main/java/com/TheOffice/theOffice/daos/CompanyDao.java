@@ -106,6 +106,11 @@ public class CompanyDao {
         return jdbcTemplate.query(sql, companyRowMapper);
     }
 
+    public List<Company> findByUserId(Long id_user) {
+        String sql = "SELECT * FROM Company WHERE id_user = ?";
+        return jdbcTemplate.query(sql, companyRowMapper, id_user);
+    }
+
     public int save(String sector, String name, Date creation_date, Long id_user) {
         String sql = "INSERT INTO Company (sector, name, creation_date, id_user) VALUES (?, ?, ?, ?)";
 
