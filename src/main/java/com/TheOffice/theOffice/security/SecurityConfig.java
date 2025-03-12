@@ -29,61 +29,66 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final CustomUserDetailsService userDetailsService;
 
+    // Constructeur de la classe SecurityConfig pour injecter les dépendances nécessaires
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService userDetailsService) {
         this.jwtFilter = jwtFilter;
         this.userDetailsService = userDetailsService;
     }
 
+    // Méthode principale de configuration de sécurité
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable()) // Désactive la protection CSRF (pas nécessaire pour une API REST)
+                .cors(Customizer.withDefaults()) // Active CORS avec la configuration par défaut
                 .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Désactive la gestion de session (utilisation de JWT pour l'authentification stateless)
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/auth/**", "/test/all").permitAll()
-                                .requestMatchers("/user/**", "/companies/**").hasRole("USER")
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                                .requestMatchers("/auth/**", "/test/all").permitAll() // Permet l'accès public aux endpoints /auth/** et /test/all
+                                .requestMatchers("/user/**", "/companies/**").hasRole("USER") // Permet l'accès aux utilisateurs avec le rôle USER pour /user/** et /companies/**
+                                .requestMatchers("/admin/**").hasRole("ADMIN") // Permet l'accès aux utilisateurs avec le rôle ADMIN pour /admin/**
+                                .anyRequest().authenticated() // Requiert une authentification pour toute autre requête
                 );
+        // Ajoute un filtre JWT avant le filtre par défaut UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        return http.build(); // Retourne la configuration de sécurité
     }
 
+    // Bean pour configurer l'AuthenticationProvider avec un DaoAuthenticationProvider
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder());
+        provider.setUserDetailsService(userDetailsService); // Utilise le CustomUserDetailsService pour récupérer les détails de l'utilisateur
+        provider.setPasswordEncoder(new BCryptPasswordEncoder()); // Utilise BCryptPasswordEncoder pour le codage des mots de passe
         return provider;
     }
 
+    // Bean pour obtenir l'AuthenticationManager à partir de la configuration d'authentification
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
     ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration.getAuthenticationManager(); // Récupère le AuthenticationManager configuré
     }
 
+    // Bean pour définir l'encodeur de mot de passe avec BCryptPasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // Utilise BCrypt pour le hachage des mots de passe
     }
 
+    // Bean pour la configuration CORS (Cross-Origin Resource Sharing)
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // Permet l'origine localhost:3000 (utile pour les appels depuis un frontend local en développement)
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")); // Définit les méthodes HTTP autorisées
+        configuration.setAllowCredentials(true); // Autorise l'envoi de cookies et d'en-têtes d'autorisation
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Définit les en-têtes autorisés
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        source.registerCorsConfiguration("/**", configuration); // Applique la configuration CORS à toutes les routes
+        return source; // Retourne la source de configuration CORS
     }
-
-
 }
