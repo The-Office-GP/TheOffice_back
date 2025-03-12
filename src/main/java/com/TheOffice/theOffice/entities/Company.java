@@ -16,6 +16,7 @@ public class Company {
     private String name;
     private Date creation_date;
     private Long id_user;
+    private Long id_local;
     private List<Machine> machines = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
@@ -24,12 +25,13 @@ public class Company {
     }
 
     // Constructor
-    public Company(Long id, String sector, String name, Date creation_date, Long id_user, List<Machine> machines, List<Employee> employees,  List<Event> events) {
+    public Company(Long id, String sector, String name, Date creation_date, Long id_user, Long id_local, List<Machine> machines, List<Employee> employees,  List<Event> events) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creation_date = creation_date;
         this.id_user = id_user;
+        this.id_local = id_local;
         this.machines = machines;
         this.employees = employees;
         this.events = events;
@@ -74,6 +76,14 @@ public class Company {
 
     public void setId_user(Long id_user) {
         this.id_user = id_user;
+    }
+
+    public Long getId_local() {
+        return id_local;
+    }
+
+    public void setId_local(Long id_local) {
+        this.id_local = id_local;
     }
 
     public List<Machine> getMachines() {return machines;}

@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -34,6 +35,7 @@ public class CompanyDao {
             rs.getString("name"),
             rs.getDate("creation_date"),
             rs.getLong("id_user"),
+            rs.getLong("id_local"),
             null,
             null,
             null
@@ -98,6 +100,14 @@ public class CompanyDao {
         return company;
     }
 
+    public Company findByIdAndUser(Long companyId, Long userId) {
+        String sql = "SELECT * FROM Company WHERE id = ? AND id_user = ?";
+        return jdbcTemplate.query(sql, companyRowMapper, companyId, userId)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new AccessDeniedException("Vous n'avez pas accès à cette entreprise"));
+    }
+
     //GET par nom
     public Optional<Company> findByName(String name) {
         String sql = "SELECT * FROM Company WHERE name = ?";
@@ -120,8 +130,10 @@ public class CompanyDao {
     }
 
     //POST
-    public int save(String sector, String name, Date creation_date, Long id_user) {
-        String sql = "INSERT INTO Company (sector, name, creation_date, id_user) VALUES (?, ?, ?, ?)";
+    public int save(String sector, String name, Date creation_date, Long id_user, Long id_local) {
+        String sql = "INSERT INTO Company (sector, name, creation_date, id_user, id_local) VALUES (?, ?, ?, ?, ?)";
+
+        int defaultLocalId = getDefaultLocalId(sector);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -131,10 +143,20 @@ public class CompanyDao {
             ps.setString(2, name);
             ps.setDate(3, new java.sql.Date(creation_date.getTime()));
             ps.setLong(4, id_user);
+            ps.setLong(5, defaultLocalId);
             return ps;
         }, keyHolder);
 
         return keyHolder.getKey().intValue();
+    }
+
+    private int getDefaultLocalId(String sector) {
+        return switch (sector.toLowerCase()) {
+            case "carpentry" -> 1; // id_local = 1 pour le secteur "carpentry" par default
+            case "creamery" -> 2; // id_local = 2 pour le secteur "creamery" par default
+            case "quarry" -> 3; // id_local = 3 pour le secteur "quarry" par default
+            default -> 1;
+        };
     }
 
     //PUT
@@ -143,8 +165,8 @@ public class CompanyDao {
             throw new ResourceNotFoundException("Entreprise avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, id_user = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreation_date(), company.getId_user(), id);
+        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, id_user = ?, id_local = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreation_date(), company.getId_user(), company.getId_local(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'entreprise avec l'ID : " + id);

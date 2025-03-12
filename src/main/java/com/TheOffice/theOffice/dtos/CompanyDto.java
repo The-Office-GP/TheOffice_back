@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.dtos;
 
 import com.TheOffice.theOffice.entities.Company;
-import com.TheOffice.theOffice.entities.Local.Local;
 
 import java.util.List;
 
@@ -9,6 +8,7 @@ public class CompanyDto {
     private String sector;
     private String name;
     private Long idUser;
+    private Long idLocal;
     private Double wallet;
 
     // DTOs associés
@@ -27,12 +27,13 @@ public class CompanyDto {
                                         List<CycleDto> cycleDtos, List<MachineDto> machineDtos,
                                         List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
-                                        List<StockFinalMaterialDto> stockFinalMaterialDtos, Local local) { // 🔥 Local en paramètre
+                                        List<StockFinalMaterialDto> stockFinalMaterialDtos, LocalDto localDtos) {
         CompanyDto dto = new CompanyDto();
 
         dto.setSector(company.getSector());
         dto.setName(company.getName());
         dto.setIdUser(company.getId_user());
+        dto.setIdLocal(company.getId_local());
         dto.setWallet(wallet);
 
         dto.setCycles(cycleDtos);
@@ -42,9 +43,7 @@ public class CompanyDto {
         dto.setEvents(eventDtos);
         dto.setStockMaterials(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
-
-        //Convertir `Local` en `LocalDto` si `local` n'est pas `null`
-        dto.setLocal((local != null) ? LocalDto.fromEntity(local) : null);
+        dto.setLocal(localDtos);
 
         return dto;
     }
@@ -58,6 +57,9 @@ public class CompanyDto {
 
     public Long getIdUser() { return idUser; }
     public void setIdUser(Long idUser) { this.idUser = idUser; }
+
+    public Long getIdLocal() { return idLocal; }
+    public void setIdLocal(Long idLocal) { this.idLocal = idLocal; }
 
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }

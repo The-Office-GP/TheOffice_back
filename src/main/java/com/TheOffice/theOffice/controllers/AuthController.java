@@ -51,7 +51,7 @@ public class AuthController {
                 user.getUsername(),  // Nom d'utilisateur
                 encoder.encode(user.getPassword()),  // Mot de passe encodé avec PasswordEncoder
                 user.getRole() != null ? user.getRole() : "USER",  // Rôle de l'utilisateur (par défaut "USER" si aucun rôle n'est fourni)
-                BigDecimal.ZERO  // Solde initial de l'utilisateur (par défaut 0)
+                user.getWallet() != null ? user.getWallet() : new BigDecimal(10000) // Si wallet est null, mettre 10 000 par défaut
         );
 
         // Enregistrement de l'utilisateur dans la base de données et vérification si l'enregistrement a réussi

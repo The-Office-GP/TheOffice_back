@@ -35,8 +35,7 @@ public class LocalDao {
             rs.getBigDecimal("rent"),
             rs.getInt("maxEmployees"),
             rs.getInt("maxMachines"),
-            rs.getBytes("background_image"),
-            rs.getLong("id_company")
+            rs.getBytes("background_image")
     );
 
     //GET de tous les locaux
@@ -54,54 +53,9 @@ public class LocalDao {
                 .orElseThrow(()-> new ResourceNotFoundException("Local non trouvé"));
     }
 
-    //GET par id de l'entreprise
-    public Local findByIdCompany(Long id_company) {
-        String sql = "SELECT * FROM Local WHERE id_company = ?";
-        return jdbcTemplate.query(sql, localRowMapper, id_company)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Local non trouvé"));
-    }
-
     //POST
-    public void saveDefaultLocal(Long id_company, String sector) {
-        String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        // Récupérer l'image par défaut en fonction du secteur
-        byte[] defaultImage = getDefaultImage(sector);
-
-        jdbcTemplate.update(sql,
-                "PETIT_LOCAL", // Valeur par défaut pour level
-                50,            // Taille par défaut
-                new BigDecimal("100000.00"), // Cout par défaut
-                10,            // Nombre max d'employés
-                5,             // Nombre max de machines
-                defaultImage,   // Image vide par défaut
-                id_company     // Associer au nouvel ID de l'entreprise
-        );
-    }
-
-    // Récupérer l'image par défaut en fonction du secteur
-    private byte[] getDefaultImage(String sector) {
-        String imagePath;
-
-        switch (sector.toLowerCase()) {
-            case "carpentry":
-                imagePath = "static/carpentry1.png"; // Menuiserie
-                break;
-            case "creamery":
-                imagePath = "static/creamery1.png"; // Crémerie
-                break;
-            case "quarry":
-                imagePath = "static/quarry1.png"; // Carrière
-                break;
-        }
-        return new byte[0];
-    }
-
-    //POST
-    public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {
-        String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image, id_company) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int save(String level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image) {
+        String sql = "INSERT INTO Local (level, size, rent, maxEmployees, maxMachines, background_image) VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -113,7 +67,6 @@ public class LocalDao {
             ps.setInt(4, maxEmployees);
             ps.setInt(5, maxMachines);
             ps.setBytes(6, background_image);
-            ps.setLong(7, id_company);
             return ps;
         }, keyHolder);
 
@@ -126,8 +79,8 @@ public class LocalDao {
             throw new ResourceNotFoundException("Local avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Local SET level = ?, size = ?, rent = ?, maxEmployees = ?, maxMachines = ?, background_image = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, local.getLevel().name(), local.getSize(), local.getRent(), local.getMaxEmployees(), local.getMaxMachines(), local.getBackground_image(),local.getId_company(), id);
+        String sql = "UPDATE Local SET level = ?, size = ?, rent = ?, maxEmployees = ?, maxMachines = ?, background_image = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, local.getLevel().name(), local.getSize(), local.getRent(), local.getMaxEmployees(), local.getMaxMachines(), local.getBackground_image(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du local avec l'ID : " + id);

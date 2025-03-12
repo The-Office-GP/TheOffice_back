@@ -41,14 +41,13 @@ public class LocalController {
             @RequestParam("rent") BigDecimal rent,
             @RequestParam("maxEmployees") Integer maxEmployees,
             @RequestParam("maxMachines") Integer maxMachines,
-            @RequestParam("id_company") Long idCompany,
             @RequestParam("background_image") MultipartFile background_image) {
         try {
             // Convertir l'image en tableau de bytes
             byte[] imageBytes = background_image.getBytes();
 
             // Sauvegarder le local et obtenir son ID
-            int id_local = localDao.save(level, size, rent, maxEmployees, maxMachines, imageBytes, idCompany);
+            int id_local = localDao.save(level, size, rent, maxEmployees, maxMachines, imageBytes);
 
             // Retourner une réponse HTTP avec les détails du local créé
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
@@ -58,8 +57,7 @@ public class LocalController {
                     "rent", rent,
                     "maxEmployees", maxEmployees,
                     "maxMachines", maxMachines,
-                    "background_image", "Uploaded Successfully",  // Confirmation que l'image a été téléchargée
-                    "id_company", idCompany
+                    "background_image", "Uploaded Successfully" // Confirmation que l'image a été téléchargée
             ));
         } catch (IOException e) {
             // En cas d'erreur lors du traitement de l'image, retourner une erreur

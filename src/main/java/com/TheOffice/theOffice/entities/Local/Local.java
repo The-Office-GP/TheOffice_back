@@ -10,13 +10,12 @@ public class Local {
     private Integer maxEmployees;
     private Integer maxMachines;
     private byte[] background_image;
-    private Long id_company;
 
     public Local() {
     }
 
     //Constructor
-    public Local(Long id, LocalLevel level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image, Long id_company) {
+    public Local(Long id, LocalLevel level, Integer size, BigDecimal rent, Integer maxEmployees, Integer maxMachines, byte[] background_image) {
         this.id = id;
         this.level = level;
         this.size = size;
@@ -24,7 +23,6 @@ public class Local {
         this.maxEmployees = maxEmployees;
         this.maxMachines = maxMachines;
         this.background_image = background_image;
-        this.id_company = id_company;
     }
 
     //Getters and Setters
@@ -53,8 +51,5 @@ public class Local {
     public void setBackground_image(byte[] background_image) {
         this.background_image = background_image;
     }
-
-    public Long getId_company() { return id_company; }
-    public void setId_company(Long id_company) { this.id_company = id_company; }
 }
 

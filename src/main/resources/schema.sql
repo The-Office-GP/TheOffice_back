@@ -5,7 +5,18 @@ CREATE TABLE IF NOT EXISTS User
     username VARCHAR(255)           NOT NULL,
     password VARCHAR(255)           NOT NULL,
     role     ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
-    wallet    DECIMAL(10, 2)     NOT NULL DEFAULT 0.00
+    wallet    DECIMAL(10, 2)     NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Local
+(
+    id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    level         ENUM ('PETIT_LOCAL', 'MOYEN_LOCAL', 'GRAND_LOCAL') NOT NULL DEFAULT 'PETIT_LOCAL',
+    size          INT                NOT NULL,
+    rent          DECIMAL(10, 2)     NOT NULL,
+    maxEmployees INT                NOT NULL,
+    maxMachines  INT                NOT NULL,
+    background_image LONGBLOB NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Company
@@ -15,7 +26,9 @@ CREATE TABLE IF NOT EXISTS Company
     name          VARCHAR(35)       NOT NULL,
     creation_date DATE               NOT NULL,
     id_user       INT,
-    FOREIGN KEY (id_user) REFERENCES User (id)
+    id_local      INT,
+    FOREIGN KEY (id_user) REFERENCES User (id),
+    FOREIGN KEY (id_local) REFERENCES Local (id)
 );
 
 CREATE TABLE IF NOT EXISTS Loan
@@ -91,19 +104,6 @@ CREATE TABLE IF NOT EXISTS EmployeeInCompany
     id_company  INT,
     PRIMARY KEY (id_employee, id_company),
     FOREIGN KEY (id_employee) REFERENCES Employee (id),
-    FOREIGN KEY (id_company) REFERENCES Company (id)
-);
-
-CREATE TABLE IF NOT EXISTS Local
-(
-    id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    level         ENUM ('PETIT_LOCAL', 'MOYEN_LOCAL', 'GRAND_LOCAL') NOT NULL DEFAULT 'PETIT_LOCAL',
-    size          INT                NOT NULL,
-    rent          DECIMAL(10, 2)     NOT NULL,
-    maxEmployees INT                NOT NULL,
-    maxMachines  INT                NOT NULL,
-    background_image LONGBLOB NOT NULL,
-    id_company    INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
 

@@ -11,6 +11,7 @@ import com.TheOffice.theOffice.security.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -30,11 +31,11 @@ public class CompanyController {
     private final EventDao eventDao;
     private final StockMaterialDao stockMaterialDao;
     private final StockFinalMaterialDao stockFinalMaterialDao;
-    private final LocalDao localDao;
     private final JwtUtil jwtUtil;
+    private final LocalDao localDao;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, LocalDao localDao, JwtUtil jwtUtil) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, LocalDao localDao) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -44,8 +45,8 @@ public class CompanyController {
         this.eventDao = eventDao;
         this.stockMaterialDao = stockMaterialDao;
         this.stockFinalMaterialDao = stockFinalMaterialDao;
-        this.localDao = localDao;
         this.jwtUtil = jwtUtil;
+        this.localDao = localDao;
     }
 
     // Récupère toutes les entreprises
@@ -56,11 +57,16 @@ public class CompanyController {
 
     // Récupère une entreprise par son ID avec toutes ses relations (machines, employés, etc.)
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyRequestDto> getCompanyById(@PathVariable Long id) {
+    public ResponseEntity<CompanyRequestDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getId();
         Company company = companyDao.findById(id);
         Double wallet = userDao.findWalletByUserId(company.getId_user());
 
-        // Conversion des entités en DTOs
+        // ✅ Récupérer `Local` associé à l'entreprise
+        Local local = localDao.findById(company.getId_local());
+        LocalDto localDto = (local != null) ? LocalDto.fromEntity(local) : null;
+
+        // ✅ Conversion des entités en DTOs
         List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<MachineDto> machines = machineDao.findByIdCompany(id).stream().map(MachineDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
@@ -68,13 +74,13 @@ public class CompanyController {
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
-        Local local = localDao.findByIdCompany(id); // Récupère l'entité Local sans conversion
 
-        // Création d'un DTO global pour l'entreprise
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials, local);
+        // ✅ Ajouter `localDto` à `CompanyDto`
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials, localDto);
 
         return ResponseEntity.ok(CompanyRequestDto.fromDto(companyDto));
     }
+
 
     // Récupère les machines associées à une entreprise spécifique
     @GetMapping("/{id}/machines")
@@ -110,27 +116,34 @@ public class CompanyController {
     // Création d'une nouvelle entreprise
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createCompany(@Valid @RequestBody Map<String, Object> request) {
-        // Extraction des paramètres de la requête
-        String sector = (String) request.get("sector");
-        String name = (String) request.get("name");
-        Date creation_date = new Date(); // Définition de la date de création à la date actuelle
-        Long id_user = ((Number) request.get("id_user")).longValue(); // Conversion en Long
+        try {
+            // ✅ Extraction et validation des paramètres
+            String sector = (String) request.get("sector");
+            String name = (String) request.get("name");
+            Date creation_date = new Date(); // ✅ Date actuelle
 
-        // Sauvegarde de l'entreprise et récupération de son ID généré
-        int id_company = companyDao.save(sector, name, creation_date, id_user);
+            // ✅ Vérification de `id_user`
+            Object idUserObject = request.get("id_user");
+            if (idUserObject == null || !(idUserObject instanceof Number)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "L'ID de l'utilisateur est obligatoire et doit être un nombre."));
+            }
+            Long id_user = ((Number) idUserObject).longValue();
 
-        // Création automatique d'un local par défaut pour cette entreprise
-        localDao.saveDefaultLocal((long) id_company, sector);
+            // ✅ Laisser `CompanyDao` gérer `id_local`
+            int id_company = companyDao.save(sector, name, creation_date, id_user, null);
 
-        // Réponse HTTP 201 (Created) avec les détails de l'entreprise créée
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_company", id_company,
-                "sector", sector,
-                "name", name,
-                "creation_date", creation_date,
-                "id_user", id_user,
-                "message", "Entreprise et Local créés avec succès !"
-        ));
+            // ✅ Réponse HTTP 201 (Created) avec les détails de l'entreprise créée
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                    "id_company", id_company,
+                    "sector", sector,
+                    "name", name,
+                    "creation_date", creation_date,
+                    "id_user", id_user,
+                    "message", "Entreprise créée avec succès !"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Erreur lors de la création de l'entreprise", "details", e.getMessage()));
+        }
     }
 
     // Mise à jour d'une entreprise existante

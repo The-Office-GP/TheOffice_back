@@ -9,6 +9,7 @@ public class CompanyRequestDto {
     private String sector;
     private String name;
     private Long idUser;
+    private Long idLocal;
     private Double wallet;
 
     // DTOs associés
@@ -30,6 +31,7 @@ public class CompanyRequestDto {
         dto.setSector(companyDto.getSector());
         dto.setName(companyDto.getName());
         dto.setIdUser(companyDto.getIdUser());
+        dto.setIdLocal(companyDto.getIdLocal());
         dto.setWallet(companyDto.getWallet());
 
         // Récupération des DTOs associés
@@ -54,6 +56,9 @@ public class CompanyRequestDto {
 
     public Long getIdUser() { return idUser; }
     public void setIdUser(Long idUser) { this.idUser = idUser; }
+
+    public Long getIdLocal() { return idLocal; }
+    public void setIdLocal(Long idLocal) { this.idLocal = idLocal; }
 
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }
