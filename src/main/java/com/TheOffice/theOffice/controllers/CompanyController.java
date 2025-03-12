@@ -57,16 +57,20 @@ public class CompanyController {
 
     // Récupère une entreprise par son ID avec toutes ses relations (machines, employés, etc.)
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyRequestDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getId();
         Company company = companyDao.findById(id);
+
+        // 🔥 Vérifier si l'utilisateur est bien le propriétaire de l'entreprise
+        if (!company.getId_user().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Accès interdit : cette entreprise ne vous appartient pas."));
+        }
+
         Double wallet = userDao.findWalletByUserId(company.getId_user());
 
-        // ✅ Récupérer `Local` associé à l'entreprise
         Local local = localDao.findById(company.getId_local());
         LocalDto localDto = (local != null) ? LocalDto.fromEntity(local) : null;
 
-        // ✅ Conversion des entités en DTOs
         List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<MachineDto> machines = machineDao.findByIdCompany(id).stream().map(MachineDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
@@ -75,12 +79,10 @@ public class CompanyController {
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
 
-        // ✅ Ajouter `localDto` à `CompanyDto`
         CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials, localDto);
 
         return ResponseEntity.ok(CompanyRequestDto.fromDto(companyDto));
     }
-
 
     // Récupère les machines associées à une entreprise spécifique
     @GetMapping("/{id}/machines")
@@ -115,24 +117,21 @@ public class CompanyController {
 
     // Création d'une nouvelle entreprise
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createCompany(@Valid @RequestBody Map<String, Object> request) {
+    public ResponseEntity<Map<String, Object>> createCompany(
+            @Valid @RequestBody Map<String, Object> request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) { // ✅ Récupérer l'utilisateur connecté
+
         try {
-            // ✅ Extraction et validation des paramètres
             String sector = (String) request.get("sector");
             String name = (String) request.get("name");
-            Date creation_date = new Date(); // ✅ Date actuelle
+            Date creation_date = new Date();
 
-            // ✅ Vérification de `id_user`
-            Object idUserObject = request.get("id_user");
-            if (idUserObject == null || !(idUserObject instanceof Number)) {
-                return ResponseEntity.badRequest().body(Map.of("error", "L'ID de l'utilisateur est obligatoire et doit être un nombre."));
-            }
-            Long id_user = ((Number) idUserObject).longValue();
+            // ✅ Associer automatiquement `id_user` à l'utilisateur connecté
+            Long id_user = userDetails.getId();
 
             // ✅ Laisser `CompanyDao` gérer `id_local`
             int id_company = companyDao.save(sector, name, creation_date, id_user, null);
 
-            // ✅ Réponse HTTP 201 (Created) avec les détails de l'entreprise créée
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                     "id_company", id_company,
                     "sector", sector,
@@ -142,7 +141,10 @@ public class CompanyController {
                     "message", "Entreprise créée avec succès !"
             ));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Erreur lors de la création de l'entreprise", "details", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "error", "Erreur lors de la création de l'entreprise",
+                    "details", e.getMessage()
+            ));
         }
     }
 

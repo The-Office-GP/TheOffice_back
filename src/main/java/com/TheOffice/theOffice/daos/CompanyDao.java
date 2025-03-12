@@ -124,10 +124,14 @@ public class CompanyDao {
     }
 
     //GET par id de l'utilisateur
-    public List<Company> findByUserId(Long id_user) {
-        String sql = "SELECT * FROM Company WHERE id_user = ?";
-        return jdbcTemplate.query(sql, companyRowMapper, id_user);
+    public List<Company> findByUserId(Long userId) {
+        String sql = "SELECT * FROM Company WHERE id_user = ?"; // 🔥 Filtrer uniquement les entreprises du user connecté
+        System.out.println("Requête SQL exécutée: " + sql + " avec id_user = " + userId); // 🔥 Debug log
+        List<Company> companies = jdbcTemplate.query(sql, companyRowMapper, userId);
+        System.out.println("Entreprises trouvées: " + companies.size()); // 🔥 Vérifier si la requête retourne bien des résultats
+        return companies;
     }
+
 
     //POST
     public int save(String sector, String name, Date creation_date, Long id_user, Long id_local) {
