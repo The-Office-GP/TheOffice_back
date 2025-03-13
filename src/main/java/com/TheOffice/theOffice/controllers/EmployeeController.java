@@ -1,7 +1,9 @@
 package com.TheOffice.theOffice.controllers;
 
+import com.TheOffice.theOffice.classes.EmployeeNameList;
 import com.TheOffice.theOffice.daos.EmployeeDao;
 import com.TheOffice.theOffice.entities.Employee.Employee;
+import com.TheOffice.theOffice.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,12 @@ import java.util.Map;
 public class EmployeeController {
     // Déclaration de la dépendance vers le DAO qui interagira avec la base de données
     private final EmployeeDao employeeDao;
+    private final EmployeeService employeeService;
 
     // Injection de la dépendance via le constructeur
-    public EmployeeController(EmployeeDao employeeDao) {
+    public EmployeeController(EmployeeDao employeeDao, EmployeeService employeeService) {
         this.employeeDao = employeeDao;
+        this.employeeService = employeeService;
     }
 
     // Méthode pour récupérer tous les employés de l'entreprise
@@ -37,6 +41,12 @@ public class EmployeeController {
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         // Retourne un employé spécifique sous forme de réponse HTTP avec le statut 200 OK
         return ResponseEntity.ok(employeeDao.findById(id));
+    }
+
+    @GetMapping("/generate")
+    public ResponseEntity<EmployeeNameList> nameList() {
+        EmployeeNameList nameList = employeeService.generateEmployee();
+        return ResponseEntity.ok(nameList);
     }
 
     // Méthode pour créer un nouvel employé. Cette méthode reçoit des paramètres via un formulaire multipart (incluant une image).
