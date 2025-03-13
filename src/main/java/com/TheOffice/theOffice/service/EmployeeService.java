@@ -2,14 +2,16 @@ package com.TheOffice.theOffice.service;
 
 import com.TheOffice.theOffice.classes.EmployeeNameList;
 import com.TheOffice.theOffice.classes.EmployeeName;
+import com.TheOffice.theOffice.classes.SalaryList;
 import com.TheOffice.theOffice.daos.EmployeeDao;
-import com.TheOffice.theOffice.entities.Employee.Employee;
+import com.TheOffice.theOffice.entities.Employee.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class EmployeeService {
@@ -19,29 +21,79 @@ public class EmployeeService {
         this.employeeDao = employeeDao;
     }
 
-    public List<Employee> generateEmployee(){
-        ObjectMapper objectMapper = new ObjectMapper();
+    public List<Employee> generateEmployee() {
+        List<Employee> employeeList = new ArrayList<>();
 
-        EmployeeNameList employeeNameList = new EmployeeNameList();
-        List<Employee> employeeList;
+        for (int i = 0; i < 10; i++) {
+            Employee employee = createEmployee(1);
 
-        try {
-            File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/employeeNameList.json");
-
-            // Désérialiser le fichier JSON dans l'objet EmployeeList
-            EmployeeNameList nameList = objectMapper.readValue(jsonFile, EmployeeNameList.class);
-
-            for (EmployeeName employeeName : nameList.getNameList()) {
-                System.out.println(employeeName);
-
-                employeeList.add(new Employee(employeeName.getId(), empl))
-                employeeNameList = nameList;
+            if (employee != null) {
+                employeeList.add(employee);
+            } else {
+                System.out.println("Erreur lors de la création de l'employé à l'itération " + i);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return employeeList;
     }
 
-    public Employee createEmployee(int rangeMin, int rangeMax, )
+
+    public Employee createEmployee(int levelCompany){
+        ObjectMapper objectMapper = new ObjectMapper();
+        SalaryList salaryList = new SalaryList();
+        EmployeeNameList nameList = new EmployeeNameList();
+
+        try {
+            File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/salary.json");
+            File jsonFile2 = new File("src/main/java/com/TheOffice/theOffice/json/employeeNameList.json");
+
+            // Désérialiser le fichier JSON dans l'objet EmployeeList
+            salaryList = objectMapper.readValue(jsonFile, SalaryList.class);
+            nameList = objectMapper.readValue(jsonFile2, EmployeeNameList.class);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Random random = new Random();
+        int randomNumber = random.nextInt(100 - 0) + 0;
+        int choiceName = random.nextInt(nameList.getNameList().size() - 1) +1;
+
+        Map<Integer, Integer[]> levelMap = new HashMap<>();
+        levelMap.put(1, new Integer[]{50, 20, 10, 10, 5});
+        levelMap.put(2, new Integer[]{25, 25, 20, 10, 10});
+        levelMap.put(3, new Integer[]{15, 17, 18, 20, 20});
+
+        Integer[] ranges = levelMap.get(levelCompany);
+        int levelEmployee = choiceLevelEmployee(randomNumber, ranges[0], ranges[1], ranges[2], ranges[3], ranges[4]);
+
+        return new Employee(
+                nameList.getNameList().get(choiceName).getId(),
+                nameList.getNameList().get(choiceName).getName(),
+                Gender.HOMME,
+                0,
+                salaryList.getSalaryList().get(levelEmployee).getSalary(),
+                salaryList.getSalaryList().get(levelEmployee).getLevelSkill(),
+                Mood.NEUTRE,
+                Status.ACTIF,
+                Job.PRODUCTION,
+                100,
+                new byte[0]
+        );
+    }
+
+    public int choiceLevelEmployee(int rng, int range1, int range2, int range3, int range4, int range5){
+        if (rng > 0 && rng <= range1){
+            return 0;
+        } else if (rng > range1 && rng <= range1+range2) {
+            return 1;
+        } else if (rng > range1+range2 && rng <= range1+range2+range3) {
+            return 2;
+        } else if (rng > range1+range2+range3 && rng <= range1+range2+range3+range4) {
+            return 3;
+        } else if (rng > range1+range2+range3+range4 && rng <= range1+range2+range3+range4+range5) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
 }

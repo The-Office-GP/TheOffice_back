@@ -44,9 +44,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/generate")
-    public ResponseEntity<EmployeeNameList> nameList() {
-        EmployeeNameList nameList = employeeService.generateEmployee();
-        return ResponseEntity.ok(nameList);
+    public ResponseEntity<List<Employee>> employeeList() {
+        List<Employee> employeeList = employeeService.generateEmployee();
+        return ResponseEntity.ok(employeeList);
     }
 
     // Méthode pour créer un nouvel employé. Cette méthode reçoit des paramètres via un formulaire multipart (incluant une image).
