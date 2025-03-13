@@ -38,7 +38,7 @@ public class EmployeeDao {
             Status.valueOf(rs.getString("status")),
             Job.valueOf(rs.getString("job")),
             rs.getInt("health"),
-            rs.getBytes("image")
+            rs.getString("image")
     );
 
     //GET de tous les salariés
@@ -66,7 +66,7 @@ public class EmployeeDao {
     }
 
     //POST
-    public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, byte[] image) {
+    public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, String image) {
         String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -82,7 +82,7 @@ public class EmployeeDao {
             ps.setString(7, status);
             ps.setString(8, job);
             ps.setInt(9, health);
-            ps.setBytes(10, image);
+            ps.setString(10, image);
             return ps;
         }, keyHolder);
 

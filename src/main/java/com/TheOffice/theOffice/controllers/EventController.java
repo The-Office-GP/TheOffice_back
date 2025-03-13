@@ -3,12 +3,12 @@ package com.TheOffice.theOffice.controllers;
 import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.daos.EventDao;
 import com.TheOffice.theOffice.entities.Event;
+import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -35,33 +35,21 @@ public class EventController {
     }
 
     // Créer un événement
-    @PostMapping(value = "/create", consumes = "multipart/form-data")
-    public ResponseEntity<Map<String, Object>> createEvent(
-            @RequestParam("recurrence") Integer recurrence,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("id_company") Long id_company) {
-        try {
-            // Conversion de l'image en tableau d'octets
-            byte[] imageBytes = image.getBytes();
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, Object>> createEvent(@RequestBody Map<String, Object> request) {
+        // Extraction des informations envoyées dans la requête
+        long recurrence = Long.parseLong((request.get("recurrence").toString()));
+        String image = (request.get("image").toString());
 
-            // Sauvegarde de l'événement et récupération de l'ID
-            int id_event = eventDao.save(recurrence, imageBytes);
+        // Sauvegarde du prêt et récupération de son ID
+        int id_event = eventDao.save(Math.toIntExact(recurrence), image);
 
-            // Lier l'événement à une entreprise
-            eventDao.linkEventToCompany((long) id_event, id_company);
-
-            // Réponse HTTP 201 avec les détails de l'événement créé
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                    "recurrence", recurrence,
-                    "image", "Uploaded Successfully",
-                    "id_company", id_company
-            ));
-        } catch (IOException e) {
-            // Si une erreur survient lors du traitement de l'image
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "error", "Erreur lors du traitement de l'image"
-            ));
-        }
+        // Construction de la réponse HTTP avec statut 201 (créé) et données du prêt
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                "id_event", id_event,
+                "recurrence", recurrence,
+                "image", image
+        ));
     }
 
     // Mettre à jour un événement
