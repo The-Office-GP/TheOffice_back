@@ -15,13 +15,13 @@ public class EmployeeDto {
     private Status status;
     private Job job;
     private Integer health;
-    private byte[] image;
+    private String image;
 
     public EmployeeDto() {
     }
 
     // Constructor
-    public EmployeeDto(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, byte [] image) {
+    public EmployeeDto(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, String image) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -66,8 +66,8 @@ public class EmployeeDto {
     public Integer getHealth() { return health; }
     public void setHealth(Integer health) { this.health = health; }
 
-    public byte [] getImage() {return image;}
-    public void setImage(byte[] image) {this.image = image;}
+    public String getImage() {return image;}
+    public void setImage(String image) {this.image = image;}
 
     public static EmployeeDto fromEntity(Employee employee) {
         return new EmployeeDto(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(), employee.getImage());

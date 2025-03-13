@@ -8,7 +8,6 @@ public class CompanyDto {
     private String sector;
     private String name;
     private Long idUser;
-    private Long idLocal;
     private Double wallet;
 
     // DTOs associés
@@ -19,7 +18,6 @@ public class CompanyDto {
     private List<EventDto> events;
     private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
-    private LocalDto local;
 
     public CompanyDto() {}
 
@@ -27,13 +25,12 @@ public class CompanyDto {
                                         List<CycleDto> cycleDtos, List<MachineDto> machineDtos,
                                         List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
-                                        List<StockFinalMaterialDto> stockFinalMaterialDtos, LocalDto localDtos) {
+                                        List<StockFinalMaterialDto> stockFinalMaterialDtos) {
         CompanyDto dto = new CompanyDto();
 
         dto.setSector(company.getSector());
         dto.setName(company.getName());
         dto.setIdUser(company.getId_user());
-        dto.setIdLocal(company.getId_local());
         dto.setWallet(wallet);
 
         dto.setCycles(cycleDtos);
@@ -43,7 +40,6 @@ public class CompanyDto {
         dto.setEvents(eventDtos);
         dto.setStockMaterials(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
-        dto.setLocal(localDtos);
 
         return dto;
     }
@@ -57,9 +53,6 @@ public class CompanyDto {
 
     public Long getIdUser() { return idUser; }
     public void setIdUser(Long idUser) { this.idUser = idUser; }
-
-    public Long getIdLocal() { return idLocal; }
-    public void setIdLocal(Long idLocal) { this.idLocal = idLocal; }
 
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }
@@ -84,7 +77,4 @@ public class CompanyDto {
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }
-
-    public LocalDto getLocal() { return local; }
-    public void setLocal(LocalDto local) { this.local = local; }
 }

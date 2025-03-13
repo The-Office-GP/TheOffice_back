@@ -30,7 +30,7 @@ public class MachineDao {
             ProductionQuality.valueOf(rs.getString("production_quality")),
             rs.getBigDecimal("price"),
             rs.getBigDecimal("maintenance_cost"),
-            rs.getBytes("image")
+            rs.getString("image")
     );
 
     //GET par id de l'entreprise
@@ -58,7 +58,7 @@ public class MachineDao {
     }
 
     //POST
-    public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, byte[] image) {
+    public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, String image) {
         String sql ="INSERT INTO Machine (name, production_quality, price, maintenance_cost, image) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -69,7 +69,7 @@ public class MachineDao {
             ps.setString(2, production_quality);
             ps.setBigDecimal(3, price);
             ps.setBigDecimal(4, maintenance_cost);
-            ps.setBytes(5, image);
+            ps.setString(5, image);
             return ps;
         }, keyHolder);
 

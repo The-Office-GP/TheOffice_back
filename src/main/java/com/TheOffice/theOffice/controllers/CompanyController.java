@@ -1,13 +1,15 @@
 package com.TheOffice.theOffice.controllers;
 
+import com.TheOffice.theOffice.classes.Local;
 import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.entities.Local.Local;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +34,9 @@ public class CompanyController {
     private final StockMaterialDao stockMaterialDao;
     private final StockFinalMaterialDao stockFinalMaterialDao;
     private final JwtUtil jwtUtil;
-    private final LocalDao localDao;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, LocalDao localDao) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -46,7 +47,6 @@ public class CompanyController {
         this.stockMaterialDao = stockMaterialDao;
         this.stockFinalMaterialDao = stockFinalMaterialDao;
         this.jwtUtil = jwtUtil;
-        this.localDao = localDao;
     }
 
     // Récupère toutes les entreprises
@@ -68,9 +68,6 @@ public class CompanyController {
 
         Double wallet = userDao.findWalletByUserId(company.getId_user());
 
-        Local local = localDao.findById(company.getId_local());
-        LocalDto localDto = (local != null) ? LocalDto.fromEntity(local) : null;
-
         List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<MachineDto> machines = machineDao.findByIdCompany(id).stream().map(MachineDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
@@ -79,7 +76,7 @@ public class CompanyController {
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials, localDto);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials);
 
         return ResponseEntity.ok(CompanyRequestDto.fromDto(companyDto));
     }
@@ -119,28 +116,45 @@ public class CompanyController {
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createCompany(
             @Valid @RequestBody Map<String, Object> request,
-            @AuthenticationPrincipal CustomUserDetails userDetails) { // ✅ Récupérer l'utilisateur connecté
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         try {
             String sector = (String) request.get("sector");
             String name = (String) request.get("name");
             Date creation_date = new Date();
 
-            // ✅ Associer automatiquement `id_user` à l'utilisateur connecté
+            Object idLocalObj = request.get("id_local");
+            if (idLocalObj == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                        "error", "L'attribut 'id_local' est requis."
+                ));
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<Local> id_local;
+
+            if (idLocalObj instanceof String idLocalJson) {
+                id_local = mapper.readValue(idLocalJson, new TypeReference<List<Local>>() {});
+            } else if (idLocalObj instanceof List<?>) {
+                id_local = ((List<?>) idLocalObj).stream()
+                        .map(item -> mapper.convertValue(item, Local.class))
+                        .collect(Collectors.toList());
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                        "error", "Format invalide pour 'id_local'. Une liste d'objets ou une chaîne JSON est attendue."
+                ));
+            }
+
             Long id_user = userDetails.getId();
 
-            // ✅ Laisser `CompanyDao` gérer `id_local`
-            int id_company = companyDao.save(sector, name, creation_date, id_user, null);
+            int companyId = companyDao.save(sector, name, creation_date, id_local, id_user);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                    "id_company", id_company,
-                    "sector", sector,
-                    "name", name,
-                    "creation_date", creation_date,
-                    "id_user", id_user,
+                    "id", companyId,
                     "message", "Entreprise créée avec succès !"
             ));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "error", "Erreur lors de la création de l'entreprise",
                     "details", e.getMessage()

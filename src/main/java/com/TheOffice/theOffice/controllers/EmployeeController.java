@@ -1,7 +1,8 @@
 package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.daos.EmployeeDao;
-import com.TheOffice.theOffice.entities.Employee.Employee;
+import com.TheOffice.theOffice.entities.Employee.*;
+import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,53 +41,36 @@ public class EmployeeController {
     }
 
     // Méthode pour créer un nouvel employé. Cette méthode reçoit des paramètres via un formulaire multipart (incluant une image).
-    @PostMapping(value = "/create", consumes = "multipart/form-data")
-    public ResponseEntity<Map<String, Object>> createEmployee(
-            @RequestParam("name") String name,  // Nom de l'employé
-            @RequestParam("gender") String gender,  // Sexe de l'employé
-            @RequestParam("seniority") Integer seniority,  // Ancienneté de l'employé
-            @RequestParam("salary") BigDecimal salary,  // Salaire de l'employé
-            @RequestParam("level") Integer level,  // Niveau de l'employé
-            @RequestParam("mood") String mood,  // Humeur de l'employé
-            @RequestParam("status") String status,  // Statut de l'employé
-            @RequestParam("job") String job,  // Poste de l'employé
-            @RequestParam("health") Integer health,  // État de santé de l'employé
-            @RequestParam("image") MultipartFile image,  // Image de l'employé (profil)
-            @RequestParam("id_company") Long id_company) {  // ID de l'entreprise à laquelle l'employé est associé
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, Object>> createEmployee(@RequestBody Map<String, Object> request) {
+        // Extraction des informations envoyées dans la requête
+        String name = (request.get("name").toString());
+        Gender gender = Gender.valueOf(request.get("gender").toString());
+        Integer price = Integer.valueOf((request.get("seniority").toString()));
+        BigDecimal salary = new BigDecimal(request.get("salary").toString());
+        Integer level = Integer.valueOf((request.get("level").toString()));
+        Mood mood = Mood.valueOf(request.get("mood").toString());
+        Status status = Status.valueOf(request.get("status").toString());
+        Job job = Job.valueOf(request.get("job").toString());
+        Integer health = Integer.valueOf((request.get("health").toString()));
+        String image = (request.get("image").toString());
 
-        try {
-            // Récupération du fichier image en tant que tableau de bytes
-            byte[] imageBytes = image.getBytes();
+        // Sauvegarde du prêt et récupération de son ID
+        int id_employee = employeeDao.save(name, gender.name(), price, salary, level, mood.name(), status.name(), job.name(), health, image);
 
-            // Enregistrement de l'employé dans la base de données via le DAO et récupération de son ID
-            int id_employee = employeeDao.save(name, gender, seniority, salary, level, mood, status, job, health, imageBytes);
-
-            // Création d'un map pour structurer la réponse
-            Map<String, Object> response = new HashMap<>();
-            response.put("id_employee", id_employee);
-            response.put("name", name);
-            response.put("gender", gender);
-            response.put("seniority", seniority);
-            response.put("salary", salary);
-            response.put("level", level);
-            response.put("mood", mood);
-            response.put("status", status);
-            response.put("job", job);
-            response.put("health", health);
-            response.put("image", "Uploaded Successfully");  // Message indiquant que l'image a bien été uploadée
-            response.put("id_company", id_company);
-
-            // Lier l'employé à une entreprise spécifique
-            employeeDao.linkEmployeeToCompany((long) id_employee, id_company);
-
-            // Retourne une réponse HTTP 201 Created avec les informations de l'employé créé
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IOException e) {
-            // Si une erreur survient lors de l'upload de l'image, une réponse 500 Internal Server Error est renvoyée
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "error", "Erreur lors du traitement de l'image"
-            ));
-        }
+        // Construction de la réponse HTTP avec statut 201 (créé) et données du prêt
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                "id_employee", id_employee,
+                "name", name,
+                "price", price,
+                "salary", salary,
+                "level", level,
+                "mood", mood,
+                "status", status,
+                "job", job,
+                "health", health,
+                "image", image
+        ));
     }
 
     // Méthode pour mettre à jour un employé via son ID

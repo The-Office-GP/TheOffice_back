@@ -3,26 +3,83 @@
     {
       "id" : 1,
       "level": "Petit local",
-      "size": 5000,
-      "rent": 10000,
+      "size": 20000,
+      "rent": 100000,
       "max_employees": 10,
-      "max_machines": 3
+      "max_machines": 5,
+      "path_background_image": "/public/images/backgroundImages/carpentry1.png"
     },
     {
       "id" : 2,
+      "level": "Petit local",
+      "size": 5000,
+      "rent": 10000,
+      "max_employees": 10,
+      "max_machines": 3,
+      "path_background_image": "/public/images/backgroundImages/creamery1.png"
+    },
+    {
+      "id" : 3,
+      "level": "Petit local",
+      "size": 5000,
+      "rent": 10000,
+      "max_employees": 10,
+      "max_machines": 3,
+      "path_background_image": "/public/images/backgroundImages/quarry1.png"
+    },
+    {
+      "id" : 4,
       "level": "Moyenne machine",
       "size": 12000,
       "rent": 1000000,
       "max_employees": 100,
-      "max_machines": 15
+      "max_machines": 15,
+      "path_background_image": "/public/images/backgroundImages/carpentry2.png"
     },
     {
-      "id" : 3,
+      "id" : 5,
+      "level": "Moyenne machine",
+      "size": 12000,
+      "rent": 1000000,
+      "max_employees": 100,
+      "max_machines": 15,
+      "path_background_image": "/public/images/backgroundImages/creamery2.png"
+    },
+    {
+      "id" : 6,
+      "level": "Moyenne machine",
+      "size": 12000,
+      "rent": 1000000,
+      "max_employees": 100,
+      "max_machines": 15,
+      "path_background_image": "/public/images/backgroundImages/quarry2.png"
+    },
+    {
+      "id" : 7,
       "level": "Grande machine",
-      "size": 30000,
+      "size": 100000,
       "rent": 12000000,
-      "max_employees": 1000,
-      "max_machines": 50
+      "max_employees": 500,
+      "max_machines": 350,
+      "path_background_image": "/public/images/backgroundImages/carpentry3.png"
+    },
+    {
+      "id" : 8,
+      "level": "Grande machine",
+      "size": 100000,
+      "rent": 12000000,
+      "max_employees": 500,
+      "max_machines": 350,
+      "path_background_image": "/public/images/backgroundImages/creamery3.png"
+    },
+    {
+      "id" : 9,
+      "level": "Grande machine",
+      "size": 100000,
+      "rent": 12000000,
+      "max_employees": 500,
+      "max_machines": 350,
+      "path_background_image": "/public/images/backgroundImages/quarry3.png"
     }
   ]
 }
