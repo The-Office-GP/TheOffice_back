@@ -1,6 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
-import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.TheOffice.theOffice.classes.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,6 +1,6 @@
 package com.TheOffice.theOffice.dtos;
 
-import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.TheOffice.theOffice.classes.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 
 import java.math.BigDecimal;
