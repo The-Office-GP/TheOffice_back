@@ -5,13 +5,13 @@ import com.TheOffice.theOffice.entities.Event;
 public class EventDto {
     private Long id;
     private Long recurrence;
-    private byte[] image;
+    private String image;
 
     public EventDto() {
     }
 
     // Constructor
-    public EventDto(Long id, Long recurrence, byte[] image){
+    public EventDto(Long id, Long recurrence, String image){
         this.id = id;
         this.recurrence = recurrence;
         this.image = image;
@@ -34,11 +34,11 @@ public class EventDto {
         this.recurrence = recurrence;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

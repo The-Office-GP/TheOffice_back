@@ -3,9 +3,11 @@ package com.TheOffice.theOffice.daos;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
+import com.TheOffice.theOffice.classes.Local;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -29,17 +31,28 @@ public class CompanyDao {
     }
 
     //RowMapper pour les entreprises
-    private final RowMapper<Company> companyRowMapper = (rs, _) -> new Company(
-            rs.getLong("id"),
-            rs.getString("sector"),
-            rs.getString("name"),
-            rs.getDate("creation_date"),
-            rs.getLong("id_user"),
-            rs.getLong("id_local"),
-            null,
-            null,
-            null
-    );
+    private final RowMapper<Company> companyRowMapper = (rs, _) -> {
+        try {
+            String jsonLocal = rs.getString("local");
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Local> id_local = objectMapper.readValue(jsonLocal, List.class);
+
+            return new Company(
+                    rs.getLong("id"),
+                    rs.getString("sector"),
+                    rs.getString("name"),
+                    rs.getDate("creation_date"),
+                    id_local,
+                    rs.getLong("id_user"),
+                    null,
+                    null,
+                    null
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    };
 
     //RowMapper pour les machines
     private final RowMapper<Machine> machineRowMapper = (rs, _) -> new Machine(
@@ -48,7 +61,7 @@ public class CompanyDao {
             ProductionQuality.valueOf(rs.getString("production_quality")),
             rs.getBigDecimal("price"),
             rs.getBigDecimal("maintenance_cost"),
-            rs.getBytes("image")
+            rs.getString("image")
     );
 
     //RowMapper pour les employés
@@ -63,14 +76,14 @@ public class CompanyDao {
             Status.valueOf(rs.getString("status")),
             Job.valueOf(rs.getString("job")),
             rs.getInt("health"),
-            rs.getBytes("image")
+            rs.getString("image")
     );
 
     //RowMapper pour les events
     private final RowMapper<Event> eventRowMapper = (rs, _) -> new Event(
             rs.getLong("id"),
             rs.getLong("recurrence"),
-            rs.getBytes("image")
+            rs.getString("image")
     );
 
     //GET par id
@@ -132,12 +145,9 @@ public class CompanyDao {
         return companies;
     }
 
-
     //POST
-    public int save(String sector, String name, Date creation_date, Long id_user, Long id_local) {
-        String sql = "INSERT INTO Company (sector, name, creation_date, id_user, id_local) VALUES (?, ?, ?, ?, ?)";
-
-        int defaultLocalId = getDefaultLocalId(sector);
+    public int save(String sector, String name, Date creation_date, List<Local> id_local , Long id_user) {
+        String sql = "INSERT INTO Company (sector, name, creation_date, id_local, id_user) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -146,21 +156,12 @@ public class CompanyDao {
             ps.setString(1, sector);
             ps.setString(2, name);
             ps.setDate(3, new java.sql.Date(creation_date.getTime()));
+            ps.setObject(4, id_local);
             ps.setLong(4, id_user);
-            ps.setLong(5, defaultLocalId);
             return ps;
         }, keyHolder);
 
         return keyHolder.getKey().intValue();
-    }
-
-    private int getDefaultLocalId(String sector) {
-        return switch (sector.toLowerCase()) {
-            case "carpentry" -> 1; // id_local = 1 pour le secteur "carpentry" par default
-            case "creamery" -> 2; // id_local = 2 pour le secteur "creamery" par default
-            case "quarry" -> 3; // id_local = 3 pour le secteur "quarry" par default
-            default -> 1;
-        };
     }
 
     //PUT
@@ -169,8 +170,8 @@ public class CompanyDao {
             throw new ResourceNotFoundException("Entreprise avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, id_user = ?, id_local = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreation_date(), company.getId_user(), company.getId_local(), id);
+        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?,id_local = ?, id_user = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreation_date(),company.getId_local(), company.getId_user(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'entreprise avec l'ID : " + id);

@@ -8,27 +8,15 @@ CREATE TABLE IF NOT EXISTS User
     wallet    DECIMAL(10, 2)     NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Local
-(
-    id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    level         ENUM ('PETIT_LOCAL', 'MOYEN_LOCAL', 'GRAND_LOCAL') NOT NULL DEFAULT 'PETIT_LOCAL',
-    size          INT                NOT NULL,
-    rent          DECIMAL(10, 2)     NOT NULL,
-    maxEmployees INT                NOT NULL,
-    maxMachines  INT                NOT NULL,
-    background_image LONGBLOB NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS Company
 (
     id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     sector       VARCHAR(255)       NOT NULL,
     name          VARCHAR(35)       NOT NULL,
     creation_date DATE               NOT NULL,
+    id_local JSON NOT NULL,
     id_user       INT,
-    id_local      INT,
-    FOREIGN KEY (id_user) REFERENCES User (id),
-    FOREIGN KEY (id_local) REFERENCES Local (id)
+    FOREIGN KEY (id_user) REFERENCES User (id)
 );
 
 CREATE TABLE IF NOT EXISTS Loan
@@ -71,7 +59,7 @@ CREATE TABLE IF NOT EXISTS Machine
     production_quality ENUM ('MEDIOCRE', 'NORMAL', 'BONNE', 'PERFORMANTE') NOT NULL,
     price            DECIMAL(10, 2)     NOT NULL,
     maintenance_cost DECIMAL(10, 2)     NOT NULL,
-    image LONGBLOB NOT NULL
+    image VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS MachineInCompany
@@ -95,7 +83,7 @@ CREATE TABLE IF NOT EXISTS Employee
     status   ENUM ('ACTIF', 'CONGES', 'GREVE') NOT NULL DEFAULT 'ACTIF',
     job ENUM ('MARKETING', 'VENTE', 'PRODUCTION') NOT NULL,
     health INT NOT NULL,
-    image LONGBLOB NOT NULL
+    image VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS EmployeeInCompany
@@ -111,7 +99,7 @@ CREATE TABLE IF NOT EXISTS Event
 (
     id     INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     recurrence INT DEFAULT 0,
-    image LONGBLOB NOT NULL
+    image VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS CompanyEvent

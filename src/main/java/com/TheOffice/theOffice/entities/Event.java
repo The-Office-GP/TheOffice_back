@@ -3,13 +3,13 @@ package com.TheOffice.theOffice.entities;
 public class Event {
     private Long id;
     private Long recurrence;
-    private byte[] image;
+    private String image;
 
     public Event() {
     }
 
     //Constructor
-    public Event(Long id, Long recurrence, byte[] image){
+    public Event(Long id, Long recurrence, String image){
         this.id = id;
         this.recurrence = recurrence;
         this.image = image;
@@ -32,11 +32,11 @@ public class Event {
         this.recurrence = recurrence;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

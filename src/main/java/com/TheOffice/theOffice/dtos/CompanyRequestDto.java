@@ -1,15 +1,11 @@
 package com.TheOffice.theOffice.dtos;
 
-import com.TheOffice.theOffice.entities.Company;
-
-import java.util.Date;
 import java.util.List;
 
 public class CompanyRequestDto {
     private String sector;
     private String name;
     private Long idUser;
-    private Long idLocal;
     private Double wallet;
 
     // DTOs associés
@@ -20,7 +16,6 @@ public class CompanyRequestDto {
     private List<EventDto> events;
     private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
-    private LocalDto local;
 
     public CompanyRequestDto() {}
 
@@ -31,7 +26,6 @@ public class CompanyRequestDto {
         dto.setSector(companyDto.getSector());
         dto.setName(companyDto.getName());
         dto.setIdUser(companyDto.getIdUser());
-        dto.setIdLocal(companyDto.getIdLocal());
         dto.setWallet(companyDto.getWallet());
 
         // Récupération des DTOs associés
@@ -42,7 +36,6 @@ public class CompanyRequestDto {
         dto.setEvents(companyDto.getEvents());
         dto.setStockMaterials(companyDto.getStockMaterials());
         dto.setStockFinalMaterials(companyDto.getStockFinalMaterials());
-        dto.setLocal(companyDto.getLocal());
 
         return dto;
     }
@@ -56,9 +49,6 @@ public class CompanyRequestDto {
 
     public Long getIdUser() { return idUser; }
     public void setIdUser(Long idUser) { this.idUser = idUser; }
-
-    public Long getIdLocal() { return idLocal; }
-    public void setIdLocal(Long idLocal) { this.idLocal = idLocal; }
 
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }
@@ -83,7 +73,4 @@ public class CompanyRequestDto {
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }
-
-    public LocalDto getLocal() { return local; }
-    public void setLocal(LocalDto local) { this.local = local; }
 }

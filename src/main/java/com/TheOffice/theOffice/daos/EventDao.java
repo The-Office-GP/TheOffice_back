@@ -26,7 +26,7 @@ public class EventDao {
     private final RowMapper<Event> eventRowMapper = (rs,_) -> new Event (
             rs.getLong("id"),
             rs.getLong("recurrence"),
-            rs.getBytes("image")
+            rs.getString("image")
     );
 
     //GET de tous les événements
@@ -54,14 +54,14 @@ public class EventDao {
     }
 
     //POST
-    public int save (Integer recurrence, byte[] image){
+    public int save (Integer recurrence, String image){
         String sql = "INSERT INTO Event (recurrence, image) VALUES (?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, recurrence);
-            ps.setBytes(2, image);
+            ps.setString(2, image);
             return ps;
         }, keyHolder);
 
