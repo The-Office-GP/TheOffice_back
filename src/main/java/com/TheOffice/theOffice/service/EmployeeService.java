@@ -77,7 +77,7 @@ public class EmployeeService {
                 Status.ACTIF,
                 Job.PRODUCTION,
                 100,
-                new byte[0]
+                "path"
         );
     }
 
