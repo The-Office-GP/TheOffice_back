@@ -3,6 +3,7 @@ package com.TheOffice.theOffice.entities;
 import com.TheOffice.theOffice.classes.Local;
 import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class Company {
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
     private String name;
     private Date creation_date;
-    private List<Local> id_local;
+    private Long id_local;
+    private Local local;
     private Long id_user;
     private List<Machine> machines = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
@@ -26,12 +28,13 @@ public class Company {
     }
 
     // Constructor
-    public Company(Long id, String sector, String name, Date creation_date,List<Local> id_local, Long id_user, List<Machine> machines, List<Employee> employees,  List<Event> events) {
+    public Company(Long id, String sector, String name, Date creation_date,Long id_local, Local local, Long id_user, List<Machine> machines, List<Employee> employees,  List<Event> events) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creation_date = creation_date;
         this.id_local = id_local;
+        this.local = local;
         this.id_user = id_user;
         this.machines = machines;
         this.employees = employees;
@@ -71,12 +74,20 @@ public class Company {
         this.creation_date = creation_date;
     }
 
-    public List<Local> getId_local() {
+    public Long getId_local() {
         return id_local;
     }
 
-    public void setId_local(List<Local> id_local) {
+    public void setId_local(Long id_local) {
         this.id_local = id_local;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
     }
 
     public Long getId_user() {

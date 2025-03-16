@@ -1,6 +1,5 @@
 package com.TheOffice.theOffice.controllers;
 
-import com.TheOffice.theOffice.classes.Local;
 import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
@@ -8,17 +7,13 @@ import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController // Indique que cette classe est un contrôleur REST
@@ -115,46 +110,60 @@ public class CompanyController {
     // Création d'une nouvelle entreprise
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createCompany(
-            @Valid @RequestBody Map<String, Object> request,
+            @Valid @RequestBody Company company,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         try {
-            String sector = (String) request.get("sector");
-            String name = (String) request.get("name");
-            Date creation_date = new Date();
-
-            Object idLocalObj = request.get("id_local");
-            if (idLocalObj == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                        "error", "L'attribut 'id_local' est requis."
-                ));
-            }
-
-            ObjectMapper mapper = new ObjectMapper();
-            List<Local> id_local;
-
-            if (idLocalObj instanceof String idLocalJson) {
-                id_local = mapper.readValue(idLocalJson, new TypeReference<List<Local>>() {});
-            } else if (idLocalObj instanceof List<?>) {
-                id_local = ((List<?>) idLocalObj).stream()
-                        .map(item -> mapper.convertValue(item, Local.class))
-                        .collect(Collectors.toList());
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                        "error", "Format invalide pour 'id_local'. Une liste d'objets ou une chaîne JSON est attendue."
-                ));
-            }
-
             Long id_user = userDetails.getId();
+            company.setId_user(id_user);
 
-            int companyId = companyDao.save(sector, name, creation_date, id_local, id_user);
+            Date creation_date = new Date();
+            company.setCreation_date(creation_date);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                    "id", companyId,
-                    "message", "Entreprise créée avec succès !"
-            ));
+            // 🔥 Vérifier et assigner un id_local si null
+            if (company.getId_local() == null) {
+
+                // 🔹 Mapping des sectors vers id_local
+                Map<String, Long> sectorToLocalMap = Map.of(
+                        "carpentry", 1L,
+                        "creamery", 4L,
+                        "quarry", 7L
+                );
+
+                Long assignedLocal = sectorToLocalMap.get(company.getSector().toLowerCase());
+
+                if (assignedLocal == null) {
+                    return ResponseEntity.badRequest().body(Map.of(
+                            "error", "Secteur inconnu : " + company.getSector(),
+                            "details", "Les secteurs valides sont : carpentry, creamery, quarry."
+                    ));
+                }
+
+                company.setId_local(assignedLocal);
+            }
+
+            // Enregistrement en base de données
+            int id_company = companyDao.save(
+                    company.getSector(),
+                    company.getName(),
+                    creation_date,
+                    company.getId_local(),
+                    id_user
+            );
+
+            // Réponse
+            Map<String, Object> response = new HashMap<>();
+            response.put("id_company", id_company);
+            response.put("sector", company.getSector());
+            response.put("name", company.getName());
+            response.put("creation_date", creation_date);
+            response.put("id_local", company.getId_local());
+            response.put("id_user", id_user);
+            response.put("message", "Entreprise créée avec succès !");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "error", "Erreur lors de la création de l'entreprise",
                     "details", e.getMessage()

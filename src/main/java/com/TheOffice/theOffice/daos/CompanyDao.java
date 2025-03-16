@@ -1,12 +1,14 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.classes.Local;
+import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
-import com.TheOffice.theOffice.classes.Local;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,17 +27,21 @@ import java.util.Optional;
 public class CompanyDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private LocalDataLoader localDataLoader;
 
-    public CompanyDao(JdbcTemplate jdbcTemplate) {
+    public CompanyDao(JdbcTemplate jdbcTemplate, LocalDataLoader localDataLoader) {
         this.jdbcTemplate = jdbcTemplate;
+        this.localDataLoader = localDataLoader;
     }
 
     //RowMapper pour les entreprises
-    private final RowMapper<Company> companyRowMapper = (rs, _) -> {
+    private final RowMapper<Company> companyRowMapper = (rs, rowNum) -> {
         try {
-            String jsonLocal = rs.getString("local");
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<Local> id_local = objectMapper.readValue(jsonLocal, List.class);
+            Long id_local = rs.getLong("id_local");
+
+            // Charger l'objet Local depuis localDataLoader
+            Local local = LocalDataLoader.getInstance().getLocalById(id_local)
+                    .orElseThrow(() -> new ResourceNotFoundException("Local non trouvé pour id " + id_local));
 
             return new Company(
                     rs.getLong("id"),
@@ -43,6 +49,7 @@ public class CompanyDao {
                     rs.getString("name"),
                     rs.getDate("creation_date"),
                     id_local,
+                    local, // Remplace id_local par l'objet complet
                     rs.getLong("id_user"),
                     null,
                     null,
@@ -146,7 +153,7 @@ public class CompanyDao {
     }
 
     //POST
-    public int save(String sector, String name, Date creation_date, List<Local> id_local , Long id_user) {
+    public int save(String sector, String name, Date creation_date, Long id_local, Long id_user) {
         String sql = "INSERT INTO Company (sector, name, creation_date, id_local, id_user) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -156,8 +163,8 @@ public class CompanyDao {
             ps.setString(1, sector);
             ps.setString(2, name);
             ps.setDate(3, new java.sql.Date(creation_date.getTime()));
-            ps.setObject(4, id_local);
-            ps.setLong(4, id_user);
+            ps.setObject(4, id_local);  // ✅ Index correct
+            ps.setLong(5, id_user);     // ✅ Correction ici (était 4)
             return ps;
         }, keyHolder);
 
