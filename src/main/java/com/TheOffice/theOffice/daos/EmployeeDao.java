@@ -5,7 +5,6 @@ import com.TheOffice.theOffice.entities.Employee.Mood;
 import com.TheOffice.theOffice.entities.Employee.Gender;
 import com.TheOffice.theOffice.entities.Employee.Status;
 import com.TheOffice.theOffice.entities.Employee.Job;
-import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

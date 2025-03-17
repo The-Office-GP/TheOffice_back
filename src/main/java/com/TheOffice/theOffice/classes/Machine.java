@@ -1,4 +1,6 @@
-package com.TheOffice.theOffice.entities.Machine;
+package com.TheOffice.theOffice.classes;
+
+import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 
 import java.math.BigDecimal;
 
@@ -40,4 +42,9 @@ public class Machine {
 
     public String getImage() {return image;}
     public void setImage(String image) {this.image = image;}
+
+    @Override
+    public String toString() {
+        return "Machine{id=" + id + ", name='" + name + ", production_quality='" + production_quality +  ", price='" + price + ", maintenance_cost='" + maintenance_cost + ", image='" + image +"}";
+    }
 }

@@ -2,14 +2,12 @@ package com.TheOffice.theOffice.controllers;
 
 // Importation des classes nécessaires
 import com.TheOffice.theOffice.daos.MachineDao;
-import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.TheOffice.theOffice.classes.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
