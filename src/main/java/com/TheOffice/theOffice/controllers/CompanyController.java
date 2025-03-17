@@ -1,6 +1,7 @@
 package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.classes.Local;
+import com.TheOffice.theOffice.classes.MachineList;
 import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
@@ -8,6 +9,7 @@ import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.classes.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
+import com.TheOffice.theOffice.service.MachineService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
@@ -34,9 +36,10 @@ public class CompanyController {
     private final StockMaterialDao stockMaterialDao;
     private final StockFinalMaterialDao stockFinalMaterialDao;
     private final JwtUtil jwtUtil;
+    private final MachineService machineService;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, MachineService machineService) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -47,6 +50,7 @@ public class CompanyController {
         this.stockMaterialDao = stockMaterialDao;
         this.stockFinalMaterialDao = stockFinalMaterialDao;
         this.jwtUtil = jwtUtil;
+        this.machineService = machineService;
     }
 
     // Récupère toutes les entreprises
@@ -112,6 +116,12 @@ public class CompanyController {
         return ResponseEntity.ok(companies);
     }
 
+    @GetMapping("/buyMachine")
+    public ResponseEntity<List<Machine>> getMachineForBuy(@RequestBody Company company){
+        MachineList machineList = machineService.collectMachine(company);
+        return ResponseEntity.ok(machineList.getMachineList());
+    }
+
     // Création d'une nouvelle entreprise
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createCompany(
@@ -173,9 +183,9 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         if (companyDao.delete(id)) {
-            return ResponseEntity.noContent().build(); // Réponse HTTP 204 si suppression réussie
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build(); // Réponse HTTP 404 si l'entreprise n'existe pas
+            return ResponseEntity.notFound().build();
         }
     }
 }
