@@ -8,8 +8,6 @@ import com.TheOffice.theOffice.entities.Event;
 import com.TheOffice.theOffice.entities.Machine.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -27,7 +25,7 @@ import java.util.Optional;
 public class CompanyDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private LocalDataLoader localDataLoader;
+    private final LocalDataLoader localDataLoader;
 
     public CompanyDao(JdbcTemplate jdbcTemplate, LocalDataLoader localDataLoader) {
         this.jdbcTemplate = jdbcTemplate;
@@ -35,13 +33,19 @@ public class CompanyDao {
     }
 
     //RowMapper pour les entreprises
-    private final RowMapper<Company> companyRowMapper = (rs, rowNum) -> {
-        try {
+    private final RowMapper<Company> companyRowMapper = new RowMapper<Company>() {
+        @Override
+        public Company mapRow(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
             Long id_local = rs.getLong("id_local");
 
             // Charger l'objet Local depuis localDataLoader
-            Local local = LocalDataLoader.getInstance().getLocalById(id_local)
-                    .orElseThrow(() -> new ResourceNotFoundException("Local non trouvé pour id " + id_local));
+            Optional<Local> optionalLocal = localDataLoader.getLocalById(id_local);
+
+            if (optionalLocal.isEmpty()) {
+                System.out.println("⚠️ Local non trouvé pour id_local = " + id_local);
+            } else {
+                System.out.println("✅ Local trouvé : " + optionalLocal.get());
+            }
 
             return new Company(
                     rs.getLong("id"),
@@ -49,17 +53,15 @@ public class CompanyDao {
                     rs.getString("name"),
                     rs.getDate("creation_date"),
                     id_local,
-                    local, // Remplace id_local par l'objet complet
+                    optionalLocal.orElse(null), // Associe l'objet `Local` s'il existe
                     rs.getLong("id_user"),
                     null,
                     null,
                     null
             );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
     };
+
 
     //RowMapper pour les machines
     private final RowMapper<Machine> machineRowMapper = (rs, _) -> new Machine(

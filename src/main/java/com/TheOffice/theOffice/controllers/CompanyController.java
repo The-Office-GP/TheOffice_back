@@ -1,6 +1,8 @@
 package com.TheOffice.theOffice.controllers;
 
+import com.TheOffice.theOffice.classes.Local;
 import com.TheOffice.theOffice.daos.*;
+import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
@@ -52,14 +54,10 @@ public class CompanyController {
 
     // Récupère une entreprise par son ID avec toutes ses relations (machines, employés, etc.)
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getId();
         Company company = companyDao.findById(id);
-
-        // 🔥 Vérifier si l'utilisateur est bien le propriétaire de l'entreprise
-        if (!company.getId_user().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Accès interdit : cette entreprise ne vous appartient pas."));
-        }
+        Local local = LocalDataLoader.localList.get(company.getId_local().intValue());
 
         Double wallet = userDao.findWalletByUserId(company.getId_user());
 
@@ -72,8 +70,9 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
 
         CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials);
+        System.out.println(companyDto);
 
-        return ResponseEntity.ok(CompanyRequestDto.fromDto(companyDto));
+        return ResponseEntity.ok(companyDto);
     }
 
     // Récupère les machines associées à une entreprise spécifique
