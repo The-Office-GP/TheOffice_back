@@ -5,7 +5,7 @@ import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
-import com.TheOffice.theOffice.entities.Machine.Machine;
+import com.TheOffice.theOffice.classes.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
