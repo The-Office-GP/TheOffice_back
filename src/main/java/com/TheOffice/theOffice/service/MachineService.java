@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class MachineService {
@@ -15,31 +16,35 @@ public class MachineService {
         System.out.println("coucou");
         ObjectMapper objectMapper = new ObjectMapper();
         MachineList machineList = new MachineList();
+        System.out.println(machineList.getMachineList());
         System.out.println("coucou2" + machineList);
 
         try {
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/machine.json");
-            System.out.println("coucou3" + jsonFile);
             // Désérialiser le fichier JSON dans l'objet EmployeeList
             MachineList machineListGlobal = objectMapper.readValue(jsonFile, MachineList.class);
-            for (int i = 0; i < machineListGlobal.getMachineList().size(); i++) {
-                if(machineListGlobal.getMachineList().get(i).getId() <= 3 && company.getSector()=="carpentry"){
-                    machineList.getMachineList().add(machineListGlobal.getMachineList().get(i));
-                } else if (machineListGlobal.getMachineList().get(i).getId() > 3 && machineListGlobal.getMachineList().get(i).getId() <= 6 && company.getSector()=="creamery") {
-                    machineList.getMachineList().add(machineListGlobal.getMachineList().get(i));
-                } else {
-                    machineList.getMachineList().add(machineListGlobal.getMachineList().get(i));
-                }
+            System.out.println("sector: " + machineList.getMachineList());
+            switch (company.getSector()){
+                case ("carpentry"):
+                    machineListGlobal.getMachineList().removeIf(machine -> machine.getId() > 4 );
+                    break;
+                case ("creamery"):
+                    machineListGlobal.getMachineList().removeIf(machine -> machine.getId() <= 4 || machine.getId() > 8);
+                    break;
+                case ("quarry"):
+                    machineListGlobal.getMachineList().removeIf(machine -> machine.getId() <= 8);
+                    break;
+                default:
+                    break;
             }
             machineList = machineListGlobal;
-            System.out.println("coucou4" + machineList.getMachineList());
+            System.out.println(machineList);
 
         } catch (
                 IOException e) {
             e.printStackTrace();
         }
-        System.out.println("machineList");
-        System.out.println(machineList.getMachineList());
+
         return machineList;
     }
 }
