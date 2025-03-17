@@ -7,7 +7,7 @@
       "rent": 100000,
       "max_employees": 10,
       "max_machines": 5,
-      "path_background_image": "/public/assets/BackgroundsLocal/carpentry1.png"
+      "path_background_image": "/assets/backgroundsLocal/carpentry1.png"
     },
     {
       "id" : 2,
@@ -16,7 +16,7 @@
       "rent": 1000000,
       "max_employees": 100,
       "max_machines": 15,
-      "path_background_image": "/public/assets/BackgroundsLocal/carpentry2.png"
+      "path_background_image": "/assets/backgroundsLocal/carpentry2.png"
     },
     {
       "id" : 3,
@@ -25,7 +25,7 @@
       "rent": 12000000,
       "max_employees": 500,
       "max_machines": 350,
-      "path_background_image": "/public/assets/BackgroundsLocal/carpentry3.png"
+      "path_background_image": "/assets/backgroundsLocal/carpentry3.png"
     },
     {
       "id" : 4,
@@ -34,7 +34,7 @@
       "rent": 10000,
       "max_employees": 10,
       "max_machines": 3,
-      "path_background_image": "/public/assets/BackgroundsLocal/creamery1.png"
+      "path_background_image": "/assets/backgroundsLocal/creamery1.png"
     },
     {
       "id" : 5,
@@ -43,7 +43,7 @@
       "rent": 1000000,
       "max_employees": 100,
       "max_machines": 15,
-      "path_background_image": "/public/assets/BackgroundsLocal/creamery2.png"
+      "path_background_image": "/assets/backgroundsLocal/creamery2.png"
     },
     {
       "id" : 6,
@@ -52,7 +52,7 @@
       "rent": 12000000,
       "max_employees": 500,
       "max_machines": 350,
-      "path_background_image": "/public/assets/BackgroundsLocal/creamery3.png"
+      "path_background_image": "/assets/backgroundsLocal/creamery3.png"
     },
     {
       "id" : 7,
@@ -61,7 +61,7 @@
       "rent": 10000,
       "max_employees": 10,
       "max_machines": 3,
-      "path_background_image": "/public/assets/BackgroundsLocal/quarry1.png"
+      "path_background_image": "/assets/backgroundsLocal/quarry1.png"
     },
     {
       "id" : 8,
@@ -70,7 +70,7 @@
       "rent": 1000000,
       "max_employees": 100,
       "max_machines": 15,
-      "path_background_image": "/public/assets/BackgroundsLocal/quarry2.png"
+      "path_background_image": "/assets/backgroundsLocal/quarry2.png"
     },
     {
       "id" : 9,
@@ -79,7 +79,7 @@
       "rent": 12000000,
       "max_employees": 500,
       "max_machines": 350,
-      "path_background_image": "/public/assets/BackgroundsLocal/quarry3.png"
+      "path_background_image": "/assets/backgroundsLocal/quarry3.png"
     }
   ]
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 public class LocalDataLoader {
-    private static List<Local> localList;
+    public static List<Local> localList;
     private static final LocalDataLoader INSTANCE = new LocalDataLoader();
 
     private LocalDataLoader() {
@@ -35,4 +35,5 @@ public class LocalDataLoader {
                 .filter(local -> local.getId().equals(id))
                 .findFirst();
     }
+
 }
