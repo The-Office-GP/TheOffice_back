@@ -1,9 +1,7 @@
 package com.TheOffice.theOffice.services;
 
 import com.TheOffice.theOffice.staticModels.EmployeeName;
-import com.TheOffice.theOffice.staticModels.EmployeeNameList;
 import com.TheOffice.theOffice.staticModels.Salary;
-import com.TheOffice.theOffice.staticModels.SalaryList;
 import com.TheOffice.theOffice.daos.EmployeeDao;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.fasterxml.jackson.databind.ObjectMapper;

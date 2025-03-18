@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.dataLoader;
 
 import com.TheOffice.theOffice.staticModels.Local;
-import com.TheOffice.theOffice.staticModels.LocalList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +18,8 @@ public class LocalDataLoader {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/local.json");
-            LocalList localWrapper = objectMapper.readValue(jsonFile, LocalList.class);
-            localList = localWrapper.getLocalList();
+            List<Local> localWrapper = objectMapper.readValue(jsonFile, List.class);
+            localList = localWrapper;
         } catch (IOException e) {
             e.printStackTrace();
         }

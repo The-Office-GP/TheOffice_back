@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.controllers;
 
 import com.TheOffice.theOffice.staticModels.Local;
-import com.TheOffice.theOffice.staticModels.MachineList;
 import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.dtos.*;
@@ -112,8 +111,8 @@ public class CompanyController {
 
     @GetMapping("/buyMachine")
     public ResponseEntity<List<Machine>> getMachineForBuy(@RequestBody Company company){
-        MachineList machineList = machineService.collectMachine(company);
-        return ResponseEntity.ok(machineList.getMachineList());
+        List<Machine> machineList = machineService.collectMachine(company);
+        return ResponseEntity.ok(machineList);
     }
 
     // Création d'une nouvelle entreprise
