@@ -1,8 +1,9 @@
 package com.TheOffice.theOffice.dtos;
 
-import com.TheOffice.theOffice.classes.Local;
-import com.TheOffice.theOffice.classes.LocalList;
+import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.staticModels.Salary;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -34,21 +35,21 @@ public class CompanyDto {
                                         List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
                                         List<StockFinalMaterialDto> stockFinalMaterialDtos) {
-        Local companyLocal = company.getLocal();
+        Local companyLocal = new Local();
         try{
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/local.json");
             ObjectMapper objectMapper = new ObjectMapper();
-            LocalList localList = objectMapper.readValue(jsonFile, LocalList.class);
+            List<Local> localList = objectMapper.readValue(jsonFile, new TypeReference<List<Local>>() {});
             Map<Long, Local> localMap = new HashMap<>();
-            localMap.put(1L, localList.getLocalList().get(0));
-            localMap.put(2L, localList.getLocalList().get(1));
-            localMap.put(3L, localList.getLocalList().get(2));
-            localMap.put(4L, localList.getLocalList().get(3));
-            localMap.put(5L, localList.getLocalList().get(4));
-            localMap.put(6L, localList.getLocalList().get(5));
-            localMap.put(7L, localList.getLocalList().get(6));
-            localMap.put(8L, localList.getLocalList().get(7));
-            localMap.put(9L, localList.getLocalList().get(8));
+            localMap.put(1L, localList.get(0));
+            localMap.put(2L, localList.get(1));
+            localMap.put(3L, localList.get(2));
+            localMap.put(4L, localList.get(3));
+            localMap.put(5L, localList.get(4));
+            localMap.put(6L, localList.get(5));
+            localMap.put(7L, localList.get(6));
+            localMap.put(8L, localList.get(7));
+            localMap.put(9L, localList.get(8));
 
             companyLocal = localMap.get(company.getId_local());
 
@@ -60,7 +61,6 @@ public class CompanyDto {
         dto.setSector(company.getSector());
         dto.setName(company.getName());
         dto.setIdUser(company.getId_user());
-        dto.setLocal(company.getLocal());
         dto.setWallet(wallet);
         dto.setLocal(companyLocal);
         dto.setCycles(cycleDtos);

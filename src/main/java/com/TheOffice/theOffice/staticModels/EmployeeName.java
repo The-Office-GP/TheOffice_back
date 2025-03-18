@@ -1,6 +1,4 @@
-package com.TheOffice.theOffice.classes;
-
-import java.util.List;
+package com.TheOffice.theOffice.staticModels;
 
 public class EmployeeName {
     private long id;
@@ -38,10 +36,5 @@ public class EmployeeName {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{id=" + id + ", name='" + name + ", gender='" + gender + "}";
     }
 }

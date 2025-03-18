@@ -1,5 +1,4 @@
-{
-  "localList": [
+[
     {
       "id" : 1,
       "level": "Niveau 1",
@@ -81,5 +80,4 @@
       "max_machines": 350,
       "path_background_image": "/assets/backgroundsLocal/quarry3.png"
     }
-  ]
-}
+]

@@ -1,5 +1,4 @@
-{
-  "suppliers": [
+[
     {
       "id" : 1,
       "name": "Tronc Commun"
@@ -120,5 +119,4 @@
       "id" : 30,
       "name": "Le Tronc Qui Fume"
     }
-  ]
-}
+]

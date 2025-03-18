@@ -1,4 +1,4 @@
-package com.TheOffice.theOffice.service;
+package com.TheOffice.theOffice.services;
 
 import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.entities.Company;
@@ -28,11 +28,7 @@ public class CompanyService {
                 company.getName(),
                 company.getCreation_date(),
                 company.getId_local(),
-                null, // Local sera chargé plus tard si nécessaire
-                company.getId_user(),
-                company.getMachines(),
-                company.getEmployees(),
-                company.getEvents()
+                company.getId_user()
         );
     }
 }

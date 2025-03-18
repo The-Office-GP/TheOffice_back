@@ -1,5 +1,4 @@
-{
-  "events": [
+[
     {
       "id": 1,
       "renewable" : false,
@@ -668,6 +667,6 @@
         "popularity": 1
       }
     }
-  ]
-}
+]
+
 

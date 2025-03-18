@@ -1,4 +1,4 @@
-package com.TheOffice.theOffice.service;
+package com.TheOffice.theOffice.services;
 
 import com.TheOffice.theOffice.daos.UserDao;
 import com.TheOffice.theOffice.entities.CustomUserDetails;

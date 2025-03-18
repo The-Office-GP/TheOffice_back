@@ -1,5 +1,4 @@
-{
-  "machineList": [
+[
     {
       "id" : 1,
       "name": "Petite machine Bois",
@@ -96,6 +95,6 @@
       "maintenance_cost": 200000,
       "image" : "image.png"
     }
-  ]
-}
+]
+
 

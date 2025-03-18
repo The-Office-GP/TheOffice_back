@@ -1,16 +1,13 @@
 package com.TheOffice.theOffice.controllers;
 
-import com.TheOffice.theOffice.classes.Local;
-import com.TheOffice.theOffice.classes.MachineList;
 import com.TheOffice.theOffice.daos.*;
-import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.classes.Machine;
+import com.TheOffice.theOffice.staticModels.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
-import com.TheOffice.theOffice.service.MachineService;
+import com.TheOffice.theOffice.services.MachineService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,9 +56,7 @@ public class CompanyController {
     // Récupère une entreprise par son ID avec toutes ses relations (machines, employés, etc.)
     @GetMapping("/{id}")
     public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long userId = userDetails.getId();
         Company company = companyDao.findById(id);
-        Local local = LocalDataLoader.localList.get(company.getId_local().intValue());
 
         Double wallet = userDao.findWalletByUserId(company.getId_user());
 
@@ -112,8 +107,8 @@ public class CompanyController {
 
     @GetMapping("/buyMachine")
     public ResponseEntity<List<Machine>> getMachineForBuy(@RequestBody Company company){
-        MachineList machineList = machineService.collectMachine(company);
-        return ResponseEntity.ok(machineList.getMachineList());
+        List<Machine> machineList = machineService.collectMachine(company);
+        return ResponseEntity.ok(machineList);
     }
 
     // Création d'une nouvelle entreprise

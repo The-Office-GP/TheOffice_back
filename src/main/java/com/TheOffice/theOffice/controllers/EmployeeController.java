@@ -1,20 +1,15 @@
 package com.TheOffice.theOffice.controllers;
 
-import com.TheOffice.theOffice.classes.EmployeeNameList;
 import com.TheOffice.theOffice.daos.EmployeeDao;
 import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.service.EmployeeService;
+import com.TheOffice.theOffice.services.EmployeeService;
 import com.TheOffice.theOffice.entities.Employee.*;
-import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
