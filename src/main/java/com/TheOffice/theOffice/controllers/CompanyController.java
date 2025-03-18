@@ -4,7 +4,7 @@ import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.staticModels.Machine;
+import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
 import com.TheOffice.theOffice.services.MachineService;

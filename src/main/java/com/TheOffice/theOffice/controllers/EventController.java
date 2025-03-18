@@ -3,12 +3,10 @@ package com.TheOffice.theOffice.controllers;
 import com.TheOffice.theOffice.daos.CompanyDao;
 import com.TheOffice.theOffice.daos.EventDao;
 import com.TheOffice.theOffice.entities.Event;
-import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 

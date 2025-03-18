@@ -1,8 +1,9 @@
 package com.TheOffice.theOffice.daos;
 
-import com.TheOffice.theOffice.staticModels.Machine;
-import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
+import com.TheOffice.theOffice.staticModels.Machine.Machine;
+
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
+import com.TheOffice.theOffice.staticModels.Machine.ProductionQuality;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;

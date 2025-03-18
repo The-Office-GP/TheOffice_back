@@ -1,8 +1,7 @@
 package com.TheOffice.theOffice.services;
 
-import com.TheOffice.theOffice.staticModels.Machine;
+import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.entities.Company;
-import com.TheOffice.theOffice.staticModels.Salary;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;

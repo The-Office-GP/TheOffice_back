@@ -1,7 +1,7 @@
 package com.TheOffice.theOffice.dtos;
 
-import com.TheOffice.theOffice.staticModels.Machine;
-import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
+import com.TheOffice.theOffice.staticModels.Machine.Machine;
+import com.TheOffice.theOffice.staticModels.Machine.ProductionQuality;
 
 import java.math.BigDecimal;
 

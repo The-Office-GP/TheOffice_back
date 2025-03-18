@@ -1,6 +1,4 @@
-package com.TheOffice.theOffice.staticModels;
-
-import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
+package com.TheOffice.theOffice.staticModels.Machine;
 
 import java.math.BigDecimal;
 
