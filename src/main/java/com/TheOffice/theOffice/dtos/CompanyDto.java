@@ -33,7 +33,7 @@ public class CompanyDto {
                                         List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
                                         List<StockFinalMaterialDto> stockFinalMaterialDtos) {
-        Local companyLocal = company.getLocal();
+        Local companyLocal = new Local();
         try{
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/local.json");
             ObjectMapper objectMapper = new ObjectMapper();
@@ -59,7 +59,6 @@ public class CompanyDto {
         dto.setSector(company.getSector());
         dto.setName(company.getName());
         dto.setIdUser(company.getId_user());
-        dto.setLocal(company.getLocal());
         dto.setWallet(wallet);
         dto.setLocal(companyLocal);
         dto.setCycles(cycleDtos);

@@ -1,8 +1,6 @@
 package com.TheOffice.theOffice.controllers;
 
-import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.daos.*;
-import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
@@ -58,9 +56,7 @@ public class CompanyController {
     // Récupère une entreprise par son ID avec toutes ses relations (machines, employés, etc.)
     @GetMapping("/{id}")
     public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long userId = userDetails.getId();
         Company company = companyDao.findById(id);
-        Local local = LocalDataLoader.localList.get(company.getId_local().intValue());
 
         Double wallet = userDao.findWalletByUserId(company.getId_user());
 

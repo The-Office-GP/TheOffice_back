@@ -4,6 +4,7 @@ import com.TheOffice.theOffice.staticModels.EmployeeName;
 import com.TheOffice.theOffice.staticModels.Salary;
 import com.TheOffice.theOffice.daos.EmployeeDao;
 import com.TheOffice.theOffice.entities.Employee.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class EmployeeService {
     }
 
     public List<Employee> generateEmployee() {
-        List<Employee> employeeList = new ArrayList<>();
+        List<Employee> employeeList = new ArrayList<Employee>();
 
         for (int i = 0; i < 10; i++) {
             Employee employee = createEmployee(1);
@@ -45,8 +46,8 @@ public class EmployeeService {
             File jsonFile2 = new File("src/main/java/com/TheOffice/theOffice/json/employeeNameList.json");
 
             // Désérialiser le fichier JSON dans l'objet EmployeeList
-            salaryList = objectMapper.readValue(jsonFile, List.class);
-            nameList = objectMapper.readValue(jsonFile2, List.class);
+            salaryList = objectMapper.readValue(jsonFile, new TypeReference<List<Salary>>() {});
+            nameList = objectMapper.readValue(jsonFile2, new TypeReference<List<EmployeeName>>() {});
 
         } catch (IOException e) {
             e.printStackTrace();

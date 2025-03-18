@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.staticModels.Local;
-import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
@@ -25,42 +24,20 @@ import java.util.Optional;
 public class CompanyDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final LocalDataLoader localDataLoader;
 
-    public CompanyDao(JdbcTemplate jdbcTemplate, LocalDataLoader localDataLoader) {
+    public CompanyDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.localDataLoader = localDataLoader;
     }
 
-    //RowMapper pour les entreprises
-    private final RowMapper<Company> companyRowMapper = new RowMapper<Company>() {
-        @Override
-        public Company mapRow(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
-            Long id_local = rs.getLong("id_local");
 
-            // Charger l'objet Local depuis localDataLoader
-            Optional<Local> optionalLocal = localDataLoader.getLocalById(id_local);
-
-            if (optionalLocal.isEmpty()) {
-                System.out.println("⚠️ Local non trouvé pour id_local = " + id_local);
-            } else {
-                System.out.println("✅ Local trouvé : " + optionalLocal.get());
-            }
-
-            return new Company(
-                    rs.getLong("id"),
-                    rs.getString("sector"),
-                    rs.getString("name"),
-                    rs.getDate("creation_date"),
-                    id_local,
-                    optionalLocal.orElse(null), // Associe l'objet `Local` s'il existe
-                    rs.getLong("id_user"),
-                    null,
-                    null,
-                    null
-            );
-        }
-    };
+    private final RowMapper<Company> companyRowMapper = (rs, _) -> new Company(
+            rs.getLong("id"),
+            rs.getString("sector"),
+            rs.getString("name"),
+            rs.getDate("creation_date"),
+            rs.getLong("id_local"),
+            rs.getLong("id_user")
+    );
 
 
     //RowMapper pour les machines
@@ -103,21 +80,6 @@ public class CompanyDao {
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
-
-        // 2. Récupérer les machines de l'entreprise
-        String sqlMachines = "SELECT m.* FROM Machine m JOIN MachineInCompany mic ON m.id = mic.id_machine WHERE mic.id_company = ?";
-        List<Machine> machines = jdbcTemplate.query(sqlMachines, machineRowMapper, id);
-        company.setMachines(machines);
-
-        // 3. Récupérer les employés de l'entreprise
-        String sqlEmployees = "SELECT e.* FROM Employee e JOIN EmployeeInCompany eic ON e.id = eic.id_employee WHERE eic.id_company = ?";
-        List<Employee> employees = jdbcTemplate.query(sqlEmployees, employeeRowMapper, id);
-        company.setEmployees(employees);
-
-        // 4. Récupérer les events de l'entreprise
-        String sqlEvents = "SELECT e.* FROM Event e JOIN CompanyEvent ce ON e.id = ce.id_event WHERE ce.id_company = ?";
-        List<Event> events = jdbcTemplate.query(sqlEvents, eventRowMapper, id);
-        company.setEvents(events);
 
         return company;
     }

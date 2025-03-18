@@ -1,5 +1,4 @@
-{
-  "salaryList": [
+ [
     { "levelSkill": 5, "salary": 78.89 },
     { "levelSkill": 6, "salary": 118.49 },
     { "levelSkill": 7, "salary": 158.08 },
@@ -7,4 +6,4 @@
     { "levelSkill": 9, "salary": 237.28 },
     { "levelSkill": 10, "salary": 234.5 }
   ]
-}
+

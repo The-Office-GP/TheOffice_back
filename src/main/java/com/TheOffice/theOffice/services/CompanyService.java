@@ -28,11 +28,7 @@ public class CompanyService {
                 company.getName(),
                 company.getCreation_date(),
                 company.getId_local(),
-                null, // Local sera chargé plus tard si nécessaire
-                company.getId_user(),
-                company.getMachines(),
-                company.getEmployees(),
-                company.getEvents()
+                company.getId_user()
         );
     }
 }

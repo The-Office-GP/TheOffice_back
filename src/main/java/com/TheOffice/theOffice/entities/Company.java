@@ -17,30 +17,20 @@ public class Company {
     private String name;
     private Date creation_date;
     private Long id_local;
-    private Local local;
     private Long id_user;
-    private List<Machine> machines = new ArrayList<>();
-    private List<Employee> employees = new ArrayList<>();
-    private List<Event> events = new ArrayList<>();
 
     public Company (){
     }
 
-    // Constructor
-    public Company(Long id, String sector, String name, Date creation_date,Long id_local, Local local, Long id_user, List<Machine> machines, List<Employee> employees,  List<Event> events) {
+    public Company(Long id, String sector, String name, Date creation_date, Long id_local, Long id_user) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creation_date = creation_date;
         this.id_local = id_local;
-        this.local = local;
         this.id_user = id_user;
-        this.machines = machines;
-        this.employees = employees;
-        this.events = events;
     }
 
-    //Getters and Setters
     public Long getId() {
         return id;
     }
@@ -81,41 +71,11 @@ public class Company {
         this.id_local = id_local;
     }
 
-    public Local getLocal() {
-        return local;
-    }
-
-    public void setLocal(Local local) {
-        this.local = local;
-    }
-
     public Long getId_user() {
         return id_user;
     }
 
     public void setId_user(Long id_user) {
         this.id_user = id_user;
-    }
-
-    public List<Machine> getMachines() {return machines;}
-
-    public void setMachines(List<Machine> machines) {
-        this.machines = (machines != null) ? machines : new ArrayList<>();
-    }
-
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = (employees != null) ? employees : new ArrayList<>();
-    }
-
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = (events != null) ? events : new ArrayList<>();
     }
 }

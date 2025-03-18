@@ -1,5 +1,4 @@
-{
-  "nameList": [
+[
     {
       "id": 1,
       "name": "Alain Térieur",
@@ -471,5 +470,5 @@
     { "id": 318, "name": "Théo Taquet", "gender": "HOMME" },
     { "id": 319, "name": "Vic Tim", "gender": "HOMME" },
     { "id": 320, "name": "Vincent Tim", "gender": "HOMME" }
-  ]
-}
+]
+

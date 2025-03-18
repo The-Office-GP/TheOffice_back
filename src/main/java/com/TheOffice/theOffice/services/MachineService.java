@@ -2,6 +2,8 @@ package com.TheOffice.theOffice.services;
 
 import com.TheOffice.theOffice.staticModels.Machine;
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.staticModels.Salary;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ public class MachineService {
         try {
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/machine.json");
             // Désérialiser le fichier JSON dans l'objet EmployeeList
-            List<Machine> machineListGlobal = objectMapper.readValue(jsonFile, List.class);
+            List<Machine> machineListGlobal = objectMapper.readValue(jsonFile, new TypeReference<List<Machine>>() {});
             switch (company.getSector()){
                 case ("carpentry"):
                     machineListGlobal.removeIf(machine -> machine.getId() > 4 );
