@@ -4,14 +4,16 @@ public class EmployeeName {
     private long id;
     private String name;
     private String gender;
+    private String path;
 
     public EmployeeName() {
     }
 
-    public EmployeeName(long id, String name, String gender) {
+    public EmployeeName(long id, String name, String gender, String path) {
         this.id = id;
         this.name = name;
         this.gender = gender;
+        this.path = path;
     }
 
     public long getId() {
@@ -36,5 +38,13 @@ public class EmployeeName {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

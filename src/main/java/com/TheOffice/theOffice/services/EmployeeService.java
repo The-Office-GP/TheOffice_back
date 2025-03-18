@@ -76,7 +76,7 @@ public class EmployeeService {
                 Status.ACTIF,
                 Job.PRODUCTION,
                 100,
-                "path"
+                nameList.get(choiceName).getPath()
         );
     }
 
