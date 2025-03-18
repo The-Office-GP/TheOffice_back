@@ -2,97 +2,97 @@
     {
       "id" : 1,
       "name": "Petite machine Bois",
-      "production_quality": "MEDIOCRE",
+      "productionQuality": "MEDIOCRE",
       "price": 50000,
-      "maintenance_cost": 12000,
+      "maintenanceCost": 12000,
       "image" : "image.png"
     },
     {
       "id" : 2,
       "name": "Moyenne machine Bois",
-      "production_quality": "NORMAL",
+      "productionQuality": "NORMAL",
       "price": 200000,
-      "maintenance_cost": 30000,
+      "maintenanceCost": 30000,
       "image" : "image.png"
     },
     {
       "id" : 3,
       "name": "Grande machine Bois",
-      "production_quality": "BONNE",
+      "productionQuality": "BONNE",
       "price": 600000,
-      "maintenance_cost": 100000,
+      "maintenanceCost": 100000,
       "image" : "image.png"
     },
     {
       "id" : 4,
       "name": "Machine de luxe Bois",
-      "production_quality": "PERFORMANTE",
+      "productionQuality": "PERFORMANTE",
       "price": 1000000,
-      "maintenance_cost": 200000,
+      "maintenanceCost": 200000,
       "image" : "image.png"
     },
     {
       "id" : 5,
       "name": "Petite machine Laitière",
-      "production_quality": "MEDIOCRE",
+      "productionQuality": "MEDIOCRE",
       "price": 50000,
-      "maintenance_cost": 12000,
+      "maintenanceCost": 12000,
       "image" : "image.png"
     },
     {
       "id" : 6,
       "name": "Moyenne machine Laitière",
-      "production_quality": "NORMAL",
+      "productionQuality": "NORMAL",
       "price": 200000,
-      "maintenance_cost": 30000,
+      "maintenanceCost": 30000,
       "image" : "image.png"
     },
     {
       "id" : 7,
       "name": "Grande machine Laitière",
-      "production_quality": "BONNE",
+      "productionQuality": "BONNE",
       "price": 600000,
-      "maintenance_cost": 100000,
+      "maintenanceCost": 100000,
       "image" : "image.png"
     },
     {
       "id" : 8,
       "name": "Machine de luxe Laitière",
-      "production_quality": "PERFORMANTE",
+      "productionQuality": "PERFORMANTE",
       "price": 1000000,
-      "maintenance_cost": 200000,
+      "maintenanceCost": 200000,
       "image" : "image.png"
     },
     {
       "id" : 9,
       "name": "Petite machine Carrière",
-      "production_quality": "MEDIOCRE",
+      "productionQuality": "MEDIOCRE",
       "price": 50000,
-      "maintenance_cost": 12000,
+      "maintenanceCost": 12000,
       "image" : "image.png"
     },
     {
       "id" : 10,
       "name": "Moyenne machine Carrière",
-      "production_quality": "NORMAL",
+      "productionQuality": "NORMAL",
       "price": 200000,
-      "maintenance_cost": 30000,
+      "maintenanceCost": 30000,
       "image" : "image.png"
     },
     {
       "id" : 11,
       "name": "Grande machine Carrière",
-      "production_quality": "BONNE",
+      "productionQuality": "BONNE",
       "price": 600000,
-      "maintenance_cost": 100000,
+      "maintenanceCost": 100000,
       "image" : "image.png"
     },
     {
       "id" : 12,
       "name": "Machine de luxe Carrière",
-      "production_quality": "PERFORMANTE",
+      "productionQuality": "PERFORMANTE",
       "price": 1000000,
-      "maintenance_cost": 200000,
+      "maintenanceCost": 200000,
       "image" : "image.png"
     }
 ]

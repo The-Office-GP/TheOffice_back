@@ -7,20 +7,20 @@ import java.math.BigDecimal;
 public class Machine {
     private Long id;
     private String name;
-    private ProductionQuality production_quality;
+    private ProductionQuality productionQuality;
     private BigDecimal price;
-    private BigDecimal maintenance_cost;
+    private BigDecimal maintenanceCost;
     private String image;
 
     public Machine() {
     }
     // Constructor
-    public Machine(Long id, String name, ProductionQuality production_quality, BigDecimal price, BigDecimal maintenance_cost, String image) {
+    public Machine(Long id, String name, ProductionQuality productionQuality, BigDecimal price, BigDecimal maintenanceCost, String image) {
         this.id = id;
         this.name = name;
-        this.production_quality = production_quality;
+        this.productionQuality = productionQuality;
         this.price = price;
-        this.maintenance_cost = maintenance_cost;
+        this.maintenanceCost = maintenanceCost;
         this.image = image;
     }
 
@@ -31,14 +31,14 @@ public class Machine {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public ProductionQuality getProduction_quality() { return production_quality; }
-    public void setProduction_quality(ProductionQuality production_quality) { this.production_quality = production_quality; }
+    public ProductionQuality getProductionQuality() { return productionQuality; }
+    public void setProductionQuality(ProductionQuality productionQuality) { this.productionQuality = productionQuality; }
 
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
 
-    public BigDecimal getMaintenance_cost() { return maintenance_cost; }
-    public void setMaintenance_cost(BigDecimal maintenance_cost) { this.maintenance_cost = maintenance_cost; }
+    public BigDecimal getMaintenanceCost() { return maintenanceCost; }
+    public void setMaintenanceCost(BigDecimal maintenanceCost) { this.maintenanceCost = maintenanceCost; }
 
     public String getImage() {return image;}
     public void setImage(String image) {this.image = image;}

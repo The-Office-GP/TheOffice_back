@@ -15,20 +15,20 @@ public class Company {
     private String sector;
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
     private String name;
-    private Date creation_date;
-    private Long id_local;
-    private Long id_user;
+    private Date creationDate;
+    private Long localId;
+    private Long userId;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creation_date, Long id_local, Long id_user) {
+    public Company(Long id, String sector, String name, Date creationDate, Long localId, Long userId) {
         this.id = id;
         this.sector = sector;
         this.name = name;
-        this.creation_date = creation_date;
-        this.id_local = id_local;
-        this.id_user = id_user;
+        this.creationDate = creationDate;
+        this.localId = localId;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -55,27 +55,27 @@ public class Company {
         this.name = name;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Long getId_local() {
-        return id_local;
+    public Long getLocalId() {
+        return localId;
     }
 
-    public void setId_local(Long id_local) {
-        this.id_local = id_local;
+    public void setLocalId(Long localId) {
+        this.localId = localId;
     }
 
-    public Long getId_user() {
-        return id_user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId_user(Long id_user) {
-        this.id_user = id_user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

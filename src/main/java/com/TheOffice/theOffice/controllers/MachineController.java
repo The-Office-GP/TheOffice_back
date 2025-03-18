@@ -40,21 +40,21 @@ public class MachineController {
     public ResponseEntity<Map<String, Object>> createMachine(@RequestBody Map<String, Object> request) {
         // Extraction des informations envoyées dans la requête
         String name = (request.get("name").toString());
-        ProductionQuality productionQuality = ProductionQuality.valueOf(request.get("production_quality").toString());
+        ProductionQuality productionQuality = ProductionQuality.valueOf(request.get("productionQuality").toString());
         BigDecimal price = new BigDecimal(request.get("price").toString());
-        BigDecimal maintenance_cost = new BigDecimal(request.get("maintenance_cost").toString());
+        BigDecimal maintenanceCost = new BigDecimal(request.get("maintenanceCost").toString());
         String image = (request.get("image").toString());
 
         // Sauvegarde du prêt et récupération de son ID
-        int id_machine = machineDao.save(name, productionQuality.name(), price, maintenance_cost, image);
+        int machineId = machineDao.save(name, productionQuality.name(), price, maintenanceCost, image);
 
         // Construction de la réponse HTTP avec statut 201 (créé) et données du prêt
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_machine", id_machine,
+                "machineId", machineId,
                 "name", name,
-                "production_quality", productionQuality,
+                "productionQuality", productionQuality,
                 "price", price,
-                "maintenance_cost", maintenance_cost,
+                "maintenanceCost", maintenanceCost,
                 "image", image
         ));
     }

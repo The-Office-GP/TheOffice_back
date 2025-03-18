@@ -42,7 +42,7 @@ public class CycleDao {
     }
 
     // GET par id de l'entreprise
-    public List<Cycle> findByIdCompany(Long id_company) {
+    public List<Cycle> findByIdCompany(Long companyId) {
         String sql = "SELECT * FROM Cycle WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                         new Cycle(rs.getLong("id"),
@@ -51,8 +51,8 @@ public class CycleDao {
                                 rs.getLong("productivity"),
                                 rs.getLong("popularity"),
                                 rs.getLong("step"),
-                                rs.getLong("id_company")),
-                id_company
+                                rs.getLong("companyId")),
+                companyId
         );
     }
 
@@ -63,7 +63,7 @@ public class CycleDao {
     }
 
     // POST
-    public int save(Double cost, Long employees, Long productivity, Long popularity, Long step, Long id_company) {
+    public int save(Double cost, Long employees, Long productivity, Long popularity, Long step, Long companyId) {
         String sql = "INSERT INTO Cycle (cost, employees, productivity, popularity, step, id_company) VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -75,7 +75,7 @@ public class CycleDao {
             ps.setLong(3, productivity);
             ps.setLong(4, popularity);
             ps.setLong(5, step);
-            ps.setLong(6, id_company);
+            ps.setLong(6, companyId);
             return ps;
         }, keyHolder);
 
@@ -89,7 +89,7 @@ public class CycleDao {
         }
 
         String sql = "UPDATE Cycle SET cost = ?, employees = ?, productivity = ?, popularity = ?, step = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, cycle.getCost(), cycle.getEmployees(), cycle.getProductivity(), cycle.getPopularity(), cycle.getStep(), cycle.getId_company(), id);
+        int rowsAffected = jdbcTemplate.update(sql, cycle.getCost(), cycle.getEmployees(), cycle.getProductivity(), cycle.getPopularity(), cycle.getStep(), cycle.getCompanyId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du cycle avec l'ID : " + id);

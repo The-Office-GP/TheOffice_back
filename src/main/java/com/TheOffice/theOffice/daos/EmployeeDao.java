@@ -56,12 +56,12 @@ public class EmployeeDao {
     }
 
     //GET par id de l'entreprise
-    public List<Employee> findByIdCompany(Long id_company) {
+    public List<Employee> findByIdCompany(Long companyId) {
         String sql = "SELECT e.* FROM Employee e " +
                 "JOIN EmployeeInCompany eic ON e.id = eic.id_employee " +
                 "WHERE eic.id_company = ?";
 
-        return jdbcTemplate.query(sql, employeeRowMapper, id_company);
+        return jdbcTemplate.query(sql, employeeRowMapper, companyId);
     }
 
     //POST

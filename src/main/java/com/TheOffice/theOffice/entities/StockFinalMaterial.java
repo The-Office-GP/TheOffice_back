@@ -5,18 +5,18 @@ public class StockFinalMaterial {
     private String name;
     private Integer quality;
     private Integer quantity;
-    private Long id_company;
+    private Long companyId;
 
     public StockFinalMaterial() {
     }
 
     // Constructor
-    public StockFinalMaterial(Long id, String name, Integer quality, Integer quantity, Long id_company) {
+    public StockFinalMaterial(Long id, String name, Integer quality, Integer quantity, Long companyId) {
         this.id = id;
         this.name = name;
         this.quality = quality;
         this.quantity = quantity;
-        this.id_company = id_company;
+        this.companyId = companyId;
     }
 
     // Getters et Setters
@@ -32,6 +32,6 @@ public class StockFinalMaterial {
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public Long getId_company() { return id_company; }
-    public void setId_company(Long id_company) { this.id_company = id_company; }
+    public Long getCompanyId() { return companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
 }

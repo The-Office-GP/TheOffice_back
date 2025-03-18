@@ -30,7 +30,7 @@ public class SupplierDao {
             rs.getString("name"),
             rs.getBigDecimal("price"),
             rs.getString("quality"),
-            rs.getLong("id_company")
+            rs.getLong("companyId")
     );
 
     //GET de tous les fournisseurs
@@ -40,7 +40,7 @@ public class SupplierDao {
     }
 
     //GET par id de l'entreprise
-    public List<Supplier> findByIdCompany(Long id_company) {
+    public List<Supplier> findByIdCompany(Long companyId) {
         String sql = "SELECT * FROM Supplier WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                         new Supplier(rs.getLong("id"),
@@ -48,7 +48,7 @@ public class SupplierDao {
                                 rs.getBigDecimal("price"),
                                 rs.getString("quality"),
                                 rs.getLong("id_company")),
-                id_company
+                companyId
         );
     }
 
@@ -62,7 +62,7 @@ public class SupplierDao {
     }
 
     //POST
-    public int save(String name, BigDecimal price, String quality, Long id_company) {
+    public int save(String name, BigDecimal price, String quality, Long companyId) {
         String sql = "INSERT INTO Supplier (name, price, quality, id_company) VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -72,7 +72,7 @@ public class SupplierDao {
             ps.setString(1, name);
             ps.setBigDecimal(2, price);
             ps.setString(3, quality);
-            ps.setLong(4, id_company);
+            ps.setLong(4, companyId);
             return ps;
         }, keyHolder);
 
@@ -85,7 +85,7 @@ public class SupplierDao {
         }
 
         String sql = "UPDATE Supplier SET name = ?, price = ?, quality = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, supplier.getName(), supplier.getPrice(), supplier.getQuality(), supplier.getId_company(), id);
+        int rowsAffected = jdbcTemplate.update(sql, supplier.getName(), supplier.getPrice(), supplier.getQuality(), supplier.getCompanyId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du fournisseur avec l'ID : " + id);

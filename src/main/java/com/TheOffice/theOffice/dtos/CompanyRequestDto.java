@@ -5,7 +5,7 @@ import java.util.List;
 public class CompanyRequestDto {
     private String sector;
     private String name;
-    private Long idUser;
+    private Long userId;
     private Double wallet;
 
     // DTOs associés
@@ -25,7 +25,7 @@ public class CompanyRequestDto {
 
         dto.setSector(companyDto.getSector());
         dto.setName(companyDto.getName());
-        dto.setIdUser(companyDto.getIdUser());
+        dto.setUserId(companyDto.getUserId());
         dto.setWallet(companyDto.getWallet());
 
         // Récupération des DTOs associés
@@ -47,8 +47,8 @@ public class CompanyRequestDto {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public Long getIdUser() { return idUser; }
-    public void setIdUser(Long idUser) { this.idUser = idUser; }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }

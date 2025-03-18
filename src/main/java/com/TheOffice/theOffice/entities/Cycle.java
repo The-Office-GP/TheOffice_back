@@ -9,19 +9,19 @@ public class Cycle {
     private Long productivity;
     private Long popularity;
     private Long step;
-    private Long id_company;
+    private Long companyId;
 
     public Cycle(){}
 
     //Constructor
-    public Cycle(Long id, Double cost, Long employees, Long productivity, Long popularity, Long step, Long id_company){
+    public Cycle(Long id, Double cost, Long employees, Long productivity, Long popularity, Long step, Long companyId){
         this.id = id;
         this.cost = cost;
         this.employees = employees;
         this.productivity = productivity;
         this.popularity = popularity;
         this.step = step;
-        this.id_company = id_company;
+        this.companyId = companyId;
     }
 
     //Getters and Setters
@@ -73,12 +73,12 @@ public class Cycle {
         this.step = step;
     }
 
-    public Long getId_company() {
-        return id_company;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setId_company(Long id_company) {
-        this.id_company = id_company;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
 }

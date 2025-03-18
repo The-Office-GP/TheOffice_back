@@ -42,18 +42,18 @@ public class SupplierController {
         String name = (String) request.get("name");
         BigDecimal price = new BigDecimal(request.get("price").toString());  // Conversion du prix en BigDecimal
         String quality = (String) request.get("quality");
-        Long id_company = ((Number) request.get("id_company")).longValue();  // Récupération de l'ID de la société associée
+        Long companyId = ((Number) request.get("companyId")).longValue();  // Récupération de l'ID de la société associée
 
         // Sauvegarde du fournisseur dans la base de données via le SupplierDao
-        int id_supplier = supplierDao.save(name, price, quality, id_company);
+        int supplierId = supplierDao.save(name, price, quality, companyId);
 
         // Retourne une réponse HTTP 201 (création réussie) avec les détails du fournisseur créé
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_supplier", id_supplier,
+                "supplierId", supplierId,
                 "name", name,
                 "price", price,
                 "quality", quality,
-                "id_company", id_company
+                "companyId", companyId
         ));
     }
 

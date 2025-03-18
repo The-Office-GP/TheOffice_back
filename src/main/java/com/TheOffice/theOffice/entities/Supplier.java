@@ -7,15 +7,15 @@ public class Supplier {
     private String name;
     private BigDecimal price;
     private String quality;
-    private Long id_company;
+    private Long companyId;
 
     //Constructor
-    public Supplier(Long id, String name, BigDecimal price, String quality, Long id_company) {
+    public Supplier(Long id, String name, BigDecimal price, String quality, Long companyId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quality = quality;
-        this.id_company = id_company;
+        this.companyId = companyId;
     }
 
     public Supplier() {
@@ -54,11 +54,11 @@ public class Supplier {
         this.quality = quality;
     }
 
-    public Long getId_company() {
-        return id_company;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setId_company(Long id_company) {
-        this.id_company = id_company;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

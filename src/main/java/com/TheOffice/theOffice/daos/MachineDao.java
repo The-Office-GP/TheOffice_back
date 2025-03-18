@@ -34,12 +34,12 @@ public class MachineDao {
     );
 
     //GET par id de l'entreprise
-    public List<Machine> findByIdCompany(Long id_company) {
+    public List<Machine> findByIdCompany(Long companyId) {
         String sql = "SELECT m.* FROM Machine m " +
                 "JOIN MachineInCompany mic ON m.id = mic.id_machine " +
                 "WHERE mic.id_company = ?";
 
-        return jdbcTemplate.query(sql, machineRowMapper, id_company);
+        return jdbcTemplate.query(sql, machineRowMapper, companyId);
     }
 
     //GET de toutes les machines
@@ -58,7 +58,7 @@ public class MachineDao {
     }
 
     //POST
-    public int save(String name, String production_quality, BigDecimal price, BigDecimal maintenance_cost, String image) {
+    public int save(String name, String productionQuality, BigDecimal price, BigDecimal maintenanceCost, String image) {
         String sql ="INSERT INTO Machine (name, production_quality, price, maintenance_cost, image) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -66,9 +66,9 @@ public class MachineDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, name);
-            ps.setString(2, production_quality);
+            ps.setString(2, productionQuality);
             ps.setBigDecimal(3, price);
-            ps.setBigDecimal(4, maintenance_cost);
+            ps.setBigDecimal(4, maintenanceCost);
             ps.setString(5, image);
             return ps;
         }, keyHolder);
@@ -82,8 +82,8 @@ public class MachineDao {
             throw new ResourceNotFoundException("Machine avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Machine SET name = ?, production_quality = ?, price = ?, maintenance_cost = ?, image = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, machine.getName(), machine.getProduction_quality().name(), machine.getPrice(), machine.getMaintenance_cost(), machine.getImage(), id);
+        String sql = "UPDATE Machine SET name = ?, productionQuality = ?, price = ?, maintenance_cost = ?, image = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, machine.getName(), machine.getProductionQuality().name(), machine.getPrice(), machine.getMaintenanceCost(), machine.getImage(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de la machine avec l'ID : " + id);

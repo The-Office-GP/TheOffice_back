@@ -46,19 +46,19 @@ public class StockMaterialDao {
     }
 
     //GET par id de l'entreprise
-    public List<StockMaterial> findByIdCompany(Long id_company) {
+    public List<StockMaterial> findByIdCompany(Long companyId) {
         String sql = "SELECT * FROM StockMaterial WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                         new StockMaterial(rs.getLong("id"),
                                 rs.getString("name"),
                                 rs.getInt("quantity"),
-                                rs.getLong("id_company")),
-                id_company
+                                rs.getLong("companyId")),
+                companyId
         );
     }
 
     //POST
-    public int save(String name, Integer quantity, Long id_company) {
+    public int save(String name, Integer quantity, Long companyId) {
         String sql = "INSERT INTO StockMaterial (name, quantity, id_company) VALUES (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -67,7 +67,7 @@ public class StockMaterialDao {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, name);
             ps.setInt(2, quantity);
-            ps.setLong(3, id_company);
+            ps.setLong(3, companyId);
             return ps;
         }, keyHolder);
 
@@ -81,7 +81,7 @@ public class StockMaterialDao {
         }
 
         String sql = "UPDATE StockMaterial SET name = ?, quantity = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, stockMaterial.getName(), stockMaterial.getQuantity(), stockMaterial.getId_company(), id);
+        int rowsAffected = jdbcTemplate.update(sql, stockMaterial.getName(), stockMaterial.getQuantity(), stockMaterial.getCompanyId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits avec l'ID : " + id);

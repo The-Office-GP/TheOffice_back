@@ -41,18 +41,18 @@ public class StockFinalMaterialController {
         String name = (String) request.get("name");
         Integer quality = (Integer) request.get("quality");  // Qualité du matériau
         Integer quantity = (Integer) request.get("quantity");  // Quantité du matériau
-        Long id_company = ((Number) request.get("id_company")).longValue();  // Récupération de l'ID de la société associée
+        Long companyId = ((Number) request.get("companyId")).longValue();  // Récupération de l'ID de la société associée
 
         // Sauvegarde du matériau de stock final dans la base de données via le StockFinalMaterialDao
-        int id_stockFinalMaterial = stockFinalMaterialDao.save(name, quality, quantity, id_company);
+        int stockFinalMaterialId = stockFinalMaterialDao.save(name, quality, quantity, companyId);
 
         // Retourne une réponse HTTP 201 (création réussie) avec les détails du matériau de stock final créé
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_stockFinalMaterial", id_stockFinalMaterial,
+                "stockFinalMaterialId", stockFinalMaterialId,
                 "name", name,
                 "quality", quality,
                 "quantity", quantity,
-                "id_company", id_company
+                "companyId", companyId
         ));
     }
 

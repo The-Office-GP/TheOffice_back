@@ -4,80 +4,80 @@
       "level": "Niveau 1",
       "size": 20000,
       "rent": 100000,
-      "max_employees": 10,
-      "max_machines": 5,
-      "path_background_image": "/assets/backgroundsLocal/carpentry1.png"
+      "maxEmployees": 10,
+      "maxMachines": 5,
+      "pathBackgroundImage": "/assets/backgroundsLocal/carpentry1.png"
     },
     {
       "id" : 2,
       "level": "Niveau 2",
       "size": 12000,
       "rent": 1000000,
-      "max_employees": 100,
-      "max_machines": 15,
-      "path_background_image": "/assets/backgroundsLocal/carpentry2.png"
+      "maxEmployees": 100,
+      "maxMachines": 15,
+      "pathBackgroundImage": "/assets/backgroundsLocal/carpentry2.png"
     },
     {
       "id" : 3,
       "level": "Niveau 3",
       "size": 100000,
       "rent": 12000000,
-      "max_employees": 500,
-      "max_machines": 350,
-      "path_background_image": "/assets/backgroundsLocal/carpentry3.png"
+      "maxEmployees": 500,
+      "maxMachines": 350,
+      "pathBackgroundImage": "/assets/backgroundsLocal/carpentry3.png"
     },
     {
       "id" : 4,
       "level": "Niveau 1",
       "size": 5000,
       "rent": 10000,
-      "max_employees": 10,
-      "max_machines": 3,
-      "path_background_image": "/assets/backgroundsLocal/creamery1.png"
+      "maxEmployees": 10,
+      "maxMachines": 3,
+      "pathBackgroundImage": "/assets/backgroundsLocal/creamery1.png"
     },
     {
       "id" : 5,
       "level": "Niveau 2",
       "size": 12000,
       "rent": 1000000,
-      "max_employees": 100,
-      "max_machines": 15,
-      "path_background_image": "/assets/backgroundsLocal/creamery2.png"
+      "maxEmployees": 100,
+      "maxMachines": 15,
+      "pathBackgroundImage": "/assets/backgroundsLocal/creamery2.png"
     },
     {
       "id" : 6,
       "level": "Niveau 3",
       "size": 100000,
       "rent": 12000000,
-      "max_employees": 500,
-      "max_machines": 350,
-      "path_background_image": "/assets/backgroundsLocal/creamery3.png"
+      "maxEmployees": 500,
+      "maxMachines": 350,
+      "pathBackgroundImage": "/assets/backgroundsLocal/creamery3.png"
     },
     {
       "id" : 7,
       "level": "Niveau 1",
       "size": 5000,
       "rent": 10000,
-      "max_employees": 10,
-      "max_machines": 3,
-      "path_background_image": "/assets/backgroundsLocal/quarry1.png"
+      "maxEmployees": 10,
+      "maxMachines": 3,
+      "pathBackgroundImage": "/assets/backgroundsLocal/quarry1.png"
     },
     {
       "id" : 8,
       "level": "Niveau 2",
       "size": 12000,
       "rent": 1000000,
-      "max_employees": 100,
-      "max_machines": 15,
-      "path_background_image": "/assets/backgroundsLocal/quarry2.png"
+      "maxEmployees": 100,
+      "maxMachines": 15,
+      "pathBackgroundImage": "/assets/backgroundsLocal/quarry2.png"
     },
     {
       "id" : 9,
       "level": "Niveau 3",
       "size": 100000,
       "rent": 12000000,
-      "max_employees": 500,
-      "max_machines": 350,
-      "path_background_image": "/assets/backgroundsLocal/quarry3.png"
+      "maxEmployees": 500,
+      "maxMachines": 350,
+      "pathBackgroundImage": "/assets/backgroundsLocal/quarry3.png"
     }
 ]

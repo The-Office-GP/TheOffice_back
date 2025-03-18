@@ -28,7 +28,7 @@ public class StockFinalMaterialDao {
             rs.getString("name"),
             rs.getInt("quality"),
             rs.getInt("quantity"),
-            rs.getLong("id_company")
+            rs.getLong("companyId")
     );
 
     //GET de tous les stocks des produits finaux
@@ -47,7 +47,7 @@ public class StockFinalMaterialDao {
     }
 
     //GET par id de l'entreprise
-    public List<StockFinalMaterial> findByIdCompany(Long id_company) {
+    public List<StockFinalMaterial> findByIdCompany(Long companyId) {
         String sql = "SELECT * FROM StockFinalMaterial WHERE id_company = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                         new StockFinalMaterial(rs.getLong("id"),
@@ -55,12 +55,12 @@ public class StockFinalMaterialDao {
                                 rs.getInt("quality"),
                                 rs.getInt("quantity"),
                                 rs.getLong("id_company")),
-                id_company
+                companyId
         );
     }
 
     //POST
-    public int save(String name, Integer quality, Integer quantity, Long id_company) {
+    public int save(String name, Integer quality, Integer quantity, Long companyId) {
         String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, id_company) VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -70,7 +70,7 @@ public class StockFinalMaterialDao {
             ps.setString(1, name);
             ps.setInt(2, quality);
             ps.setInt(3, quantity);
-            ps.setLong(4, id_company);
+            ps.setLong(4, companyId);
             return ps;
         }, keyHolder);
 
@@ -84,7 +84,7 @@ public class StockFinalMaterialDao {
         }
 
         String sql = "UPDATE StockFinalMaterial SET name = ?, quality = ?, quantity = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, stockFinalMaterial.getName(), stockFinalMaterial.getQuality(), stockFinalMaterial.getQuantity(), stockFinalMaterial.getId_company(), id);
+        int rowsAffected = jdbcTemplate.update(sql, stockFinalMaterial.getName(), stockFinalMaterial.getQuality(), stockFinalMaterial.getQuantity(), stockFinalMaterial.getCompanyId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits finaux avec l'ID : " + id);

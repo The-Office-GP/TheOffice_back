@@ -2,7 +2,6 @@ package com.TheOffice.theOffice.dtos;
 
 import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Company;
-import com.TheOffice.theOffice.staticModels.Salary;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,7 +14,7 @@ import java.util.Map;
 public class CompanyDto {
     private String sector;
     private String name;
-    private Long idUser;
+    private Long userId;
     private Local local;
     private Double wallet;
 
@@ -51,7 +50,7 @@ public class CompanyDto {
             localMap.put(8L, localList.get(7));
             localMap.put(9L, localList.get(8));
 
-            companyLocal = localMap.get(company.getId_local());
+            companyLocal = localMap.get(company.getLocalId());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,7 +59,7 @@ public class CompanyDto {
         CompanyDto dto = new CompanyDto();
         dto.setSector(company.getSector());
         dto.setName(company.getName());
-        dto.setIdUser(company.getId_user());
+        dto.setUserId(company.getUserId());
         dto.setWallet(wallet);
         dto.setLocal(companyLocal);
         dto.setCycles(cycleDtos);
@@ -81,8 +80,8 @@ public class CompanyDto {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public Long getIdUser() { return idUser; }
-    public void setIdUser(Long idUser) { this.idUser = idUser; }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public Local getLocal() {return local;}
     public void setLocal(Local local) {this.local = local;}

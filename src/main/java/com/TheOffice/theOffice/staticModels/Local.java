@@ -5,21 +5,21 @@ public class Local {
     public String level;
     public Long size;
     public Long rent;
-    public Long max_employees;
-    public Long max_machines;
-    public String path_background_image;
+    public Long maxEmployees;
+    public Long maxMachines;
+    public String pathBackgroundImage;
 
     public Local(){
     }
 
-    public Local(Long id, String level, Long size, Long rent, Long max_employees, Long max_machines, String path_background_image) {
+    public Local(Long id, String level, Long size, Long rent, Long maxEmployees, Long maxMachines, String pathBackgroundImage) {
         this.id = id;
         this.level = level;
         this.size = size;
         this.rent = rent;
-        this.max_employees = max_employees;
-        this.max_machines = max_machines;
-        this.path_background_image = path_background_image;
+        this.maxEmployees = maxEmployees;
+        this.maxMachines = maxMachines;
+        this.pathBackgroundImage = pathBackgroundImage;
     }
 
     public Long getId() {
@@ -54,27 +54,27 @@ public class Local {
         this.rent = rent;
     }
 
-    public Long getMax_employees() {
-        return max_employees;
+    public Long getMaxEmployees() {
+        return maxEmployees;
     }
 
-    public void setMax_employees(Long max_employees) {
-        this.max_employees = max_employees;
+    public void setMaxEmployees(Long maxEmployees) {
+        this.maxEmployees = maxEmployees;
     }
 
-    public Long getMax_machines() {
-        return max_machines;
+    public Long getMaxMachines() {
+        return maxMachines;
     }
 
-    public void setMax_machines(Long max_machines) {
-        this.max_machines = max_machines;
+    public void setMaxMachines(Long maxMachines) {
+        this.maxMachines = maxMachines;
     }
 
-    public String getPath_background_image() {
-        return path_background_image;
+    public String getPathBackgroundImage() {
+        return pathBackgroundImage;
     }
 
-    public void setPath_background_image(String path_background_image) {
-        this.path_background_image = path_background_image;
+    public void setPathBackgroundImage(String pathBackgroundImage) {
+        this.pathBackgroundImage = pathBackgroundImage;
     }
 }

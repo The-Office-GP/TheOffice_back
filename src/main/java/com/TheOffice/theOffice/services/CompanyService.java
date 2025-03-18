@@ -17,18 +17,18 @@ public class CompanyService {
         int generatedId = companyDao.save(
                 company.getSector(),
                 company.getName(),
-                company.getCreation_date(),
-                company.getId_local(), // 👈 Utilisation directe
-                company.getId_user()
+                company.getCreationDate(),
+                company.getLocalId(), // 👈 Utilisation directe
+                company.getUserId()
         );
 
         return new Company(
                 (long) generatedId,
                 company.getSector(),
                 company.getName(),
-                company.getCreation_date(),
-                company.getId_local(),
-                company.getId_user()
+                company.getCreationDate(),
+                company.getLocalId(),
+                company.getUserId()
         );
     }
 }

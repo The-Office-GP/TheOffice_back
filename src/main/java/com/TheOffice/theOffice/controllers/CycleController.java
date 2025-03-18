@@ -45,20 +45,20 @@ public class CycleController {
         Long productivity = ((Number) request.get("productivity")).longValue();  // Productivité
         Long popularity = ((Number) request.get("popularity")).longValue();  // Popularité
         Long step = ((Number) request.get("step")).longValue();  // Étape du cycle
-        Long id_company = ((Number) request.get("id_company")).longValue();  // ID de l'entreprise
+        Long companyId = ((Number) request.get("companyId")).longValue();  // ID de l'entreprise
 
         // Enregistrement du cycle dans la base de données via le DAO et récupération de l'ID du cycle créé
-        int id_cycle = cycleDao.save(cost, employees, productivity, popularity, step, id_company);
+        int cycleId = cycleDao.save(cost, employees, productivity, popularity, step, companyId);
 
         // Construction de la réponse avec les informations du cycle créé
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_cycle", id_cycle,  // ID du cycle
+                "cycleId", cycleId,  // ID du cycle
                 "cost", cost,  // Coût du cycle
                 "employees", employees,  // Nombre d'employés
                 "productivity", productivity,  // Productivité
                 "popularity", popularity,  // Popularité
                 "step", step,  // Étape du cycle
-                "id_company", id_company  // ID de l'entreprise
+                "companyId", companyId  // ID de l'entreprise
         ));
     }
 

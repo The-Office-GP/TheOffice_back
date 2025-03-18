@@ -63,11 +63,11 @@ public class EmployeeController {
         String image = (request.get("image").toString());
 
         // Sauvegarde du prêt et récupération de son ID
-        int id_employee = employeeDao.save(name, gender.name(), price, salary, level, mood.name(), status.name(), job.name(), health, image);
+        int employeeId = employeeDao.save(name, gender.name(), price, salary, level, mood.name(), status.name(), job.name(), health, image);
 
         // Construction de la réponse HTTP avec statut 201 (créé) et données du prêt
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_employee", id_employee,
+                "employeeId", employeeId,
                 "name", name,
                 "price", price,
                 "salary", salary,

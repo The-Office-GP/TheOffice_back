@@ -45,12 +45,12 @@ public class EventDao {
     };
 
     //GET par id de l'entreprise
-    public List<Event> findByIdCompany(Long id_company) {
+    public List<Event> findByIdCompany(Long companyId) {
         String sql = "SELECT e.* FROM Event e " +
                 "JOIN CompanyEvent ce ON e.id = ce.id_event " +
                 "WHERE ce.id_company = ?";
 
-        return jdbcTemplate.query(sql, eventRowMapper, id_company);
+        return jdbcTemplate.query(sql, eventRowMapper, companyId);
     }
 
     //POST

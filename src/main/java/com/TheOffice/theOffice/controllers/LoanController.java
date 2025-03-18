@@ -36,23 +36,23 @@ public class LoanController {
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createLoan(@RequestBody Map<String, Object> request) {
         // Extraction des informations envoyées dans la requête
-        BigDecimal loanAmount = new BigDecimal(request.get("loan_amount").toString());
-        BigDecimal interestRate = new BigDecimal(request.get("interest_rate").toString());
+        BigDecimal loanAmount = new BigDecimal(request.get("loanAmount").toString());
+        BigDecimal interestRate = new BigDecimal(request.get("interestRate").toString());
         BigDecimal rest = new BigDecimal(request.get("rest").toString());
         Integer duration = (Integer) request.get("duration");
-        Long id_user = ((Number) request.get("id_user")).longValue();
+        Long userId = ((Number) request.get("userId")).longValue();
 
         // Sauvegarde du prêt et récupération de son ID
-        int id_loan = loanDao.save(loanAmount, interestRate, duration, rest, id_user);
+        int loanId = loanDao.save(loanAmount, interestRate, duration, rest, userId);
 
         // Construction de la réponse HTTP avec statut 201 (créé) et données du prêt
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_loan", id_loan,
-                "loan_amount", loanAmount,
-                "interest_rate", interestRate,
+                "loanId", loanId,
+                "loanAmount", loanAmount,
+                "interestRate", interestRate,
                 "duration", duration,
                 "rest", rest,
-                "id_user", id_user
+                "userId", userId
         ));
     }
 

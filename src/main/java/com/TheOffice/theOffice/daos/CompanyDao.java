@@ -1,6 +1,5 @@
 package com.TheOffice.theOffice.daos;
 
-import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
@@ -110,14 +109,14 @@ public class CompanyDao {
     //GET par id de l'utilisateur
     public List<Company> findByUserId(Long userId) {
         String sql = "SELECT * FROM Company WHERE id_user = ?"; // 🔥 Filtrer uniquement les entreprises du user connecté
-        System.out.println("Requête SQL exécutée: " + sql + " avec id_user = " + userId); // 🔥 Debug log
+        System.out.println("Requête SQL exécutée: " + sql + " avec userId = " + userId); // 🔥 Debug log
         List<Company> companies = jdbcTemplate.query(sql, companyRowMapper, userId);
         System.out.println("Entreprises trouvées: " + companies.size()); // 🔥 Vérifier si la requête retourne bien des résultats
         return companies;
     }
 
     //POST
-    public int save(String sector, String name, Date creation_date, Long id_local, Long id_user) {
+    public int save(String sector, String name, Date creationDate, Long localId, Long userId) {
         String sql = "INSERT INTO Company (sector, name, creation_date, id_local, id_user) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -126,9 +125,9 @@ public class CompanyDao {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, sector);
             ps.setString(2, name);
-            ps.setDate(3, new java.sql.Date(creation_date.getTime()));
-            ps.setObject(4, id_local);  // ✅ Index correct
-            ps.setLong(5, id_user);     // ✅ Correction ici (était 4)
+            ps.setDate(3, new java.sql.Date(creationDate.getTime()));
+            ps.setObject(4, localId);  // ✅ Index correct
+            ps.setLong(5, userId);     // ✅ Correction ici (était 4)
             return ps;
         }, keyHolder);
 
@@ -142,7 +141,7 @@ public class CompanyDao {
         }
 
         String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?,id_local = ?, id_user = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreation_date(),company.getId_local(), company.getId_user(), id);
+        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreationDate(),company.getLocalId(), company.getUserId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'entreprise avec l'ID : " + id);

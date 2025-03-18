@@ -42,11 +42,11 @@ public class EventController {
         String image = (request.get("image").toString());
 
         // Sauvegarde du prêt et récupération de son ID
-        int id_event = eventDao.save(Math.toIntExact(recurrence), image);
+        int eventId = eventDao.save(Math.toIntExact(recurrence), image);
 
         // Construction de la réponse HTTP avec statut 201 (créé) et données du prêt
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id_event", id_event,
+                "eventId", eventId,
                 "recurrence", recurrence,
                 "image", image
         ));

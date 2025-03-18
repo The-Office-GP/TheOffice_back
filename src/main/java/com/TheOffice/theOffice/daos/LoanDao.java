@@ -49,7 +49,7 @@ public class LoanDao {
     }
 
     //POST
-    public int save(BigDecimal loanAmount, BigDecimal interestRate, Integer duration, BigDecimal rest, Long id_user) {
+    public int save(BigDecimal loanAmount, BigDecimal interestRate, Integer duration, BigDecimal rest, Long userId) {
         String sql = "INSERT INTO Loan (loan_amount, interest_rate, duration, rest, id_user) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -60,7 +60,7 @@ public class LoanDao {
             ps.setBigDecimal(2, interestRate);
             ps.setInt(3, duration);
             ps.setBigDecimal(4, rest);
-            ps.setLong(5, id_user);
+            ps.setLong(5, userId);
             return ps;
         }, keyHolder);
 
@@ -74,7 +74,7 @@ public class LoanDao {
         }
 
         String sql = "UPDATE Loan SET loan_amount = ?, interest_rate = ?, duration = ?, rest = ?, id_user = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, loan.getLoanAmount(), loan.getInterestRate(), loan.getDuration(), loan.getRest(), loan.getId_user(), id);
+        int rowsAffected = jdbcTemplate.update(sql, loan.getLoanAmount(), loan.getInterestRate(), loan.getDuration(), loan.getRest(), loan.getUserId(), id);
 
         if (rowsAffected <= 0) {
             throw new RuntimeException("Échec de la mise à jour de l'emprunt avec l'ID : " + id);

@@ -58,7 +58,7 @@ public class CompanyController {
     public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         Company company = companyDao.findById(id);
 
-        Double wallet = userDao.findWalletByUserId(company.getId_user());
+        Double wallet = userDao.findWalletByUserId(company.getUserId());
 
         List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<MachineDto> machines = machineDao.findByIdCompany(id).stream().map(MachineDto::fromEntity).collect(Collectors.toList());
@@ -118,16 +118,16 @@ public class CompanyController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         try {
-            Long id_user = userDetails.getId();
-            company.setId_user(id_user);
+            Long userId = userDetails.getId();
+            company.setUserId(userId);
 
-            Date creation_date = new Date();
-            company.setCreation_date(creation_date);
+            Date creationDate = new Date();
+            company.setCreationDate(creationDate);
 
-            // 🔥 Vérifier et assigner un id_local si null
-            if (company.getId_local() == null) {
+            // 🔥 Vérifier et assigner un localId si null
+            if (company.getLocalId() == null) {
 
-                // 🔹 Mapping des sectors vers id_local
+                // 🔹 Mapping des sectors vers localId
                 Map<String, Long> sectorToLocalMap = Map.of(
                         "carpentry", 1L,
                         "creamery", 4L,
@@ -143,26 +143,26 @@ public class CompanyController {
                     ));
                 }
 
-                company.setId_local(assignedLocal);
+                company.setLocalId(assignedLocal);
             }
 
             // Enregistrement en base de données
-            int id_company = companyDao.save(
+            int companyId = companyDao.save(
                     company.getSector(),
                     company.getName(),
-                    creation_date,
-                    company.getId_local(),
-                    id_user
+                    creationDate,
+                    company.getLocalId(),
+                    userId
             );
 
             // Réponse
             Map<String, Object> response = new HashMap<>();
-            response.put("id_company", id_company);
+            response.put("companyId", companyId);
             response.put("sector", company.getSector());
             response.put("name", company.getName());
-            response.put("creation_date", creation_date);
-            response.put("id_local", company.getId_local());
-            response.put("id_user", id_user);
+            response.put("creationDate", creationDate);
+            response.put("localId", company.getLocalId());
+            response.put("userId", userId);
             response.put("message", "Entreprise créée avec succès !");
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
