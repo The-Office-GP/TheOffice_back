@@ -2,6 +2,8 @@ package com.TheOffice.theOffice.dtos;
 
 import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Company;
+import com.TheOffice.theOffice.staticModels.Salary;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -37,7 +39,7 @@ public class CompanyDto {
         try{
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/local.json");
             ObjectMapper objectMapper = new ObjectMapper();
-            List<Local> localList = objectMapper.readValue(jsonFile, List.class);
+            List<Local> localList = objectMapper.readValue(jsonFile, new TypeReference<List<Local>>() {});
             Map<Long, Local> localMap = new HashMap<>();
             localMap.put(1L, localList.get(0));
             localMap.put(2L, localList.get(1));

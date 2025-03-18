@@ -77,9 +77,4 @@ public class Local {
     public void setPath_background_image(String path_background_image) {
         this.path_background_image = path_background_image;
     }
-
-    @Override
-    public String toString() {
-        return "Local{id=" + id + ", level='" + level + ", size='" + size + ", rent='" + rent + ", max_employees='" + max_employees + ", max_machines='" + max_machines + ", path_background_image='" + path_background_image + "}";
-    }
 }
