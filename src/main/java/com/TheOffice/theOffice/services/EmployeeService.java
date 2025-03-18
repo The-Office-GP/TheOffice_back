@@ -1,8 +1,9 @@
-package com.TheOffice.theOffice.service;
+package com.TheOffice.theOffice.services;
 
-import com.TheOffice.theOffice.classes.EmployeeNameList;
-import com.TheOffice.theOffice.classes.EmployeeName;
-import com.TheOffice.theOffice.classes.SalaryList;
+import com.TheOffice.theOffice.staticModels.EmployeeName;
+import com.TheOffice.theOffice.staticModels.EmployeeNameList;
+import com.TheOffice.theOffice.staticModels.Salary;
+import com.TheOffice.theOffice.staticModels.SalaryList;
 import com.TheOffice.theOffice.daos.EmployeeDao;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -39,16 +39,16 @@ public class EmployeeService {
 
     public Employee createEmployee(int levelCompany){
         ObjectMapper objectMapper = new ObjectMapper();
-        SalaryList salaryList = new SalaryList();
-        EmployeeNameList nameList = new EmployeeNameList();
+        List<Salary> salaryList = new ArrayList<Salary>();
+        List<EmployeeName> nameList = new ArrayList<EmployeeName>();
 
         try {
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/salary.json");
             File jsonFile2 = new File("src/main/java/com/TheOffice/theOffice/json/employeeNameList.json");
 
             // Désérialiser le fichier JSON dans l'objet EmployeeList
-            salaryList = objectMapper.readValue(jsonFile, SalaryList.class);
-            nameList = objectMapper.readValue(jsonFile2, EmployeeNameList.class);
+            salaryList = objectMapper.readValue(jsonFile, List.class);
+            nameList = objectMapper.readValue(jsonFile2, List.class);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +56,7 @@ public class EmployeeService {
 
         Random random = new Random();
         int randomNumber = random.nextInt(100 - 0) + 0;
-        int choiceName = random.nextInt(nameList.getNameList().size() - 1) +1;
+        int choiceName = random.nextInt(nameList.size() - 1) +1;
 
         Map<Integer, Integer[]> levelMap = new HashMap<>();
         levelMap.put(1, new Integer[]{50, 20, 10, 10, 5});
@@ -67,12 +67,12 @@ public class EmployeeService {
         int levelEmployee = choiceLevelEmployee(randomNumber, ranges[0], ranges[1], ranges[2], ranges[3], ranges[4]);
 
         return new Employee(
-                nameList.getNameList().get(choiceName).getId(),
-                nameList.getNameList().get(choiceName).getName(),
+                nameList.get(choiceName).getId(),
+                nameList.get(choiceName).getName(),
                 Gender.HOMME,
                 0,
-                salaryList.getSalaryList().get(levelEmployee).getSalary(),
-                salaryList.getSalaryList().get(levelEmployee).getLevelSkill(),
+                salaryList.get(levelEmployee).getSalary(),
+                salaryList.get(levelEmployee).getLevelSkill(),
                 Mood.NEUTRE,
                 Status.ACTIF,
                 Job.PRODUCTION,

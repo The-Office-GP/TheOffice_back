@@ -1,16 +1,16 @@
 package com.TheOffice.theOffice.controllers;
 
-import com.TheOffice.theOffice.classes.Local;
-import com.TheOffice.theOffice.classes.MachineList;
+import com.TheOffice.theOffice.staticModels.Local;
+import com.TheOffice.theOffice.staticModels.MachineList;
 import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dataLoader.LocalDataLoader;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.classes.Machine;
+import com.TheOffice.theOffice.staticModels.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
-import com.TheOffice.theOffice.service.MachineService;
+import com.TheOffice.theOffice.services.MachineService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

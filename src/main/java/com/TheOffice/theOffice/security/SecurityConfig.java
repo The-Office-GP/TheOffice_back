@@ -1,6 +1,6 @@
 package com.TheOffice.theOffice.security;
 
-import com.TheOffice.theOffice.service.CustomUserDetailsService;
+import com.TheOffice.theOffice.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

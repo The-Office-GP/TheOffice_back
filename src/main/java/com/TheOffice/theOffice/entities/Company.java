@@ -1,8 +1,8 @@
 package com.TheOffice.theOffice.entities;
 
-import com.TheOffice.theOffice.classes.Local;
+import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.classes.Machine;
+import com.TheOffice.theOffice.staticModels.Machine;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;

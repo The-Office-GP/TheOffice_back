@@ -1,6 +1,4 @@
-package com.TheOffice.theOffice.classes;
-
-import java.util.List;
+package com.TheOffice.theOffice.staticModels;
 
 public class EmployeeName {
     private long id;

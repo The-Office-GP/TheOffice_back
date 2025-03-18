@@ -1,4 +1,4 @@
-package com.TheOffice.theOffice.classes;
+package com.TheOffice.theOffice.staticModels;
 
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 

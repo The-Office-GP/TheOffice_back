@@ -1,6 +1,6 @@
 package com.TheOffice.theOffice.security;
 
-import com.TheOffice.theOffice.service.CustomUserDetailsService;
+import com.TheOffice.theOffice.services.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

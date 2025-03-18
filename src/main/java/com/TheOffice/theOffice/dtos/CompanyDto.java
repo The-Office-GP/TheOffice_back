@@ -1,7 +1,7 @@
 package com.TheOffice.theOffice.dtos;
 
-import com.TheOffice.theOffice.classes.Local;
-import com.TheOffice.theOffice.classes.LocalList;
+import com.TheOffice.theOffice.staticModels.Local;
+import com.TheOffice.theOffice.staticModels.LocalList;
 import com.TheOffice.theOffice.entities.Company;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

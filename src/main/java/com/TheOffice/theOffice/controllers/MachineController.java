@@ -2,7 +2,7 @@ package com.TheOffice.theOffice.controllers;
 
 // Importation des classes nécessaires
 import com.TheOffice.theOffice.daos.MachineDao;
-import com.TheOffice.theOffice.classes.Machine;
+import com.TheOffice.theOffice.staticModels.Machine;
 import com.TheOffice.theOffice.entities.Machine.ProductionQuality;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
