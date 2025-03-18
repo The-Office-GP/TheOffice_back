@@ -2,7 +2,7 @@
   "localList": [
     {
       "id" : 1,
-      "level": "Petit local",
+      "level": "Niveau 1",
       "size": 20000,
       "rent": 100000,
       "max_employees": 10,
@@ -11,7 +11,7 @@
     },
     {
       "id" : 2,
-      "level": "Moyenne machine",
+      "level": "Niveau 2",
       "size": 12000,
       "rent": 1000000,
       "max_employees": 100,
@@ -20,7 +20,7 @@
     },
     {
       "id" : 3,
-      "level": "Grande machine",
+      "level": "Niveau 3",
       "size": 100000,
       "rent": 12000000,
       "max_employees": 500,
@@ -29,7 +29,7 @@
     },
     {
       "id" : 4,
-      "level": "Petit local",
+      "level": "Niveau 1",
       "size": 5000,
       "rent": 10000,
       "max_employees": 10,
@@ -38,7 +38,7 @@
     },
     {
       "id" : 5,
-      "level": "Moyenne machine",
+      "level": "Niveau 2",
       "size": 12000,
       "rent": 1000000,
       "max_employees": 100,
@@ -47,7 +47,7 @@
     },
     {
       "id" : 6,
-      "level": "Grande machine",
+      "level": "Niveau 3",
       "size": 100000,
       "rent": 12000000,
       "max_employees": 500,
@@ -56,7 +56,7 @@
     },
     {
       "id" : 7,
-      "level": "Petit local",
+      "level": "Niveau 1",
       "size": 5000,
       "rent": 10000,
       "max_employees": 10,
@@ -65,7 +65,7 @@
     },
     {
       "id" : 8,
-      "level": "Moyenne machine",
+      "level": "Niveau 2",
       "size": 12000,
       "rent": 1000000,
       "max_employees": 100,
@@ -74,7 +74,7 @@
     },
     {
       "id" : 9,
-      "level": "Grande machine",
+      "level": "Niveau 3",
       "size": 100000,
       "rent": 12000000,
       "max_employees": 500,
