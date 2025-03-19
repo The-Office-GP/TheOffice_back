@@ -23,7 +23,6 @@ public class CompanyController {
     private final CompanyDao companyDao;
     private final UserDao userDao;
     private final CycleDao cycleDao;
-    private final MachineDao machineDao;
     private final EmployeeDao employeeDao;
     private final SupplierDao supplierDao;
     private final EventDao eventDao;
@@ -33,11 +32,10 @@ public class CompanyController {
     private final MachineService machineService;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, MachineDao machineDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, MachineService machineService) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, MachineService machineService) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
-        this.machineDao = machineDao;
         this.employeeDao = employeeDao;
         this.supplierDao = supplierDao;
         this.eventDao = eventDao;
@@ -61,23 +59,15 @@ public class CompanyController {
         Double wallet = userDao.findWalletByUserId(company.getUserId());
 
         List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
-        List<MachineDto> machines = machineDao.findByIdCompany(id).stream().map(MachineDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials, machineService);
 
         return ResponseEntity.ok(companyDto);
-    }
-
-    // Récupère les machines associées à une entreprise spécifique
-    @GetMapping("/{id}/machines")
-    public ResponseEntity<List<Machine>> getMachinesByCompanyId(@PathVariable Long id) {
-        List<Machine> machines = companyDao.findMachinesByCompanyId(id);
-        return ResponseEntity.ok(machines);
     }
 
     // Récupère les employés associés à une entreprise spécifique
@@ -152,6 +142,7 @@ public class CompanyController {
                     creationDate,
                     company.getPopularity(),
                     company.getLocalId(),
+                    company.getMachineId(),
                     userId
             );
 
@@ -163,9 +154,9 @@ public class CompanyController {
             response.put("creationDate", creationDate);
             response.put("popularity", company.getPopularity());
             response.put("localId", company.getLocalId());
+            response.put("machineId", company.getMachineId());
             response.put("userId", userId);
             response.put("message", "Entreprise créée avec succès !");
-
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (Exception e) {

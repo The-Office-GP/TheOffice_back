@@ -16,18 +16,20 @@ public class Company {
     @Max(100)
     private Long popularity;
     private Long localId;
+    private Long machineId;
     private Long userId;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creationDate,Long popularity, Long localId, Long userId) {
+    public Company(Long id, String sector, String name, Date creationDate,Long popularity, Long localId,Long machineId, Long userId) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creationDate = creationDate;
         this.popularity = popularity;
         this.localId = localId;
+        this.machineId = machineId;
         this.userId = userId;
     }
 
@@ -77,6 +79,14 @@ public class Company {
 
     public void setLocalId(Long localId) {
         this.localId = localId;
+    }
+
+    public Long getMachineId() {
+        return machineId;
+    }
+
+    public void setMachineId(Long machineId) {
+        this.machineId = machineId;
     }
 
     public Long getUserId() {

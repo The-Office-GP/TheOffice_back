@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS User
     username VARCHAR(255)           NOT NULL,
     password VARCHAR(255)           NOT NULL,
     role     ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
-    wallet    DECIMAL(10, 2)     NOT NULL
+    wallet    DECIMAL(10, 2)
 );
 
 CREATE TABLE IF NOT EXISTS Company
@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS Company
     id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     sector       VARCHAR(255)       NOT NULL,
     name          VARCHAR(35)       NOT NULL,
-    creation_date DATE               NOT NULL,
+    creation_date DATE,
     popularity    INT                NOT NULL,
     id_local VARCHAR(50) NOT NULL,
+    id_machine VARCHAR(50),
     id_user       INT,
     FOREIGN KEY (id_user) REFERENCES User (id)
 );
@@ -53,22 +54,11 @@ CREATE TABLE IF NOT EXISTS Cycle
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
 
-CREATE TABLE IF NOT EXISTS Machine
-(
-    id               INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    name             VARCHAR(255)       NOT NULL,
-    production_quality ENUM ('MEDIOCRE', 'NORMAL', 'BONNE', 'PERFORMANTE') NOT NULL,
-    price            DECIMAL(10, 2)     NOT NULL,
-    maintenance_cost DECIMAL(10, 2)     NOT NULL,
-    image VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS MachineInCompany
 (
-    id_machine INT,
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id_machine VARCHAR(50) NOT NULL,
     id_company INT,
-    PRIMARY KEY (id_machine, id_company),
-    FOREIGN KEY (id_machine) REFERENCES Machine (id),
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
 
