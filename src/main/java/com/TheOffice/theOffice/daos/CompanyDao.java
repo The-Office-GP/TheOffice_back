@@ -36,18 +36,8 @@ public class CompanyDao {
             rs.getDate("creation_date"),
             rs.getLong("popularity"),
             rs.getLong("id_local"),
+            rs.getLong("id_machine"),
             rs.getLong("id_user")
-    );
-
-
-    //RowMapper pour les machines
-    private final RowMapper<Machine> machineRowMapper = (rs, _) -> new Machine(
-            rs.getLong("id"),
-            rs.getString("name"),
-            ProductionQuality.valueOf(rs.getString("production_quality")),
-            rs.getBigDecimal("price"),
-            rs.getBigDecimal("maintenance_cost"),
-            rs.getString("image")
     );
 
     //RowMapper pour les employés
@@ -74,7 +64,6 @@ public class CompanyDao {
 
     //GET par id
     public Company findById(Long id) {
-        // 1. Récupérer l'entreprise
         String sqlCompany = "SELECT * FROM Company WHERE id = ?";
         Company company = jdbcTemplate.query(sqlCompany, companyRowMapper, id)
                 .stream()
@@ -109,16 +98,16 @@ public class CompanyDao {
 
     //GET par id de l'utilisateur
     public List<Company> findByUserId(Long userId) {
-        String sql = "SELECT * FROM Company WHERE id_user = ?"; // 🔥 Filtrer uniquement les entreprises du user connecté
-        System.out.println("Requête SQL exécutée: " + sql + " avec userId = " + userId); // 🔥 Debug log
+        String sql = "SELECT * FROM Company WHERE id_user = ?";
         List<Company> companies = jdbcTemplate.query(sql, companyRowMapper, userId);
-        System.out.println("Entreprises trouvées: " + companies.size()); // 🔥 Vérifier si la requête retourne bien des résultats
         return companies;
     }
 
+
     //POST
-    public int save(String sector, String name, Date creationDate, Long popularity, Long localId, Long userId) {
-        String sql = "INSERT INTO Company (sector, name, creation_date, popularity, id_local, id_user) VALUES (?, ?, ?, ?, ?, ?)";
+    public int save(String sector, String name, Date creationDate, Long popularity, Long localId, Long machineId, Long userId) {
+        String sql = "INSERT INTO Company (sector, name, creation_date, popularity, id_local, id_machine, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -129,7 +118,8 @@ public class CompanyDao {
             ps.setDate(3, new java.sql.Date(creationDate.getTime()));
             ps.setLong(4, popularity);
             ps.setObject(5, localId);
-            ps.setLong(6, userId);
+            ps.setObject(6, machineId);
+            ps.setLong(7, userId);
             return ps;
         }, keyHolder);
 
@@ -142,8 +132,8 @@ public class CompanyDao {
             throw new ResourceNotFoundException("Entreprise avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, popularity = ?, id_local = ?, id_user = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreationDate(), company.getPopularity(),company.getLocalId(), company.getUserId(), id);
+        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, popularity = ?, id_local = ?, id_machine = ?, id_user = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreationDate(), company.getPopularity(),company.getLocalId(), company.getMachineId(), company.getUserId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'entreprise avec l'ID : " + id);
@@ -161,18 +151,6 @@ public class CompanyDao {
     public boolean companyExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Company WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
-    }
-
-    // Récupérer toutes les machines d'une entreprise spécifique
-    public List<Machine> findMachinesByCompanyId(Long companyId) {
-        String sql = " SELECT Machine.* FROM Machine INNER JOIN MachineInCompany mic ON Machine.id = mic.id_machine WHERE mic.id_company = ? ";
-        return jdbcTemplate.query(sql, machineRowMapper, companyId);
-    }
-
-    // Associer une machine à une entreprise
-    public void addMachineToCompany(Long companyId, Long machineId) {
-        String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
-        jdbcTemplate.update(sql, machineId, companyId);
     }
 
     // Récupérer tous les employés d'une entreprise spécifique
