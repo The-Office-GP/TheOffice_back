@@ -14,6 +14,7 @@ import java.util.Map;
 public class CompanyDto {
     private String sector;
     private String name;
+    private Long popularity;
     private Long userId;
     private Local local;
     private Double wallet;
@@ -59,6 +60,7 @@ public class CompanyDto {
         CompanyDto dto = new CompanyDto();
         dto.setSector(company.getSector());
         dto.setName(company.getName());
+        dto.setPopularity(company.getPopularity());
         dto.setUserId(company.getUserId());
         dto.setWallet(wallet);
         dto.setLocal(companyLocal);
@@ -79,6 +81,14 @@ public class CompanyDto {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public Long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Long popularity) {
+        this.popularity = popularity;
+    }
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }

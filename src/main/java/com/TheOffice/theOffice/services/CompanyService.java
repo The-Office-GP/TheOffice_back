@@ -18,6 +18,7 @@ public class CompanyService {
                 company.getSector(),
                 company.getName(),
                 company.getCreationDate(),
+                company.getPopularity(),
                 company.getLocalId(), // 👈 Utilisation directe
                 company.getUserId()
         );
@@ -27,6 +28,7 @@ public class CompanyService {
                 company.getSector(),
                 company.getName(),
                 company.getCreationDate(),
+                company.getPopularity(),
                 company.getLocalId(),
                 company.getUserId()
         );

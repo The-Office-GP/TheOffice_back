@@ -1,5 +1,7 @@
 package com.TheOffice.theOffice.entities;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
@@ -11,17 +13,20 @@ public class Company {
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
     private String name;
     private Date creationDate;
+    @Max(100)
+    private Long popularity;
     private Long localId;
     private Long userId;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creationDate, Long localId, Long userId) {
+    public Company(Long id, String sector, String name, Date creationDate,Long popularity, Long localId, Long userId) {
         this.id = id;
         this.sector = sector;
         this.name = name;
         this.creationDate = creationDate;
+        this.popularity = popularity;
         this.localId = localId;
         this.userId = userId;
     }
@@ -56,6 +61,14 @@ public class Company {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Long popularity) {
+        this.popularity = popularity;
     }
 
     public Long getLocalId() {
