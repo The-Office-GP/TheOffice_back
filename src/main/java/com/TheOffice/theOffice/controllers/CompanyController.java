@@ -69,7 +69,6 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
 
         CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, machines, employees, suppliers, events, stockMaterials, stockFinalMaterials);
-        System.out.println(companyDto);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -124,10 +123,10 @@ public class CompanyController {
             Date creationDate = new Date();
             company.setCreationDate(creationDate);
 
-            // 🔥 Vérifier et assigner un localId si null
+            // Vérifier et assigner un localId si null
             if (company.getLocalId() == null) {
 
-                // 🔹 Mapping des sectors vers localId
+                // Mapping des sectors vers localId
                 Map<String, Long> sectorToLocalMap = Map.of(
                         "carpentry", 1L,
                         "creamery", 4L,
@@ -151,6 +150,7 @@ public class CompanyController {
                     company.getSector(),
                     company.getName(),
                     creationDate,
+                    company.getPopularity(),
                     company.getLocalId(),
                     userId
             );
@@ -161,6 +161,7 @@ public class CompanyController {
             response.put("sector", company.getSector());
             response.put("name", company.getName());
             response.put("creationDate", creationDate);
+            response.put("popularity", company.getPopularity());
             response.put("localId", company.getLocalId());
             response.put("userId", userId);
             response.put("message", "Entreprise créée avec succès !");
