@@ -105,7 +105,7 @@ public class CompanyController {
         return ResponseEntity.ok(companies);
     }
 
-    @GetMapping("/buyMachine")
+    @PostMapping("/buyMachine")
     public ResponseEntity<List<Machine>> getMachineForBuy(@RequestBody Company company){
         List<Machine> machineList = machineService.collectMachine(company);
         return ResponseEntity.ok(machineList);

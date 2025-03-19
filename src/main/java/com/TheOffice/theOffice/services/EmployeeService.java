@@ -23,20 +23,20 @@ public class EmployeeService {
     public List<Employee> generateEmployee() {
         List<Employee> employeeList = new ArrayList<Employee>();
 
-        for (int i = 0; i < 10; i++) {
-            Employee employee = createEmployee(1);
-
-            if (employee != null) {
-                employeeList.add(employee);
-            } else {
-                System.out.println("Erreur lors de la création de l'employé à l'itération " + i);
+        for (int i = 0; i < 15; i++) {
+            if(i < 5){
+                employeeList.add(createEmployee(1, Job.PRODUCTION));
+            } else if (i > 9) {
+                employeeList.add(createEmployee(1, Job.MARKETING));
+            }else {
+                employeeList.add(createEmployee(1, Job.VENTE));
             }
         }
         return employeeList;
     }
 
 
-    public Employee createEmployee(int levelCompany){
+    public Employee createEmployee(int levelCompany, Job job){
         ObjectMapper objectMapper = new ObjectMapper();
         List<Salary> salaryList = new ArrayList<Salary>();
         List<EmployeeName> nameList = new ArrayList<EmployeeName>();
@@ -74,7 +74,7 @@ public class EmployeeService {
                 salaryList.get(levelEmployee).getLevelSkill(),
                 Mood.NEUTRE,
                 Status.ACTIF,
-                Job.PRODUCTION,
+                job,
                 100,
                 nameList.get(choiceName).getPath()
         );
