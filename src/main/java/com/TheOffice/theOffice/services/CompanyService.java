@@ -24,6 +24,7 @@ public class CompanyService {
                 company.getPopularity(),
                 company.getLocalId(),
                 company.getMachineId(),
+                company.getSupplierId(),
                 company.getUserId()
         );
     }

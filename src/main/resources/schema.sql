@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS Company
     popularity    INT                NOT NULL,
     id_local INT NOT NULL,
     id_machine INT,
+    id_supplier INT,
     id_user       INT,
     FOREIGN KEY (id_user) REFERENCES User (id)
 );
@@ -30,16 +31,6 @@ CREATE TABLE IF NOT EXISTS Loan
     rest DECIMAL(10, 2)     NOT NULL,
     id_user       INT NOT NULL,
     FOREIGN KEY (id_user) REFERENCES User (id)
-);
-
-CREATE TABLE IF NOT EXISTS Supplier
-(
-    id         INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    name       VARCHAR(255)       NOT NULL,
-    price      DECIMAL(10, 2)     NOT NULL,
-    quality    VARCHAR(100)       NOT NULL,
-    id_company INT,
-    FOREIGN KEY (id_company) REFERENCES Company (id)
 );
 
 CREATE TABLE IF NOT EXISTS Cycle

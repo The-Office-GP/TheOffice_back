@@ -11,7 +11,6 @@ public class CompanyRequestDto {
     // DTOs associés
     private List<CycleDto> cycles;
     private List<EmployeeDto> employees;
-    private List<SupplierDto> suppliers;
     private List<EventDto> events;
     private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
@@ -31,7 +30,6 @@ public class CompanyRequestDto {
         // Récupération des DTOs associés
         dto.setCycles(companyDto.getCycles());
         dto.setEmployees(companyDto.getEmployees());
-        dto.setSuppliers(companyDto.getSuppliers());
         dto.setEvents(companyDto.getEvents());
         dto.setStockMaterials(companyDto.getStockMaterials());
         dto.setStockFinalMaterials(companyDto.getStockFinalMaterials());
@@ -58,9 +56,6 @@ public class CompanyRequestDto {
 
     public List<EmployeeDto> getEmployees() { return employees; }
     public void setEmployees(List<EmployeeDto> employees) { this.employees = employees; }
-
-    public List<SupplierDto> getSuppliers() { return suppliers; }
-    public void setSuppliers(List<SupplierDto> suppliers) { this.suppliers = suppliers; }
 
     public List<EventDto> getEvents() { return events; }
     public void setEvents(List<EventDto> events) { this.events = events; }

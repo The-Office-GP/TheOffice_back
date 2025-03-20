@@ -1,9 +1,12 @@
 package com.TheOffice.theOffice.dtos;
 
 import com.TheOffice.theOffice.services.MachineService;
+import com.TheOffice.theOffice.services.SupplierService;
 import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.staticModels.Machine.Machine;
+import com.TheOffice.theOffice.staticModels.Suppliers.PriceSuppliers;
+import com.TheOffice.theOffice.staticModels.Suppliers.SupplierName;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,7 +29,6 @@ public class CompanyDto {
     // DTOs associés
     private List<CycleDto> cycles;
     private List<EmployeeDto> employees;
-    private List<SupplierDto> suppliers;
     private List<EventDto> events;
     private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
@@ -36,7 +38,7 @@ public class CompanyDto {
     public CompanyDto() {}
 
     public static CompanyDto fromEntity(Company company, Double wallet,
-                                        List<CycleDto> cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
+                                        List<CycleDto> cycleDtos, List<EmployeeDto> employeeDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
                                         List<StockFinalMaterialDto> stockFinalMaterialDtos,List<MachineInCompanyDto> machinesInCompany,
                                         MachineService machineService) {
@@ -74,7 +76,6 @@ public class CompanyDto {
         dto.setMachines(machineList);
         dto.setCycles(cycleDtos);
         dto.setEmployees(employeeDtos);
-        dto.setSuppliers(supplierDtos);
         dto.setEvents(eventDtos);
         dto.setStockMaterials(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
@@ -120,9 +121,6 @@ public class CompanyDto {
 
     public List<EmployeeDto> getEmployees() { return employees; }
     public void setEmployees(List<EmployeeDto> employees) { this.employees = employees; }
-
-    public List<SupplierDto> getSuppliers() { return suppliers; }
-    public void setSuppliers(List<SupplierDto> suppliers) { this.suppliers = suppliers; }
 
     public List<EventDto> getEvents() { return events; }
     public void setEvents(List<EventDto> events) { this.events = events; }

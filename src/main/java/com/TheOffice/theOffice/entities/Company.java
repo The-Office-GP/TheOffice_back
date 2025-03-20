@@ -18,12 +18,13 @@ public class Company {
     private Long popularity;
     private Long localId;
     private Long machineId;
+    private Long supplierId;
     private Long userId;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, LocalDate creationDate,Long popularity, Long localId,Long machineId, Long userId) {
+    public Company(Long id, String sector, String name, LocalDate creationDate,Long popularity, Long localId, Long machineId, Long supplierId, Long userId) {
         this.id = id;
         this.sector = sector;
         this.name = name;
@@ -31,6 +32,7 @@ public class Company {
         this.popularity = popularity;
         this.localId = localId;
         this.machineId = machineId;
+        this.supplierId = supplierId;
         this.userId = userId;
     }
 
@@ -88,6 +90,14 @@ public class Company {
 
     public void setMachineId(Long machineId) {
         this.machineId = machineId;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public Long getUserId() {

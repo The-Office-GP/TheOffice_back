@@ -4,6 +4,7 @@ import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
+import com.TheOffice.theOffice.services.SupplierService;
 import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
@@ -25,27 +26,27 @@ public class CompanyController {
     private final UserDao userDao;
     private final CycleDao cycleDao;
     private final EmployeeDao employeeDao;
-    private final SupplierDao supplierDao;
     private final EventDao eventDao;
     private final StockMaterialDao stockMaterialDao;
     private final StockFinalMaterialDao stockFinalMaterialDao;
     private final MachineInCompanyDao machineInCompanyDao;
     private final JwtUtil jwtUtil;
     private final MachineService machineService;
+    private final SupplierService supplierService;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, SupplierService supplierService) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
         this.employeeDao = employeeDao;
-        this.supplierDao = supplierDao;
         this.eventDao = eventDao;
         this.stockMaterialDao = stockMaterialDao;
         this.stockFinalMaterialDao = stockFinalMaterialDao;
         this.machineInCompanyDao = machineInCompanyDao;
         this.jwtUtil = jwtUtil;
         this.machineService = machineService;
+        this.supplierService = supplierService;
     }
 
     // Récupère toutes les entreprises
@@ -63,13 +64,12 @@ public class CompanyController {
 
         List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
-        List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -102,6 +102,12 @@ public class CompanyController {
     public ResponseEntity<List<Machine>> getMachineForBuy(@RequestBody Company company){
         List<Machine> machineList = machineService.collectMachine(company);
         return ResponseEntity.ok(machineList);
+    }
+
+    @GetMapping("/generate")
+    public ResponseEntity<List<SupplierService>> supplierList() {
+        List<SupplierService> supplierServiceList = supplierService.collectSupplier();
+        return ResponseEntity.ok(employeeList);
     }
 
     // Création d'une nouvelle entreprise
@@ -151,6 +157,7 @@ public class CompanyController {
             response.put("popularity", companyResponse.getPopularity());
             response.put("localId", companyResponse.getLocalId());
             response.put("machineId", companyResponse.getMachineId());
+            response.put("supplierId", companyResponse.getSupplierId());
             response.put("userId", companyResponse.getId());
             response.put("message", "Entreprise créée avec succès !");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -173,7 +180,7 @@ public class CompanyController {
     // Suppression d'une entreprise par son ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
-        if (companyDao.delete(id)) {
+        if (companyDao.delete(id)){
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

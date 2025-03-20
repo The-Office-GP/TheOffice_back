@@ -3,6 +3,7 @@ package com.TheOffice.theOffice.daos;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
+import com.TheOffice.theOffice.services.SupplierService;
 import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import com.TheOffice.theOffice.staticModels.Machine.ProductionQuality;
@@ -39,6 +40,7 @@ public class CompanyDao {
             rs.getLong("popularity"),
             rs.getLong("id_local"),
             rs.getLong("id_machine"),
+            rs.getLong("id_supplier"),
             rs.getLong("id_user")
     );
 
@@ -108,9 +110,9 @@ public class CompanyDao {
 
     //POST
     public Company save(Company company) {
-        String sql = "INSERT INTO Company (sector, name, creation_date, popularity, id_local, id_machine, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Company (sector, name, creation_date, popularity, id_local, id_machine, id_supplier, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, company.getSector(), company.getName(), LocalDate.now(), company.getPopularity(), company.getLocalId(), company.getMachineId(), company.getUserId());
+        jdbcTemplate.update(sql, company.getSector(), company.getName(), LocalDate.now(), company.getPopularity(), company.getLocalId(), company.getMachineId(), company.getSupplierId(), company.getUserId());
 
         String sqlGetId = "SELECT * FROM Company WHERE Company.name = ?";
 
@@ -126,8 +128,8 @@ public class CompanyDao {
             throw new ResourceNotFoundException("Entreprise avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, popularity = ?, id_local = ?, id_machine = ?, id_user = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreationDate(), company.getPopularity(),company.getLocalId(), company.getMachineId(), company.getUserId(), id);
+        String sql = "UPDATE Company SET sector = ?, name = ?, creation_date = ?, popularity = ?, id_local = ?, id_machine = ?, id_supplier, id_user = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, company.getSector(), company.getName(), company.getCreationDate(), company.getPopularity(),company.getLocalId(), company.getMachineId(), company.getSupplierId(), company.getUserId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'entreprise avec l'ID : " + id);
