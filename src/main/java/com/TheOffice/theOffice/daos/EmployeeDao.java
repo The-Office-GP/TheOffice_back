@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.Employee;
 import com.TheOffice.theOffice.entities.Employee.Mood;
 import com.TheOffice.theOffice.entities.Employee.Gender;
@@ -7,6 +8,7 @@ import com.TheOffice.theOffice.entities.Employee.Status;
 import com.TheOffice.theOffice.entities.Employee.Job;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -65,28 +68,60 @@ public class EmployeeDao {
     }
 
     //POST
-    public int save(String name, String gender, Integer seniority, BigDecimal salary, Integer level, String mood, String status, String job, Integer health, String image) {
+    /*public Employee save(Employee employee) {
         String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        System.out.println(employee.getGender());
+        System.out.println(employee.getMood());
+        System.out.println(employee.getJob());
+
+        jdbcTemplate.update(sql, employee.getName(), "HOMME", employee.getSeniority(), employee.getSalary(), employee.getLevel(), "NEUTRE", "ACTIF", "PRODUCTION", employee.getHealth(), employee.getImage());
+
+        String sqlGetId = "SELECT LAST_INSERT_ID()";
+        long id = jdbcTemplate.queryForObject(sqlGetId, long.class);
+
+        employee.setId(id);
+        return employee;
+
+    }*/
+
+    public long save(Employee employee) {
+        String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, image) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        // Utilisation de KeyHolder pour récupérer l'ID généré
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, name);
-            ps.setString(2, gender);
-            ps.setInt(3, seniority);
-            ps.setBigDecimal(4, salary);
-            ps.setInt(5, level);
-            ps.setString(6, mood);
-            ps.setString(7, status);
-            ps.setString(8, job);
-            ps.setInt(9, health);
-            ps.setString(10, image);
-            return ps;
-        }, keyHolder);
+        // Préparer la requête d'insertion
+        jdbcTemplate.update(
+                new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(java.sql.Connection connection) throws java.sql.SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                        ps.setString(1, employee.getName());
+                        ps.setString(2, employee.getGender().toString());
+                        ps.setInt(3, employee.getSeniority());
+                        ps.setBigDecimal(4, employee.getSalary());
+                        ps.setInt(5, employee.getLevel());
+                        ps.setString(6, employee.getMood().toString());  // Exemple de valeur pour mood
+                        ps.setString(7, employee.getStatus().toString());   // Exemple de valeur pour status
+                        ps.setString(8, employee.getJob().toString());  // Exemple de valeur pour job
+                        ps.setLong(9, employee.getHealth());
+                        ps.setString(10, employee.getImage()); // Supposons que `image` soit un tableau de bytes
+                        return ps;
+                    }
+                },
+                keyHolder);
 
-        return keyHolder.getKey().intValue();
+        // Obtenir l'ID généré
+        long id = keyHolder.getKey().longValue();
+
+        // Mettre à jour l'ID de l'employé
+        employee.setId(id);
+
+        return id;
     }
+
 
     //PUT
     public Employee update(Long id, Employee employee) {

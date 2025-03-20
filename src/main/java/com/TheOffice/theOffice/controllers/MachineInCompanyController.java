@@ -28,7 +28,7 @@ public class MachineInCompanyController {
         return ResponseEntity.ok(machineInCompanyDao.findById(id));
     }
 
-    @PostMapping("/create")
+    /*@PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createMachineInCompany(@RequestBody Map<String, Object> request) {
         // Extraction des données depuis la requête JSON
         Long machineId = ((Number) request.get("machineId")).longValue();
@@ -41,7 +41,7 @@ public class MachineInCompanyController {
                 "machineId", machineId,
                 "companyId", companyId
         ));
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMachineInCompany(@PathVariable Long id) {

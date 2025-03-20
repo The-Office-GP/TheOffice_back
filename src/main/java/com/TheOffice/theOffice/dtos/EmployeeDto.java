@@ -72,4 +72,8 @@ public class EmployeeDto {
     public static EmployeeDto fromEntity(Employee employee) {
         return new EmployeeDto(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(), employee.getImage());
     }
+
+    public static Employee convertInEntity(EmployeeDto employee) {
+        return new Employee(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(), employee.getImage());
+    }
 }

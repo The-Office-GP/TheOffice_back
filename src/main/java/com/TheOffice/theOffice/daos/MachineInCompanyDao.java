@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.List;
 
 //GET, POST? DELETE
@@ -54,24 +55,24 @@ public class MachineInCompanyDao {
     }
 
     //POST
-    public int save (Long machineId, Long companyId) {
-        String sql = "INSERT INTO MachineInCompany (machineId, companyId) VALUES (?, ?)";
+    public long save (String machineId, Long companyId) {
+        String sql = "INSERT INTO MachineInCompany (id_machine, id_company) VALUES (?, ?)";
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setLong(1, machineId);
-            ps.setLong(2, companyId);
-            return ps;
-        }, keyHolder);
+        jdbcTemplate.update(sql, machineId, companyId);
 
-        return keyHolder.getKey().intValue();
+        return companyId;
     }
 
     //DELETE
     public boolean delete(Long id) {
         String sql = "DELETE FROM MachineInCompany WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
+        return rowsAffected > 0;
+    }
+
+    public boolean deleteAllByCompanyId(Long companyId) {
+        String sql = "DELETE FROM MachineInCompany WHERE id_company = ?";
+        int rowsAffected = jdbcTemplate.update(sql, companyId);
         return rowsAffected > 0;
     }
 }

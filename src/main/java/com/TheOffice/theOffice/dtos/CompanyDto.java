@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +82,10 @@ public class CompanyDto {
         dto.setMachinesInCompany(machinesInCompany);
 
         return dto;
+    }
+
+    public static Company companyFromDto(Company company, CompanyDto companyDto){
+        return new Company(company.getId(), companyDto.getSector(), companyDto.getName(), company.getCreationDate(), companyDto.getPopularity(), company.getLocalId(),company.getMachineId(), company.getUserId());
     }
 
     // Getters & Setters

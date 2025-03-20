@@ -48,7 +48,7 @@ public class EmployeeController {
     }
 
     // Méthode pour créer un nouvel employé. Cette méthode reçoit des paramètres via un formulaire multipart (incluant une image).
-    @PostMapping("/create")
+    /*@PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createEmployee(@RequestBody Map<String, Object> request) {
         // Extraction des informations envoyées dans la requête
         String name = (request.get("name").toString());
@@ -78,7 +78,7 @@ public class EmployeeController {
                 "health", health,
                 "image", image
         ));
-    }
+    }*/
 
     // Méthode pour mettre à jour un employé via son ID
     @PutMapping("/{id}")
