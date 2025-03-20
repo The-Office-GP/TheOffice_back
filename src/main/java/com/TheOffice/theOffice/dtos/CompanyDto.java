@@ -30,6 +30,7 @@ public class CompanyDto {
     private List<EventDto> events;
     private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
+    private List<MachineInCompanyDto> machinesInCompany;
     private MachineService machineService;
 
     public CompanyDto() {}
@@ -37,7 +38,8 @@ public class CompanyDto {
     public static CompanyDto fromEntity(Company company, Double wallet,
                                         List<CycleDto> cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
-                                        List<StockFinalMaterialDto> stockFinalMaterialDtos, MachineService machineService) {
+                                        List<StockFinalMaterialDto> stockFinalMaterialDtos,List<MachineInCompanyDto> machinesInCompany,
+                                        MachineService machineService) {
         Local companyLocal = new Local();
         try{
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/local.json");
@@ -76,6 +78,7 @@ public class CompanyDto {
         dto.setEvents(eventDtos);
         dto.setStockMaterials(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
+        dto.setMachinesInCompany(machinesInCompany);
 
         return dto;
     }
@@ -129,4 +132,7 @@ public class CompanyDto {
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }
+
+    public List<MachineInCompanyDto> getMachinesInCompany() { return machinesInCompany; }
+    public void setMachinesInCompany(List<MachineInCompanyDto> machinesInCompany) { this.machinesInCompany = machinesInCompany; }
 }

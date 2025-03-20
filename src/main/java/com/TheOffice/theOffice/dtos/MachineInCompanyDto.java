@@ -1,14 +1,15 @@
-package com.TheOffice.theOffice.entities;
+package com.TheOffice.theOffice.dtos;
 
-public class MachineInCompany {
+import com.TheOffice.theOffice.entities.MachineInCompany;
+
+public class MachineInCompanyDto {
     private Long id;
     private Long machineId;
     private Long companyId;
 
-    public MachineInCompany() {
-    }
+    public MachineInCompanyDto() {}
 
-    public MachineInCompany(Long id, Long machineId, Long companyId) {
+    public MachineInCompanyDto(Long id, Long machineId, Long companyId) {
         this.id = id;
         this.machineId = machineId;
         this.companyId = companyId;
@@ -36,5 +37,9 @@ public class MachineInCompany {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public static MachineInCompanyDto fromEntity(MachineInCompany machineInCompany) {
+        return new MachineInCompanyDto(machineInCompany.getId(), machineInCompany.getMachineId(), machineInCompany.getCompanyId());
     }
 }
