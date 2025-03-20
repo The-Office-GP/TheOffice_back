@@ -31,9 +31,11 @@ public class CompanyController {
     private final StockFinalMaterialDao stockFinalMaterialDao;
     private final JwtUtil jwtUtil;
     private final MachineService machineService;
+    private final MachineInCompanyDao machineInCompanyDao;
+
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, MachineService machineService) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, JwtUtil jwtUtil, MachineService machineService, MachineInCompanyDao machineInCompanyDao) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -44,6 +46,7 @@ public class CompanyController {
         this.stockFinalMaterialDao = stockFinalMaterialDao;
         this.jwtUtil = jwtUtil;
         this.machineService = machineService;
+        this.machineInCompanyDao = machineInCompanyDao;
     }
 
     // Récupère toutes les entreprises
@@ -162,8 +165,25 @@ public class CompanyController {
 
     // Mise à jour d'une entreprise existante
     @PutMapping("/{id}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
-        Company updatedCompany = companyDao.update(id, company);
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
+        Company companyFromBody = companyDao.findById(id);
+        Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
+        Company updatedCompany = companyDao.update(id, companyForUpdate);
+
+        machineInCompanyDao.deleteAllByCompanyId(id);
+        for (int i = 0; i < companyDtoFromBody.getMachines().size(); i++) {
+            machineInCompanyDao.save(companyDtoFromBody.getMachines().get(i).getId().toString(), id);
+        }
+
+        for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
+            if(employeeDao.employeeExists(companyDtoFromBody.getEmployees().get(i).getId())){
+                employeeDao.update(companyDtoFromBody.getEmployees().get(i).getId(), EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));
+            }
+            else{
+                long idCompany = employeeDao.save(EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));
+                employeeDao.linkEmployeeToCompany(idCompany,id);
+            }
+        }
         return ResponseEntity.ok(updatedCompany);
     }
 
