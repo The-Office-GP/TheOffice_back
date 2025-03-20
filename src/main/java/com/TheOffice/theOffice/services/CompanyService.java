@@ -14,18 +14,10 @@ public class CompanyService {
 
     public Company createCompany(Company company) {
         // Insérer en base de données
-        int generatedId = companyDao.save(
-                company.getSector(),
-                company.getName(),
-                company.getCreationDate(),
-                company.getPopularity(),
-                company.getLocalId(),
-                company.getMachineId(),
-                company.getUserId()
-        );
+        long generatedId = companyDao.save(company).getId();
 
         return new Company(
-                (long) generatedId,
+                generatedId,
                 company.getSector(),
                 company.getName(),
                 company.getCreationDate(),

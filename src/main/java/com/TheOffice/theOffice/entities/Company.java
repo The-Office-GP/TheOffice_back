@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Company {
@@ -12,7 +13,7 @@ public class Company {
     private String sector;
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
     private String name;
-    private Date creationDate;
+    private LocalDate creationDate;
     @Max(100)
     private Long popularity;
     private Long localId;
@@ -22,7 +23,7 @@ public class Company {
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creationDate,Long popularity, Long localId,Long machineId, Long userId) {
+    public Company(Long id, String sector, String name, LocalDate creationDate,Long popularity, Long localId,Long machineId, Long userId) {
         this.id = id;
         this.sector = sector;
         this.name = name;
@@ -57,11 +58,11 @@ public class Company {
         this.name = name;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 

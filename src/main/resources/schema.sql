@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS Company
     name          VARCHAR(35)       NOT NULL,
     creation_date DATE,
     popularity    INT                NOT NULL,
-    id_local VARCHAR(50) NOT NULL,
-    id_machine VARCHAR(50),
+    id_local INT NOT NULL,
+    id_machine INT,
     id_user       INT,
     FOREIGN KEY (id_user) REFERENCES User (id)
 );

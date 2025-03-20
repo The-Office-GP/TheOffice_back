@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -110,7 +111,7 @@ public class CompanyController {
             Long userId = userDetails.getId();
             company.setUserId(userId);
 
-            Date creationDate = new Date();
+            LocalDate creationDate = LocalDate.now();
             company.setCreationDate(creationDate);
 
             // Vérifier et assigner un localId si null
@@ -136,26 +137,18 @@ public class CompanyController {
             }
 
             // Enregistrement en base de données
-            int companyId = companyDao.save(
-                    company.getSector(),
-                    company.getName(),
-                    creationDate,
-                    company.getPopularity(),
-                    company.getLocalId(),
-                    company.getMachineId(),
-                    userId
-            );
+            Company companyResponse = companyDao.save(company);
 
             // Réponse
             Map<String, Object> response = new HashMap<>();
-            response.put("companyId", companyId);
-            response.put("sector", company.getSector());
-            response.put("name", company.getName());
-            response.put("creationDate", creationDate);
-            response.put("popularity", company.getPopularity());
-            response.put("localId", company.getLocalId());
-            response.put("machineId", company.getMachineId());
-            response.put("userId", userId);
+            response.put("companyId", companyResponse.getId());
+            response.put("sector", companyResponse.getSector());
+            response.put("name", companyResponse.getName());
+            response.put("creationDate", companyResponse.getCreationDate());
+            response.put("popularity", companyResponse.getPopularity());
+            response.put("localId", companyResponse.getLocalId());
+            response.put("machineId", companyResponse.getMachineId());
+            response.put("userId", companyResponse.getId());
             response.put("message", "Entreprise créée avec succès !");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 

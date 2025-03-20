@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +35,7 @@ public class CompanyDao {
             rs.getLong("id"),
             rs.getString("sector"),
             rs.getString("name"),
-            rs.getDate("creation_date"),
+            rs.getTimestamp("creation_date").toLocalDateTime().toLocalDate(),
             rs.getLong("popularity"),
             rs.getLong("id_local"),
             rs.getLong("id_machine"),
@@ -105,25 +107,17 @@ public class CompanyDao {
 
 
     //POST
-    public int save(String sector, String name, Date creationDate, Long popularity, Long localId, Long machineId, Long userId) {
+    public Company save(Company company) {
         String sql = "INSERT INTO Company (sector, name, creation_date, popularity, id_local, id_machine, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+        jdbcTemplate.update(sql, company.getSector(), company.getName(), LocalDate.now(), company.getPopularity(), company.getLocalId(), company.getMachineId(), company.getUserId());
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sqlGetId = "SELECT * FROM Company WHERE Company.name = ?";
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, sector);
-            ps.setString(2, name);
-            ps.setDate(3, new java.sql.Date(creationDate.getTime()));
-            ps.setLong(4, popularity);
-            ps.setObject(5, localId);
-            ps.setObject(6, machineId);
-            ps.setLong(7, userId);
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().intValue();
+        return jdbcTemplate.query(sqlGetId, companyRowMapper, company.getName())
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée"));
     }
 
     //PUT
