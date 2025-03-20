@@ -74,6 +74,24 @@ public class CompanyController {
         return ResponseEntity.ok(companyDto);
     }
 
+    public CompanyDto getCompanyById2(Long id) {
+        Company company = companyDao.findById(id);
+
+        Double wallet = userDao.findWalletByUserId(company.getUserId());
+
+        List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
+        List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
+        List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
+        List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
+        List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
+        List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
+        List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
+
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+
+        return companyDto;
+    }
+
     // Récupère les employés associés à une entreprise spécifique
     @GetMapping("/{id}/employees")
     public ResponseEntity<List<Employee>> getEmployeesByCompanyId(@PathVariable Long id) {
@@ -165,7 +183,7 @@ public class CompanyController {
 
     // Mise à jour d'une entreprise existante
     @PutMapping("/{id}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
+    public ResponseEntity<CompanyDto> updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
         Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
         Company updatedCompany = companyDao.update(id, companyForUpdate);
@@ -184,7 +202,11 @@ public class CompanyController {
                 employeeDao.linkEmployeeToCompany(idCompany,id);
             }
         }
-        return ResponseEntity.ok(updatedCompany);
+
+        CompanyDto newCompanyDto = getCompanyById2(id);
+
+
+        return ResponseEntity.ok(newCompanyDto);
     }
 
     // Suppression d'une entreprise par son ID
