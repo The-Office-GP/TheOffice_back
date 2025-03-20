@@ -35,7 +35,6 @@ public class CompanyRequestDto {
         dto.setEvents(companyDto.getEvents());
         dto.setStockMaterials(companyDto.getStockMaterials());
         dto.setStockFinalMaterials(companyDto.getStockFinalMaterials());
-        dto.setMachinesInCompany(companyDto.getMachinesInCompany());
 
         return dto;
     }
