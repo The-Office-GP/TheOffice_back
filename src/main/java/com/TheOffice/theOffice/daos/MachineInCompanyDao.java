@@ -23,7 +23,7 @@ public class MachineInCompanyDao {
 
     private final RowMapper<MachineInCompany> machineInCompanyRowMapper = (rs, _) -> new MachineInCompany (
             rs.getLong("id"),
-            rs.getString("machineId"),
+            rs.getLong("machineId"),
             rs.getLong("companyId")
     );
 
@@ -42,14 +42,25 @@ public class MachineInCompanyDao {
         return jdbcTemplate.query(sql, machineInCompanyRowMapper);
     }
 
+    //GET par id de l'entreprise
+    public List<MachineInCompany> findByIdCompany(Long companyId) {
+        String sql = "SELECT * FROM MachineInCompany WHERE id_company = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new MachineInCompany(rs.getLong("id"),
+                                rs.getLong("id_machine"),
+                                rs.getLong("id_company")),
+                companyId
+        );
+    }
+
     //POST
-    public int save (String machineId, Long companyId) {
+    public int save (Long machineId, Long companyId) {
         String sql = "INSERT INTO MachineInCompany (machineId, companyId) VALUES (?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, machineId);
+            ps.setLong(1, machineId);
             ps.setLong(2, companyId);
             return ps;
         }, keyHolder);
