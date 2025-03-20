@@ -189,8 +189,8 @@ public class CompanyController {
         Company updatedCompany = companyDao.update(id, companyForUpdate);
 
         machineInCompanyDao.deleteAllByCompanyId(id);
-        for (int i = 0; i < companyDtoFromBody.getMachines().size(); i++) {
-            machineInCompanyDao.save(companyDtoFromBody.getMachines().get(i).getId().toString(), id);
+        for (int i = 0; i < companyDtoFromBody.getMachinesInCompany().size(); i++) {
+            machineInCompanyDao.save(companyDtoFromBody.getMachinesInCompany().get(i).getMachineId().toString(), id);
         }
 
         for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
