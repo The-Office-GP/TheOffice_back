@@ -67,8 +67,9 @@ public class CompanyController {
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
+        List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -84,8 +85,9 @@ public class CompanyController {
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
         List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
+        List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return companyDto;
     }
