@@ -15,6 +15,7 @@ public class CompanyRequestDto {
     private List<EventDto> events;
     private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
+    private List<MachineInCompanyDto> machinesInCompany;
 
     public CompanyRequestDto() {}
 
@@ -34,6 +35,7 @@ public class CompanyRequestDto {
         dto.setEvents(companyDto.getEvents());
         dto.setStockMaterials(companyDto.getStockMaterials());
         dto.setStockFinalMaterials(companyDto.getStockFinalMaterials());
+        dto.setMachinesInCompany(companyDto.getMachinesInCompany());
 
         return dto;
     }
@@ -68,4 +70,7 @@ public class CompanyRequestDto {
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }
+
+    public List<MachineInCompanyDto> getMachinesInCompany() { return machinesInCompany; }
+    public void setMachinesInCompany(List<MachineInCompanyDto> machinesInCompany) { this.machinesInCompany = machinesInCompany; }
 }

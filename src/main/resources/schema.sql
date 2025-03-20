@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS Cycle
 CREATE TABLE IF NOT EXISTS MachineInCompany
 (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    id_machine VARCHAR(50) NOT NULL,
+    id_machine INT NOT NULL,
     id_company INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );

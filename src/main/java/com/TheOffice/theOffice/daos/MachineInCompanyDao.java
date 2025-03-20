@@ -24,7 +24,7 @@ public class MachineInCompanyDao {
 
     private final RowMapper<MachineInCompany> machineInCompanyRowMapper = (rs, _) -> new MachineInCompany (
             rs.getLong("id"),
-            rs.getString("machineId"),
+            rs.getLong("machineId"),
             rs.getLong("companyId")
     );
 
@@ -41,6 +41,17 @@ public class MachineInCompanyDao {
     public List<MachineInCompany> findAll() {
         String sql = "SELECT * FROM MachineInCompany";
         return jdbcTemplate.query(sql, machineInCompanyRowMapper);
+    }
+
+    //GET par id de l'entreprise
+    public List<MachineInCompany> findByIdCompany(Long companyId) {
+        String sql = "SELECT * FROM MachineInCompany WHERE id_company = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new MachineInCompany(rs.getLong("id"),
+                                rs.getLong("id_machine"),
+                                rs.getLong("id_company")),
+                companyId
+        );
     }
 
     //POST
