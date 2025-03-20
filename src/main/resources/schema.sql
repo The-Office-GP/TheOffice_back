@@ -119,9 +119,9 @@ CREATE TABLE IF NOT EXISTS StockFinalMaterial
     quantity      INT               NOT NULL,
     proportion_product INT          NOT NULL,
     quantity_to_product: INT        NOT NULL,
-    mounth_production INT           NOT NULL,
+    month_production INT           NOT NULL,
     sell INT                        NOT NULL,
-    mounth_sell INT                 NOT NULL,
+    month_sell INT                 NOT NULL,
     id_company    INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
