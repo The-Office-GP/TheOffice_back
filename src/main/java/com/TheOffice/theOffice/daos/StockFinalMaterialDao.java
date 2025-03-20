@@ -28,6 +28,11 @@ public class StockFinalMaterialDao {
             rs.getString("name"),
             rs.getInt("quality"),
             rs.getInt("quantity"),
+            rs.getInt("proportion_product"),
+            rs.getInt("quantity_to_product"),
+            rs.getInt("month_production"),
+            rs.getInt("sell"),
+            rs.getInt("month_sell"),
             rs.getLong("companyId")
     );
 
@@ -49,19 +54,25 @@ public class StockFinalMaterialDao {
     //GET par id de l'entreprise
     public List<StockFinalMaterial> findByIdCompany(Long companyId) {
         String sql = "SELECT * FROM StockFinalMaterial WHERE id_company = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
-                        new StockFinalMaterial(rs.getLong("id"),
-                                rs.getString("name"),
-                                rs.getInt("quality"),
-                                rs.getInt("quantity"),
-                                rs.getLong("id_company")),
-                companyId
+        return jdbcTemplate.query(sql, new Object[]{companyId}, (rs, rowNum) ->
+                new StockFinalMaterial(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getInt("quality"),
+                        rs.getInt("quantity"),
+                        rs.getInt("proportion_product"),
+                        rs.getInt("quantity_to_product"),
+                        rs.getInt("month_production"),
+                        rs.getInt("sell"),
+                        rs.getInt("month_sell"),
+                        companyId
+                )
         );
     }
 
     //POST
-    public int save(String name, Integer quality, Integer quantity, Long companyId) {
-        String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, id_company) VALUES (?, ?, ?, ?)";
+    public int save(String name, Integer quality, Integer quantity, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
+        String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -70,7 +81,12 @@ public class StockFinalMaterialDao {
             ps.setString(1, name);
             ps.setInt(2, quality);
             ps.setInt(3, quantity);
-            ps.setLong(4, companyId);
+            ps.setInt(4, proportionProduct);
+            ps.setInt(5, quantityToProduct);
+            ps.setInt(6, monthProduction);
+            ps.setInt(7, sell);
+            ps.setInt(8, monthSell);
+            ps.setLong(9, companyId);
             return ps;
         }, keyHolder);
 
