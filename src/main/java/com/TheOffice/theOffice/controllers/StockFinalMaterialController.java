@@ -34,28 +34,6 @@ public class StockFinalMaterialController {
         return ResponseEntity.ok(stockFinalMaterialDao.findById(id));  // Renvoie le matériau de stock final correspondant à l'ID fourni
     }
 
-    // Méthode pour créer un nouveau matériau de stock final
-    @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createStockFinalMaterial(@RequestBody Map<String, Object> request) {
-        // Extraction des données depuis la requête JSON
-        String name = (String) request.get("name");
-        Integer quality = (Integer) request.get("quality");  // Qualité du matériau
-        Integer quantity = (Integer) request.get("quantity");  // Quantité du matériau
-        Long companyId = ((Number) request.get("companyId")).longValue();  // Récupération de l'ID de la société associée
-
-        // Sauvegarde du matériau de stock final dans la base de données via le StockFinalMaterialDao
-        int stockFinalMaterialId = stockFinalMaterialDao.save(name, quality, quantity, companyId);
-
-        // Retourne une réponse HTTP 201 (création réussie) avec les détails du matériau de stock final créé
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "stockFinalMaterialId", stockFinalMaterialId,
-                "name", name,
-                "quality", quality,
-                "quantity", quantity,
-                "companyId", companyId
-        ));
-    }
-
     // Méthode pour mettre à jour un matériau de stock final existant
     @PutMapping("/{id}")
     public ResponseEntity<StockFinalMaterial> updateStockFinalMaterial(@PathVariable Long id, @RequestBody StockFinalMaterial stockFinalMaterial) {

@@ -159,6 +159,11 @@ public class CompanyController {
 
             // Enregistrement en base de données
             Company companyResponse = companyDao.save(company);
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 3; j++) {
+                    stockFinalMaterialDao.save("Product"+(i+1), j+1, 0, 0, 0, 0, 0, 0, companyResponse.getId());
+                }
+            }
 
             // Réponse
             Map<String, Object> response = new HashMap<>();

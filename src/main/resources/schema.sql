@@ -113,15 +113,15 @@ CREATE TABLE IF NOT EXISTS StockMaterial
 
 CREATE TABLE IF NOT EXISTS StockFinalMaterial
 (
-    id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    name          VARCHAR(255)       NOT NULL,
-    quality      INT                NOT NULL,
-    quantity      INT               NOT NULL,
-    proportion_product INT          NOT NULL,
-    quantity_to_product: INT        NOT NULL,
-    month_production INT           NOT NULL,
-    sell INT                        NOT NULL,
-    month_sell INT                 NOT NULL,
-    id_company    INT,
+    id                INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    name              VARCHAR(255)       NOT NULL,
+    quality           INT                NOT NULL,
+    quantity          INT                NOT NULL,
+    proportion_product INT               NOT NULL,
+    quantity_to_product INT             NOT NULL,
+    month_production  INT                NOT NULL,
+    sell              INT                NOT NULL,
+    month_sell        INT                NOT NULL,
+    id_company        INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );

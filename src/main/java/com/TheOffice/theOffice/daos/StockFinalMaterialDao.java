@@ -72,7 +72,9 @@ public class StockFinalMaterialDao {
 
     //POST
     public int save(String name, Integer quality, Integer quantity, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
-        String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, proportion_product, quantity_to_product, month_production, sell, month_sell, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        System.out.println("coucou");
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -90,8 +92,10 @@ public class StockFinalMaterialDao {
             return ps;
         }, keyHolder);
 
+        // Retournez l'ID généré
         return keyHolder.getKey().intValue();
     }
+
 
     //PUT
     public StockFinalMaterial update(Long id, StockFinalMaterial stockFinalMaterial) {
