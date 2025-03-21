@@ -24,12 +24,12 @@ public class CompanyDto {
     private List<Machine> machines;
     private Double wallet;
     private CycleDto cycle;
+    private StockMaterialDto stockMaterial;
 
     // DTOs associés
     private List<EmployeeDto> employees;
     private List<SupplierDto> suppliers;
     private List<EventDto> events;
-    private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
     private List<MachineInCompanyDto> machinesInCompany;
     private MachineService machineService;
@@ -38,7 +38,7 @@ public class CompanyDto {
 
     public static CompanyDto fromEntity(Company company, Double wallet,
                                         CycleDto cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
-                                        List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
+                                        List<EventDto> eventDtos, StockMaterialDto stockMaterialDtos,
                                         List<StockFinalMaterialDto> stockFinalMaterialDtos,List<MachineInCompanyDto> machinesInCompany,
                                         MachineService machineService) {
         Local companyLocal = new Local();
@@ -77,7 +77,7 @@ public class CompanyDto {
         dto.setEmployees(employeeDtos);
         dto.setSuppliers(supplierDtos);
         dto.setEvents(eventDtos);
-        dto.setStockMaterials(stockMaterialDtos);
+        dto.setStockMaterial(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
         dto.setMachinesInCompany(machinesInCompany);
 
@@ -132,8 +132,8 @@ public class CompanyDto {
     public List<EventDto> getEvents() { return events; }
     public void setEvents(List<EventDto> events) { this.events = events; }
 
-    public List<StockMaterialDto> getStockMaterials() { return stockMaterials; }
-    public void setStockMaterials(List<StockMaterialDto> stockMaterials) { this.stockMaterials = stockMaterials; }
+    public StockMaterialDto getStockMaterial() { return stockMaterial; }
+    public void setStockMaterial(StockMaterialDto stockMaterial) { this.stockMaterial = stockMaterial; }
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }

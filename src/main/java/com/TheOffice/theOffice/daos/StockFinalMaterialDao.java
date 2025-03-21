@@ -74,28 +74,31 @@ public class StockFinalMaterialDao {
 
     //POST
     public int save(String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
-        String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, proportion_product, quantity_to_product, month_production, sell, month_sell, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Requête SQL corrigée pour inclure les trois quantités distinctes
+        String sql = "INSERT INTO StockFinalMaterial (name, quantity_low, quantity_mid, quantity_high, proportion_product, quantity_to_product, month_production, sell, month_sell, id_company) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, name);
-            ps.setInt(2, quantityLow);
-            ps.setInt(3, quantityMid);
-            ps.setInt(4, quantityHigh);
+            ps.setInt(2, quantityLow);  // Insertion dans quantity_low
+            ps.setInt(3, quantityMid);  // Insertion dans quantity_mid
+            ps.setInt(4, quantityHigh); // Insertion dans quantity_high
             ps.setInt(5, proportionProduct);
             ps.setInt(6, quantityToProduct);
             ps.setInt(7, monthProduction);
             ps.setInt(8, sell);
             ps.setInt(9, monthSell);
-            ps.setLong(10, companyId);
+            ps.setLong(10, companyId);   // Insertion dans id_company
             return ps;
         }, keyHolder);
 
-        // Retournez l'ID généré
+        // Retourner l'ID généré
         return keyHolder.getKey().intValue();
     }
+
 
 
     //PUT

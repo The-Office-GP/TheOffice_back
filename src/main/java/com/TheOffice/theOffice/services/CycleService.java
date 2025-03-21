@@ -11,11 +11,13 @@ import com.TheOffice.theOffice.staticModels.Machine.ProductionQuality;
 import com.TheOffice.theOffice.staticModels.Salary;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+@Service
 public class CycleService {
 
     public void runCycle1(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){

@@ -119,7 +119,6 @@ CREATE TABLE IF NOT EXISTS StockFinalMaterial
 (
     id                INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name              VARCHAR(255)       NOT NULL,
-    quality           INT                NOT NULL,
     quantity_low          INT                NOT NULL,
     quantity_mid          INT                NOT NULL,
     quantity_high          INT                NOT NULL,

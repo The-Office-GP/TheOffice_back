@@ -13,7 +13,7 @@ public class CompanyRequestDto {
     private List<EmployeeDto> employees;
     private List<SupplierDto> suppliers;
     private List<EventDto> events;
-    private List<StockMaterialDto> stockMaterials;
+    private StockMaterialDto stockMaterial;
     private List<StockFinalMaterialDto> stockFinalMaterials;
     private List<MachineInCompanyDto> machinesInCompany;
 
@@ -33,7 +33,7 @@ public class CompanyRequestDto {
         dto.setEmployees(companyDto.getEmployees());
         dto.setSuppliers(companyDto.getSuppliers());
         dto.setEvents(companyDto.getEvents());
-        dto.setStockMaterials(companyDto.getStockMaterials());
+        dto.setStockMaterials(companyDto.getStockMaterial());
         dto.setStockFinalMaterials(companyDto.getStockFinalMaterials());
 
         return dto;
@@ -64,8 +64,8 @@ public class CompanyRequestDto {
     public List<EventDto> getEvents() { return events; }
     public void setEvents(List<EventDto> events) { this.events = events; }
 
-    public List<StockMaterialDto> getStockMaterials() { return stockMaterials; }
-    public void setStockMaterials(List<StockMaterialDto> stockMaterials) { this.stockMaterials = stockMaterials; }
+    public StockMaterialDto getStockMaterial() { return stockMaterial; }
+    public void setStockMaterials(StockMaterialDto stockMaterial) { this.stockMaterial = stockMaterial; }
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }

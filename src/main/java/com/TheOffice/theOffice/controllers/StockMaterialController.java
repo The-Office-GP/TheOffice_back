@@ -39,20 +39,23 @@ public class StockMaterialController {
     public ResponseEntity<Map<String, Object>> createStockMaterial(@RequestBody Map<String, Object> request) {
         // Extraction des données depuis la requête JSON
         String name = (String) request.get("name");
-        Integer quantity = (Integer) request.get("quantity");  // Quantité des matériaux
+        Integer quantityLow = (Integer) request.get("quantityLow");  // Quantité basse
+        Integer quantityMid = (Integer) request.get("quantityMid");  // Quantité moyenne
+        Integer quantityHigh = (Integer) request.get("quantityHigh"); // Quantité haute
         Long companyId = ((Number) request.get("companyId")).longValue();  // Récupération de l'ID de la société associée
 
-        // Sauvegarde du matériau de stock dans la base de données via le StockMaterialDao
-        int stockMaterialId = stockMaterialDao.save(name, quantity, companyId);
+        int stockMaterialId = stockMaterialDao.save(name, quantityLow, quantityMid, quantityHigh, companyId);
 
-        // Retourne une réponse HTTP 201 (création réussie) avec les détails du matériau de stock créé
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "stockMaterialId", stockMaterialId,
                 "name", name,
-                "quantity", quantity,
+                "quantityLow", quantityLow,
+                "quantityMid", quantityMid,
+                "quantityHigh", quantityHigh,
                 "companyId", companyId
         ));
     }
+
 
     // Méthode pour mettre à jour un matériau de stock existant
     /*@PutMapping("/{id}")
