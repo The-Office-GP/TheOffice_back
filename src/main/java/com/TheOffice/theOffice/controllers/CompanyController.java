@@ -59,8 +59,18 @@ public class CompanyController {
 
     // Récupère une entreprise par son ID avec toutes ses relations (machines, employés, etc.)
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
         Company company = companyDao.findById(id);
+        String token = authorizationHeader.substring(7);
+        String email = jwtUtil.getEmailFromToken(token);
+        User user = userDao.findByEmail(email);
+
+        System.out.println(company.getUserId());
+        System.out.println(user.getId());
+
+        if (!company.getUserId().equals(user.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403 Forbidden
+        }
 
         Double wallet = userDao.findWalletByUserId(company.getUserId());
         CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
