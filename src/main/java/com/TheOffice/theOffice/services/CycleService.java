@@ -35,24 +35,7 @@ public class CycleService {
         }
     }
 
-    public void runCycle2(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
-        int dayCycle = 0;
-
-        while(dayCycle < 30) {
-            companyProduct(cycle, employeeList, machineInCompany, stockProduct, stockMaterial);
-            dayCycle++;
-            if (dayCycle >= 6) {
-                companySell(employeeList, stockProduct, cycle);
-            }
-            companyMarket(cycle, company,employeeList);
-
-            for (int i = 0; i < employeeList.size(); i++) {
-                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue()*30);
-            }
-        }
-    }
-
-    public void runCycle3(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
+    public void lastRunCycle(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
         int dayCycle = 0;
 
         while(dayCycle < 30) {

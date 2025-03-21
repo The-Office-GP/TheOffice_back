@@ -1,5 +1,5 @@
 package com.TheOffice.theOffice.entities.Employee;
 
 public enum PriorityAction {
-    Priority1, Priority2, Priority3, Priority4
+    Product1, Product2, Product3, Product4
 }

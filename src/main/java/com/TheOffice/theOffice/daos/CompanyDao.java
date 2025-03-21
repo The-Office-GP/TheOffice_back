@@ -54,6 +54,7 @@ public class CompanyDao {
             Status.valueOf(rs.getString("status")),
             Job.valueOf(rs.getString("job")),
             rs.getInt("health"),
+            PriorityAction.valueOf(rs.getString("priority_action")),
             rs.getString("image")
     );
 

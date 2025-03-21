@@ -85,11 +85,8 @@ public class EmployeeDao {
     public long save(Employee employee) {
         String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, priority_action, image) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        // Utilisation de KeyHolder pour récupérer l'ID généré
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        // Préparer la requête d'insertion
+        System.out.println(employee.getPriorityAction().toString());
         jdbcTemplate.update(
                 new PreparedStatementCreator() {
                     @Override
@@ -100,17 +97,16 @@ public class EmployeeDao {
                         ps.setInt(3, employee.getSeniority());
                         ps.setBigDecimal(4, employee.getSalary());
                         ps.setInt(5, employee.getLevel());
-                        ps.setString(6, employee.getMood().toString());  // Exemple de valeur pour mood
-                        ps.setString(7, employee.getStatus().toString());   // Exemple de valeur pour status
-                        ps.setString(8, employee.getJob().toString());  // Exemple de valeur pour job
+                        ps.setString(6, employee.getMood().toString());
+                        ps.setString(7, employee.getStatus().toString());
+                        ps.setString(8, employee.getJob().toString());
                         ps.setLong(9, employee.getHealth());
-                        ps.setString(7, employee.getPriorityAction().toString());
-                        ps.setString(10, employee.getImage()); // Supposons que `image` soit un tableau de bytes
+                        ps.setString(10, employee.getPriorityAction().toString());
+                        ps.setString(11, employee.getImage());
                         return ps;
                     }
                 },
                 keyHolder);
-
         // Obtenir l'ID généré
         long id = keyHolder.getKey().longValue();
 
@@ -121,12 +117,13 @@ public class EmployeeDao {
     }
 
 
+
     //PUT
     public Employee update(Long id, Employee employee) {
         if (!employeeExists(id)) {
             throw new ResourceNotFoundException("Salarié avec l'ID : " + id + " n'existe pas");
         }
-
+        System.out.println(employee.getPriorityAction());
         String sql = "UPDATE Employee SET name = ?, gender = ?, seniority = ?, salary = ?, level = ?, mood = ?, status = ?, job = ?, health = ?, priority_action = ?, image = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql,
                 employee.getName(),
@@ -138,11 +135,10 @@ public class EmployeeDao {
                 employee.getStatus().name(),
                 employee.getJob().name(),
                 employee.getHealth(),
-                employee.getPriorityAction(),
+                employee.getPriorityAction().name(),
                 employee.getImage(),
                 id
         );
-
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du salarié avec l'ID : " + id);
         }

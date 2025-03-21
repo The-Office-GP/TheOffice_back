@@ -45,8 +45,10 @@ CREATE TABLE IF NOT EXISTS Supplier
 CREATE TABLE IF NOT EXISTS Cycle
 (
     id           INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    step    INT                NOT NULL,
     production_speed    INT                NOT NULL,
     priority_production INT                NOT NULL,
+    priority_marketing INT                NOT NULL,
     count_good_sell         INT                NOT NULL,
     count_bad_sell         INT                NOT NULL,
     id_company   INT,

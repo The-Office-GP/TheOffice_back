@@ -4,18 +4,22 @@ import com.TheOffice.theOffice.entities.Cycle;
 
 public class CycleDto {
     private Long id;
+    private Integer step;
     private Integer productionSpeed;
     private Integer priorityProduction;
+    private Integer priorityMarketing;
     private Integer countGoodSell;
     private Integer countBadSell;
     private Long companyId;
 
     public CycleDto() {}
 
-    public CycleDto(Long id, Integer productionSpeed, Integer priorityProduction, Integer countGoodSell, Integer countBadSell, Long companyId) {
+    public CycleDto(Long id, Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, Long companyId) {
         this.id = id;
+        this.step = step;
         this.productionSpeed = productionSpeed;
         this.priorityProduction = priorityProduction;
+        this.priorityMarketing = priorityMarketing;
         this.countGoodSell = countGoodSell;
         this.countBadSell = countBadSell;
         this.companyId = companyId;
@@ -29,12 +33,12 @@ public class CycleDto {
         this.id = id;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Integer getStep() {
+        return step;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setStep(Integer step) {
+        this.step = step;
     }
 
     public Integer getProductionSpeed() {
@@ -53,6 +57,14 @@ public class CycleDto {
         this.priorityProduction = priorityProduction;
     }
 
+    public Integer getPriorityMarketing() {
+        return priorityMarketing;
+    }
+
+    public void setPriorityMarketing(Integer priorityMarketing) {
+        this.priorityMarketing = priorityMarketing;
+    }
+
     public Integer getCountGoodSell() {
         return countGoodSell;
     }
@@ -69,7 +81,15 @@ public class CycleDto {
         this.countBadSell = countBadSell;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     public static CycleDto fromEntity(Cycle cycle){
-        return new CycleDto(cycle.getId(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getCompanyId());
+        return new CycleDto(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getCompanyId());
     }
 }

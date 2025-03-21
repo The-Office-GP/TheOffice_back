@@ -76,8 +76,6 @@ public class StockFinalMaterialDao {
     public int save(String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
         String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, proportion_product, quantity_to_product, month_production, sell, month_sell, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        System.out.println("coucou");
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
