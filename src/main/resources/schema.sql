@@ -45,11 +45,10 @@ CREATE TABLE IF NOT EXISTS Supplier
 CREATE TABLE IF NOT EXISTS Cycle
 (
     id           INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    cost         DECIMAL(10, 2)     NOT NULL,
-    employees    INT                NOT NULL,
-    productivity INT                NOT NULL,
-    popularity   INT                NOT NULL,
-    step         INT                NOT NULL,
+    production_speed    INT                NOT NULL,
+    priority_production INT                NOT NULL,
+    count_good_sell         INT                NOT NULL,
+    count_bad_sell         INT                NOT NULL,
     id_company   INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
@@ -74,6 +73,7 @@ CREATE TABLE IF NOT EXISTS Employee
     status   ENUM ('ACTIF', 'CONGES', 'GREVE') NOT NULL DEFAULT 'ACTIF',
     job ENUM ('MARKETING', 'VENTE', 'PRODUCTION') NOT NULL,
     health INT NOT NULL,
+    priority_action ENUM ('Product1', 'Product2', 'Product3', 'Product4') NOT NULL DEFAULT 'Product1',
     image VARCHAR(255) NOT NULL
 );
 
@@ -106,7 +106,9 @@ CREATE TABLE IF NOT EXISTS StockMaterial
 (
     id            INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name          VARCHAR(255)       NOT NULL,
-    quantity      INT                NOT NULL,
+    quantity_low      INT                NOT NULL,
+    quantity_mid      INT                NOT NULL,
+    quantity_high      INT                NOT NULL,
     id_company    INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
@@ -116,7 +118,9 @@ CREATE TABLE IF NOT EXISTS StockFinalMaterial
     id                INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name              VARCHAR(255)       NOT NULL,
     quality           INT                NOT NULL,
-    quantity          INT                NOT NULL,
+    quantity_low          INT                NOT NULL,
+    quantity_mid          INT                NOT NULL,
+    quantity_high          INT                NOT NULL,
     proportion_product INT               NOT NULL,
     quantity_to_product INT             NOT NULL,
     month_production  INT                NOT NULL,

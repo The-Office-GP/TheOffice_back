@@ -1,11 +1,7 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.Company;
-import com.TheOffice.theOffice.entities.Employee.Employee;
-import com.TheOffice.theOffice.entities.Employee.Mood;
-import com.TheOffice.theOffice.entities.Employee.Gender;
-import com.TheOffice.theOffice.entities.Employee.Status;
-import com.TheOffice.theOffice.entities.Employee.Job;
+import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -40,6 +36,7 @@ public class EmployeeDao {
             Status.valueOf(rs.getString("status")),
             Job.valueOf(rs.getString("job")),
             rs.getInt("health"),
+            PriorityAction.valueOf(rs.getString("priority_action")),
             rs.getString("image")
     );
 
@@ -86,8 +83,8 @@ public class EmployeeDao {
     }*/
 
     public long save(Employee employee) {
-        String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, image) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Employee (name, gender, seniority, salary, level, mood, status, job, health, priority_action, image) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Utilisation de KeyHolder pour récupérer l'ID généré
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -107,6 +104,7 @@ public class EmployeeDao {
                         ps.setString(7, employee.getStatus().toString());   // Exemple de valeur pour status
                         ps.setString(8, employee.getJob().toString());  // Exemple de valeur pour job
                         ps.setLong(9, employee.getHealth());
+                        ps.setString(7, employee.getPriorityAction().toString());
                         ps.setString(10, employee.getImage()); // Supposons que `image` soit un tableau de bytes
                         return ps;
                     }
@@ -129,7 +127,7 @@ public class EmployeeDao {
             throw new ResourceNotFoundException("Salarié avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Employee SET name = ?, gender = ?, seniority = ?, salary = ?, level = ?, mood = ?, status = ?, job = ?, health = ?, image = ? WHERE id = ?";
+        String sql = "UPDATE Employee SET name = ?, gender = ?, seniority = ?, salary = ?, level = ?, mood = ?, status = ?, job = ?, health = ?, priority_action = ?, image = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql,
                 employee.getName(),
                 employee.getGender().name(),
@@ -140,6 +138,7 @@ public class EmployeeDao {
                 employee.getStatus().name(),
                 employee.getJob().name(),
                 employee.getHealth(),
+                employee.getPriorityAction(),
                 employee.getImage(),
                 id
         );

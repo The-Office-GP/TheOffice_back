@@ -23,9 +23,9 @@ public class CompanyDto {
     private Local local;
     private List<Machine> machines;
     private Double wallet;
+    private CycleDto cycle;
 
     // DTOs associés
-    private List<CycleDto> cycles;
     private List<EmployeeDto> employees;
     private List<SupplierDto> suppliers;
     private List<EventDto> events;
@@ -37,7 +37,7 @@ public class CompanyDto {
     public CompanyDto() {}
 
     public static CompanyDto fromEntity(Company company, Double wallet,
-                                        List<CycleDto> cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
+                                        CycleDto cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
                                         List<StockFinalMaterialDto> stockFinalMaterialDtos,List<MachineInCompanyDto> machinesInCompany,
                                         MachineService machineService) {
@@ -73,7 +73,7 @@ public class CompanyDto {
         dto.setWallet(wallet);
         dto.setLocal(companyLocal);
         dto.setMachines(machineList);
-        dto.setCycles(cycleDtos);
+        dto.setCycle(cycleDtos);
         dto.setEmployees(employeeDtos);
         dto.setSuppliers(supplierDtos);
         dto.setEvents(eventDtos);
@@ -120,8 +120,8 @@ public class CompanyDto {
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }
 
-    public List<CycleDto> getCycles() { return cycles; }
-    public void setCycles(List<CycleDto> cycles) { this.cycles = cycles; }
+    public CycleDto getCycle() { return cycle; }
+    public void setCycle(CycleDto cycle) { this.cycle = cycle; }
 
     public List<EmployeeDto> getEmployees() { return employees; }
     public void setEmployees(List<EmployeeDto> employees) { this.employees = employees; }

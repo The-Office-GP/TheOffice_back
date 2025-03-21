@@ -13,13 +13,14 @@ public class Employee {
     private Status status;
     private Job job;
     private Integer health;
+    private PriorityAction priorityAction;
     private String image;
 
     public Employee() {
     }
 
     //Constructor
-    public Employee(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, String image) {
+    public Employee(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, PriorityAction priorityAction, String image) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -30,6 +31,7 @@ public class Employee {
         this.status = status;
         this.job = job;
         this.health = health;
+        this.priorityAction = priorityAction;
         this.image = image;
     }
 
@@ -66,5 +68,13 @@ public class Employee {
 
     public String getImage() {return image;}
     public void setImage(String image) {this.image = image;}
+
+    public PriorityAction getPriorityAction() {
+        return priorityAction;
+    }
+
+    public void setPriorityAction(PriorityAction priorityAction) {
+        this.priorityAction = priorityAction;
+    }
 }
 

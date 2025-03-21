@@ -26,8 +26,9 @@ public class StockFinalMaterialDao {
     private final RowMapper<StockFinalMaterial> stockFinalMaterialRowMapper = (rs, rowNum) -> new StockFinalMaterial(
             rs.getLong("id"),
             rs.getString("name"),
-            rs.getInt("quality"),
-            rs.getInt("quantity"),
+            rs.getInt("quantity_low"),
+            rs.getInt("quantity_mid"),
+            rs.getInt("quantity_high"),
             rs.getInt("proportion_product"),
             rs.getInt("quantity_to_product"),
             rs.getInt("month_production"),
@@ -58,8 +59,9 @@ public class StockFinalMaterialDao {
                 new StockFinalMaterial(
                         rs.getLong("id"),
                         rs.getString("name"),
-                        rs.getInt("quality"),
-                        rs.getInt("quantity"),
+                        rs.getInt("quantity_low"),
+                        rs.getInt("quantity_mid"),
+                        rs.getInt("quantity_high"),
                         rs.getInt("proportion_product"),
                         rs.getInt("quantity_to_product"),
                         rs.getInt("month_production"),
@@ -71,7 +73,7 @@ public class StockFinalMaterialDao {
     }
 
     //POST
-    public int save(String name, Integer quality, Integer quantity, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
+    public int save(String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
         String sql = "INSERT INTO StockFinalMaterial (name, quality, quantity, proportion_product, quantity_to_product, month_production, sell, month_sell, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         System.out.println("coucou");
@@ -81,14 +83,15 @@ public class StockFinalMaterialDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, name);
-            ps.setInt(2, quality);
-            ps.setInt(3, quantity);
-            ps.setInt(4, proportionProduct);
-            ps.setInt(5, quantityToProduct);
-            ps.setInt(6, monthProduction);
-            ps.setInt(7, sell);
-            ps.setInt(8, monthSell);
-            ps.setLong(9, companyId);
+            ps.setInt(2, quantityLow);
+            ps.setInt(3, quantityMid);
+            ps.setInt(4, quantityHigh);
+            ps.setInt(5, proportionProduct);
+            ps.setInt(6, quantityToProduct);
+            ps.setInt(7, monthProduction);
+            ps.setInt(8, sell);
+            ps.setInt(9, monthSell);
+            ps.setLong(10, companyId);
             return ps;
         }, keyHolder);
 
@@ -98,7 +101,7 @@ public class StockFinalMaterialDao {
 
 
     //PUT
-    public StockFinalMaterial update(Long id, StockFinalMaterial stockFinalMaterial) {
+    /*public StockFinalMaterial update(Long id, StockFinalMaterial stockFinalMaterial) {
         if (!stockFinalMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits finaux avec l'ID : " + id + " n'existe pas");
         }
@@ -110,7 +113,7 @@ public class StockFinalMaterialDao {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits finaux avec l'ID : " + id);
         }
         return stockFinalMaterial;
-    }
+    }*/
 
     //Vérifier si le stock des produits finaux existe
     public boolean stockFinalMaterialExists(Long id) {

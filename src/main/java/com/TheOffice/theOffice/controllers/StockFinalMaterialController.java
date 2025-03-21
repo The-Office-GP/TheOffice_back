@@ -35,10 +35,10 @@ public class StockFinalMaterialController {
     }
 
     // Méthode pour mettre à jour un matériau de stock final existant
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<StockFinalMaterial> updateStockFinalMaterial(@PathVariable Long id, @RequestBody StockFinalMaterial stockFinalMaterial) {
         // Mise à jour du matériau de stock final via le StockFinalMaterialDao et récupération du matériau mis à jour
         StockFinalMaterial updatedStockFinalMaterial = stockFinalMaterialDao.update(id, stockFinalMaterial);
         return ResponseEntity.ok(updatedStockFinalMaterial);  // Renvoie le matériau de stock final mis à jour
-    }
+    }*/
 }

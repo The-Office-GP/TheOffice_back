@@ -24,11 +24,10 @@ public class CycleDao {
 
     private final RowMapper<Cycle> cycleRowMapper = (rs, _) -> new Cycle(
             rs.getLong("id"),
-            rs.getDouble("cost"),
-            rs.getLong("employees"),
-            rs.getLong("productivity"),
-            rs.getLong("popularity"),
-            rs.getLong("step"),
+            rs.getInt("production_speed"),
+            rs.getInt("priority_production"),
+            rs.getInt("count_good_sell"),
+            rs.getInt("count_bad_sell"),
             rs.getLong("id_company")
     );
 
@@ -41,19 +40,12 @@ public class CycleDao {
                 .orElseThrow(() -> new ResourceNotFoundException("Cycle non trouvée"));
     }
 
-    // GET par id de l'entreprise
-    public List<Cycle> findByIdCompany(Long companyId) {
+    public Cycle findByIdCompany(Long id) {
         String sql = "SELECT * FROM Cycle WHERE id_company = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
-                        new Cycle(rs.getLong("id"),
-                                rs.getDouble("cost"),
-                                rs.getLong("employees"),
-                                rs.getLong("productivity"),
-                                rs.getLong("popularity"),
-                                rs.getLong("step"),
-                                rs.getLong("companyId")),
-                companyId
-        );
+        return jdbcTemplate.query(sql, cycleRowMapper, id)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Cycle non trouvée"));
     }
 
     // GET de tous les cycles
@@ -63,19 +55,18 @@ public class CycleDao {
     }
 
     // POST
-    public int save(Double cost, Long employees, Long productivity, Long popularity, Long step, Long companyId) {
-        String sql = "INSERT INTO Cycle (cost, employees, productivity, popularity, step, id_company) VALUES (?, ?, ?, ?, ?, ?)";
+    public int save(Integer productionSpeed, Integer prioritySpeed, Integer countGoodSell, Integer countBadSell, Long companyId) {
+        String sql = "INSERT INTO Cycle (production_speed, priority_production, count_good_sell, count_bad_sell, id_company) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setDouble(1, cost);
-            ps.setLong(2, employees);
-            ps.setLong(3, productivity);
-            ps.setLong(4, popularity);
-            ps.setLong(5, step);
-            ps.setLong(6, companyId);
+            ps.setDouble(1, productionSpeed);
+            ps.setLong(2, prioritySpeed);
+            ps.setLong(3, countGoodSell);
+            ps.setLong(3, countBadSell);
+            ps.setLong(4, companyId);
             return ps;
         }, keyHolder);
 
@@ -88,8 +79,8 @@ public class CycleDao {
             throw new ResourceNotFoundException("Cycle avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE Cycle SET cost = ?, employees = ?, productivity = ?, popularity = ?, step = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, cycle.getCost(), cycle.getEmployees(), cycle.getProductivity(), cycle.getPopularity(), cycle.getStep(), cycle.getCompanyId(), id);
+        String sql = "UPDATE Cycle SET production_speed = ?, priority_production = ?, count_good_sell = ?, id_company = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getCountGoodSell(), cycle.getCompanyId(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du cycle avec l'ID : " + id);

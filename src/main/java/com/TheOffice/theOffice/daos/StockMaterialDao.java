@@ -26,7 +26,9 @@ public class StockMaterialDao {
     private final RowMapper<StockMaterial> stockMaterialRowMapper = (rs, rowNum) -> new StockMaterial(
             rs.getLong("id"),
             rs.getString("name"),
-            rs.getInt("quantity"),
+            rs.getInt("quantity_low"),
+            rs.getInt("quantity_mid"),
+            rs.getInt("quantity_high"),
             rs.getLong("id_company")
     );
 
@@ -51,7 +53,9 @@ public class StockMaterialDao {
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                         new StockMaterial(rs.getLong("id"),
                                 rs.getString("name"),
-                                rs.getInt("quantity"),
+                                rs.getInt("quantity_low"),
+                                rs.getInt("quantity_mid"),
+                                rs.getInt("quantity_high"),
                                 rs.getLong("companyId")),
                 companyId
         );
@@ -75,7 +79,7 @@ public class StockMaterialDao {
     }
 
     //PUT
-    public StockMaterial update(Long id, StockMaterial stockMaterial) {
+    /*public StockMaterial update(Long id, StockMaterial stockMaterial) {
         if (!stockMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits avec l'ID : " + id + " n'existe pas");
         }
@@ -87,7 +91,7 @@ public class StockMaterialDao {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits avec l'ID : " + id);
         }
         return stockMaterial;
-    }
+    }*/
 
     public boolean stockMaterialExists(Long id) {
         String sql = "SELECT COUNT(*) FROM StockMaterial WHERE id = ?";

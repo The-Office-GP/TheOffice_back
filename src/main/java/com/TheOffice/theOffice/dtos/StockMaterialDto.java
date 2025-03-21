@@ -5,17 +5,21 @@ import com.TheOffice.theOffice.entities.StockMaterial;
 public class StockMaterialDto {
     private Long id;
     private String name;
-    private Integer quantity;
+    private Integer quantityLow;
+    private Integer quantityMid;
+    private Integer quantityHigh;
     private Long companyId;
 
     public StockMaterialDto() {
     }
 
-    // Constructor
-    public StockMaterialDto(Long id, String name, Integer quantity, Long companyId) {
+    // Constructeur corrigé avec les propriétés quantityLow, quantityMid et quantityHigh
+    public StockMaterialDto(Long id, String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Long companyId) {
         this.id = id;
         this.name = name;
-        this.quantity = quantity;
+        this.quantityLow = quantityLow;
+        this.quantityMid = quantityMid;
+        this.quantityHigh = quantityHigh;
         this.companyId = companyId;
     }
 
@@ -26,13 +30,31 @@ public class StockMaterialDto {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Integer getQuantityLow() { return quantityLow; }
+    public void setQuantityLow(Integer quantityLow) { this.quantityLow = quantityLow; }
+
+    public Integer getQuantityMid() { return quantityMid; }
+    public void setQuantityMid(Integer quantityMid) { this.quantityMid = quantityMid; }
+
+    public Integer getQuantityHigh() { return quantityHigh; }
+    public void setQuantityHigh(Integer quantityHigh) { this.quantityHigh = quantityHigh; }
 
     public Long getCompanyId() { return companyId; }
     public void setCompanyId(Long companyId) { this.companyId = companyId; }
 
     public static StockMaterialDto fromEntity(StockMaterial stockMaterial) {
-        return new StockMaterialDto(stockMaterial.getId(), stockMaterial.getName(), stockMaterial.getQuantity(), stockMaterial.getCompanyId());
+        return new StockMaterialDto(
+                stockMaterial.getId(),
+                stockMaterial.getName(),
+                stockMaterial.getQuantityLow(),  // Assurez-vous que ces méthodes existent dans l'entité
+                stockMaterial.getQuantityMid(),
+                stockMaterial.getQuantityHigh(),
+                stockMaterial.getCompanyId()
+        );
+    }
+
+    public int totalStock(){
+        return this.quantityLow + this.quantityMid + this.quantityHigh;
     }
 }
+

@@ -60,8 +60,8 @@ public class CompanyController {
         Company company = companyDao.findById(id);
 
         Double wallet = userDao.findWalletByUserId(company.getUserId());
+        CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
 
-        List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
@@ -69,7 +69,7 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -78,8 +78,8 @@ public class CompanyController {
         Company company = companyDao.findById(id);
 
         Double wallet = userDao.findWalletByUserId(company.getUserId());
+        CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
 
-        List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
@@ -87,7 +87,7 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return companyDto;
     }
@@ -160,9 +160,7 @@ public class CompanyController {
             // Enregistrement en base de données
             Company companyResponse = companyDao.save(company);
             for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 3; j++) {
-                    stockFinalMaterialDao.save("Product"+(i+1), j+1, 0, 0, 0, 0, 0, 0, companyResponse.getId());
-                }
+                stockFinalMaterialDao.save("Product"+(i+1), 0, 0, 0, 0, 0, 0, 0, 0, companyResponse.getId());
             }
 
             // Réponse
