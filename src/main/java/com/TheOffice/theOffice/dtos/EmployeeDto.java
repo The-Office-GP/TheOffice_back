@@ -15,13 +15,14 @@ public class EmployeeDto {
     private Status status;
     private Job job;
     private Integer health;
+    private PriorityAction priorityAction;
     private String image;
 
     public EmployeeDto() {
     }
 
     // Constructor
-    public EmployeeDto(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, String image) {
+    public EmployeeDto(Long id, String name, Gender gender, Integer seniority, BigDecimal salary, Integer level, Mood mood, Status status, Job job, Integer health, PriorityAction priorityAction, String image) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -32,6 +33,7 @@ public class EmployeeDto {
         this.status = status;
         this.job = job;
         this.health = health;
+        this.priorityAction = priorityAction;
         this.image = image;
     }
 
@@ -69,11 +71,19 @@ public class EmployeeDto {
     public String getImage() {return image;}
     public void setImage(String image) {this.image = image;}
 
+    public PriorityAction getPriorityAction() {
+        return priorityAction;
+    }
+
+    public void setPriorityAction(PriorityAction priorityAction) {
+        this.priorityAction = priorityAction;
+    }
+
     public static EmployeeDto fromEntity(Employee employee) {
-        return new EmployeeDto(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(), employee.getImage());
+        return new EmployeeDto(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(), employee.getPriorityAction(), employee.getImage());
     }
 
     public static Employee convertInEntity(EmployeeDto employee) {
-        return new Employee(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(), employee.getImage());
+        return new Employee(employee.getId(), employee.getName(), employee.getGender(), employee.getSeniority(), employee.getSalary(), employee.getLevel(), employee.getMood(), employee.getStatus(), employee.getJob(), employee.getHealth(),employee.getPriorityAction(), employee.getImage());
     }
 }

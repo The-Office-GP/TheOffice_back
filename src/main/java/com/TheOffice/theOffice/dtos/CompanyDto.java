@@ -23,13 +23,13 @@ public class CompanyDto {
     private Local local;
     private List<Machine> machines;
     private Double wallet;
+    private CycleDto cycle;
+    private StockMaterialDto stockMaterial;
 
     // DTOs associés
-    private List<CycleDto> cycles;
     private List<EmployeeDto> employees;
     private List<SupplierDto> suppliers;
     private List<EventDto> events;
-    private List<StockMaterialDto> stockMaterials;
     private List<StockFinalMaterialDto> stockFinalMaterials;
     private List<MachineInCompanyDto> machinesInCompany;
     private MachineService machineService;
@@ -37,8 +37,8 @@ public class CompanyDto {
     public CompanyDto() {}
 
     public static CompanyDto fromEntity(Company company, Double wallet,
-                                        List<CycleDto> cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
-                                        List<EventDto> eventDtos, List<StockMaterialDto> stockMaterialDtos,
+                                        CycleDto cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
+                                        List<EventDto> eventDtos, StockMaterialDto stockMaterialDtos,
                                         List<StockFinalMaterialDto> stockFinalMaterialDtos,List<MachineInCompanyDto> machinesInCompany,
                                         MachineService machineService) {
         Local companyLocal = new Local();
@@ -73,11 +73,11 @@ public class CompanyDto {
         dto.setWallet(wallet);
         dto.setLocal(companyLocal);
         dto.setMachines(machineList);
-        dto.setCycles(cycleDtos);
+        dto.setCycle(cycleDtos);
         dto.setEmployees(employeeDtos);
         dto.setSuppliers(supplierDtos);
         dto.setEvents(eventDtos);
-        dto.setStockMaterials(stockMaterialDtos);
+        dto.setStockMaterial(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
         dto.setMachinesInCompany(machinesInCompany);
 
@@ -120,8 +120,8 @@ public class CompanyDto {
     public Double getWallet() { return wallet; }
     public void setWallet(Double wallet) { this.wallet = wallet; }
 
-    public List<CycleDto> getCycles() { return cycles; }
-    public void setCycles(List<CycleDto> cycles) { this.cycles = cycles; }
+    public CycleDto getCycle() { return cycle; }
+    public void setCycle(CycleDto cycle) { this.cycle = cycle; }
 
     public List<EmployeeDto> getEmployees() { return employees; }
     public void setEmployees(List<EmployeeDto> employees) { this.employees = employees; }
@@ -132,8 +132,8 @@ public class CompanyDto {
     public List<EventDto> getEvents() { return events; }
     public void setEvents(List<EventDto> events) { this.events = events; }
 
-    public List<StockMaterialDto> getStockMaterials() { return stockMaterials; }
-    public void setStockMaterials(List<StockMaterialDto> stockMaterials) { this.stockMaterials = stockMaterials; }
+    public StockMaterialDto getStockMaterial() { return stockMaterial; }
+    public void setStockMaterial(StockMaterialDto stockMaterial) { this.stockMaterial = stockMaterial; }
 
     public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
     public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }

@@ -4,6 +4,7 @@ import com.TheOffice.theOffice.daos.*;
 import com.TheOffice.theOffice.dtos.*;
 import com.TheOffice.theOffice.entities.*;
 import com.TheOffice.theOffice.entities.Employee.Employee;
+import com.TheOffice.theOffice.services.CycleService;
 import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
@@ -32,9 +33,10 @@ public class CompanyController {
     private final MachineInCompanyDao machineInCompanyDao;
     private final JwtUtil jwtUtil;
     private final MachineService machineService;
+    private final CycleService cycleService;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -46,6 +48,7 @@ public class CompanyController {
         this.jwtUtil = jwtUtil;
         this.machineService = machineService;
         this.machineInCompanyDao = machineInCompanyDao;
+        this.cycleService = cycleService;
     }
 
     // Récupère toutes les entreprises
@@ -60,16 +63,16 @@ public class CompanyController {
         Company company = companyDao.findById(id);
 
         Double wallet = userDao.findWalletByUserId(company.getUserId());
+        CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
+        StockMaterialDto stockMaterials = StockMaterialDto.fromEntity(stockMaterialDao.findByIdCompany(id));
 
-        List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
-        List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -78,16 +81,16 @@ public class CompanyController {
         Company company = companyDao.findById(id);
 
         Double wallet = userDao.findWalletByUserId(company.getUserId());
+        CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
+        StockMaterialDto stockMaterials = StockMaterialDto.fromEntity(stockMaterialDao.findByIdCompany(id));
 
-        List<CycleDto> cycles = cycleDao.findByIdCompany(id).stream().map(CycleDto::fromEntity).collect(Collectors.toList());
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
         List<EventDto> events = eventDao.findByIdCompany(id).stream().map(EventDto::fromEntity).collect(Collectors.toList());
-        List<StockMaterialDto> stockMaterials = stockMaterialDao.findByIdCompany(id).stream().map(StockMaterialDto::fromEntity).collect(Collectors.toList());
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycles, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
 
         return companyDto;
     }
@@ -159,6 +162,11 @@ public class CompanyController {
 
             // Enregistrement en base de données
             Company companyResponse = companyDao.save(company);
+            cycleDao.save(1, 100, 50, 50, 0, 0, companyResponse.getId());
+            stockMaterialDao.save("Product",0, 0, 0, companyResponse.getId());
+            for (int i = 0; i < 4; i++) {
+                stockFinalMaterialDao.save("Product"+(i+1), 0, 0, 0, 0, 0, 0, 0, 0, companyResponse.getId());
+            }
 
             // Réponse
             Map<String, Object> response = new HashMap<>();
@@ -208,6 +216,35 @@ public class CompanyController {
 
         return ResponseEntity.ok(newCompanyDto);
     }
+
+    @PutMapping("/cycle/{id}")
+    public ResponseEntity<CompanyDto> runCycleCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
+        Company companyFromBody = companyDao.findById(id);
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+        cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+
+        Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
+        companyDao.update(id, companyForUpdate);
+        cycleDao.update(companyDtoFromBody.getCycle().getId(), CycleDto.dtoToEntity(companyDtoFromBody.getCycle()));
+        for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
+            employeeDao.update(companyDtoFromBody.getEmployees().get(i).getId(), EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));
+        }
+        for (int i = 0; i < companyDtoFromBody.getStockFinalMaterials().size(); i++) {
+            stockFinalMaterialDao.update(companyDtoFromBody.getStockFinalMaterials().get(i).getId(), StockFinalMaterialDto.dtoToEntity(companyDtoFromBody.getStockFinalMaterials().get(i)));
+        }
+        stockMaterialDao.update(companyDtoFromBody.getStockMaterial().getId(), StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
+        System.out.println("coucouFinale");
+
+
+
+        CompanyDto newCompanyDto = companyDtoFromBody;
+
+
+        return ResponseEntity.ok(newCompanyDto);
+    }
+
+
 
     // Suppression d'une entreprise par son ID
     @DeleteMapping("/{id}")

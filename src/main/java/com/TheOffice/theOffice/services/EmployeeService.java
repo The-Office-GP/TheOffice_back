@@ -76,6 +76,7 @@ public class EmployeeService {
                 Status.ACTIF,
                 job,
                 100,
+                PriorityAction.Product1,
                 nameList.get(choiceName).getPath()
         );
     }

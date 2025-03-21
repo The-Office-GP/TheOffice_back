@@ -37,7 +37,7 @@ public class CycleController {
     }
 
     // Méthode pour créer un nouveau cycle
-    @PostMapping("/create")
+    /*@PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createCycle(@RequestBody Map<String, Object> request) {
         // Extraction des informations envoyées dans le corps de la requête (format JSON)
         Double cost = ((Number) request.get("cost")).doubleValue();  // Coût du cycle
@@ -60,7 +60,7 @@ public class CycleController {
                 "step", step,  // Étape du cycle
                 "companyId", companyId  // ID de l'entreprise
         ));
-    }
+    }*/
 
     // Méthode pour mettre à jour un cycle existant via son ID
     @PutMapping("/{id}")
