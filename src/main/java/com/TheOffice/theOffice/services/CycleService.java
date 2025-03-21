@@ -26,16 +26,20 @@ public class CycleService {
         while(dayCycle < 30) {
             companyProduct(cycle, employeeList, machineInCompany, stockProduct, stockMaterial);
             dayCycle++;
+
             if (dayCycle >= 6) {
                 companySell(employeeList, stockProduct, cycle);
             }
-            companyMarket(cycle, company,employeeList);
+
+            companyMarket(cycle, company, employeeList);
 
             for (int i = 0; i < employeeList.size(); i++) {
-                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue()*30);
+                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue() * 30);
             }
         }
+
     }
+
 
     public void lastRunCycle(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
         int dayCycle = 0;
@@ -71,15 +75,15 @@ public class CycleService {
 
     public void companyProduct(CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
         Integer companyProduction = 0;
-        double coeffProductionSpeed = cycle.getProductionSpeed() / 100;
-        double coeffPriorityProduction = cycle.getPriorityProduction() / 100;
+        double coeffProductionSpeed = (double)cycle.getProductionSpeed() / 100;
+        double coeffPriorityProduction = (double)cycle.getPriorityProduction() / 100;
+
 
         for (int i = 0; i < employeeList.size(); i++) {
             companyProduction += employeeProductionCapacity(employeeList.get(i), employeeList, machineInCompany, coeffPriorityProduction, coeffProductionSpeed);
         }
-
         for (int i = 0; i < stockProduct.size(); i++) {
-            stockProduct.get(i).setQuantityToProduct(Math.round(companyProduction * stockProduct.get(i).getProportionProduct()/100));
+            stockProduct.get(i).setQuantityToProduct((int) Math.round(companyProduction * (double)stockProduct.get(i).getProportionProduct()/100));
         }
 
         int index = 0;
@@ -99,14 +103,13 @@ public class CycleService {
                 }
             }
         }
-
     }
 
     public Integer employeeProductionCapacity(EmployeeDto employee, List<EmployeeDto> employeeInCompany, List<MachineInCompanyDto> machineInCompany, double coeffPriorityProduction, double coeffProductionSpeed) {
         Integer productionCapacity = productionEmployee(employee);
         int idForMachine = employeeInCompany.indexOf(employee);
         if (idForMachine < machineInCompany.size()) {
-            productionCapacity = (int)(fetchTheProductionOfMachine(machineInCompany.get(idForMachine)) * productionCapacity);
+            double machineProduction = fetchTheProductionOfMachine(machineInCompany.get(idForMachine));
             return (int)((productionCapacity * coeffProductionSpeed + 1) * coeffPriorityProduction);
         } else {
             return 0;
@@ -205,12 +208,12 @@ public class CycleService {
                 apportMachine += 200;
                 break;
         }
-        return apportMachine / 100;
+        return (double)apportMachine / 100;
     }
 
     public void defineQualityOfProduction(int productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, StockMaterialDto stockMaterial){
         int tresholdProductivity = Math.round(productivityEmployee * 100 / 30);
-        int ecart = (int) (-Math.pow((productionSpeed - 50)/ 10, 2)  + 50);
+        int ecart = (int) (-Math.pow((double)(productionSpeed - 50)/ 10, 2)  + 50);
 
         double choice = Math.floor(Math.random() * 100);
         if (productionSpeed <= 50) {
@@ -236,13 +239,7 @@ public class CycleService {
         }
         stockProduct.setMonthProduction(stockProduct.getMonthProduction()+1);
 
-        if(stockMaterial.getQuantityHigh() > 0){
-            stockMaterial.setQuantityHigh(stockMaterial.getQuantityHigh()-1);
-        } else if (stockMaterial.getQuantityMid() > 0) {
-            stockMaterial.setQuantityMid(stockMaterial.getQuantityMid()-1);
-        } else {
-            stockMaterial.setQuantityLow(stockMaterial.getQuantityLow()-1);
-        }
+        stockMaterial.setQuantityMid(stockMaterial.getQuantityMid()-1);
     }
 
     public void companySell(List<EmployeeDto> employeeList, List<StockFinalMaterialDto> stockProduct, CycleDto cycle){
@@ -253,7 +250,7 @@ public class CycleService {
 
     public void employeeSell(EmployeeDto employee, List<StockFinalMaterialDto> stockProduct, CycleDto cycle){
         int capacityToSell = sellCapacity(employee);
-        double chanceToSell = capacityToSell * 100 / 15;
+        double chanceToSell = (double)capacityToSell * 100 / 15;
 
         chooseTheProductForSell(employee, stockProduct);
 
@@ -376,14 +373,14 @@ public class CycleService {
     }
 
     public void companyMarket(CycleDto cycle, CompanyDto company, List<EmployeeDto> employeeList){
-        if (cycle.getCountGoodSell() > (100-company.getPopularity()/100000)) {
+        if (cycle.getCountGoodSell() > (100- (double)company.getPopularity()/100000)) {
             for (int i = 0; i < employeeList.size(); i++) {
                 company.setPopularity(company.getPopularity() + marketEmployee(employeeList.get(i)));
                 cycle.setCountGoodSell(0);
             }
         }
 
-        if (cycle.getCountBadSell() > (100-company.getPopularity()/100000)) {
+        if (cycle.getCountBadSell() > (100-(double)company.getPopularity()/100000)) {
             for (int i = 0; i < employeeList.size(); i++) {
                 company.setPopularity(company.getPopularity() - 20);
                 cycle.setCountGoodSell(0);

@@ -53,6 +53,17 @@ public class StockMaterialDto {
         );
     }
 
+    public static StockMaterial dtoToEntity(StockMaterialDto stockMaterial) {
+        return new StockMaterial(
+                stockMaterial.getId(),
+                stockMaterial.getName(),
+                stockMaterial.getQuantityLow(),  // Assurez-vous que ces méthodes existent dans l'entité
+                stockMaterial.getQuantityMid(),
+                stockMaterial.getQuantityHigh(),
+                stockMaterial.getCompanyId()
+        );
+    }
+
     public int totalStock(){
         return this.quantityLow + this.quantityMid + this.quantityHigh;
     }

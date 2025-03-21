@@ -102,19 +102,34 @@ public class StockFinalMaterialDao {
 
 
     //PUT
-    /*public StockFinalMaterial update(Long id, StockFinalMaterial stockFinalMaterial) {
+    public StockFinalMaterial update(Long id, StockFinalMaterial stockFinalMaterial) {
         if (!stockFinalMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits finaux avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE StockFinalMaterial SET name = ?, quality = ?, quantity = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, stockFinalMaterial.getName(), stockFinalMaterial.getQuality(), stockFinalMaterial.getQuantity(), stockFinalMaterial.getCompanyId(), id);
+        // Requête SQL mise à jour pour inclure toutes les colonnes pertinentes
+        String sql = "UPDATE StockFinalMaterial SET name = ?, quantity_low = ?, quantity_mid = ?, quantity_high = ?, proportion_product = ?, quantity_to_product = ?, month_production = ?, sell = ?, month_sell = ?, id_company = ? WHERE id = ?";
+
+        int rowsAffected = jdbcTemplate.update(sql,
+                stockFinalMaterial.getName(),
+                stockFinalMaterial.getQuantityLow(),
+                stockFinalMaterial.getQuantityMid(),
+                stockFinalMaterial.getQuantityHigh(),
+                stockFinalMaterial.getProportionProduct(),
+                stockFinalMaterial.getQuantityToProduct(),
+                stockFinalMaterial.getMonthProduction(),
+                stockFinalMaterial.getSell(),
+                stockFinalMaterial.getMonthSell(),
+                stockFinalMaterial.getCompanyId(),
+                id
+        );
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits finaux avec l'ID : " + id);
         }
         return stockFinalMaterial;
-    }*/
+    }
+
 
     //Vérifier si le stock des produits finaux existe
     public boolean stockFinalMaterialExists(Long id) {

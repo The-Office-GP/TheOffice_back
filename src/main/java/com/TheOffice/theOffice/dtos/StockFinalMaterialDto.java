@@ -138,6 +138,22 @@ public class StockFinalMaterialDto { private Long id;
         );
     }
 
+    public static StockFinalMaterial dtoToEntity(StockFinalMaterialDto stockFinalMaterial) {
+        return new StockFinalMaterial(
+                stockFinalMaterial.getId(),
+                stockFinalMaterial.getName(),
+                stockFinalMaterial.getQuantityLow(),
+                stockFinalMaterial.getQuantityMid(),
+                stockFinalMaterial.getQuantityHigh(),
+                stockFinalMaterial.getProportionProduct(),
+                stockFinalMaterial.getQuantityToProduct(),
+                stockFinalMaterial.getMonthProduction(),
+                stockFinalMaterial.getSell(),
+                stockFinalMaterial.getMonthSell(),
+                stockFinalMaterial.getCompanyId()
+        );
+    }
+
     public int totalStock(){
         return this.getQuantityLow() + this.getQuantityMid() + this.getQuantityHigh();
     }

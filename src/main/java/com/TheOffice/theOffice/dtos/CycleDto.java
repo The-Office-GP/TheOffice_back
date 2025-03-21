@@ -92,4 +92,8 @@ public class CycleDto {
     public static CycleDto fromEntity(Cycle cycle){
         return new CycleDto(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getCompanyId());
     }
+
+    public static Cycle dtoToEntity(CycleDto cycle){
+        return new Cycle(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getCompanyId());
+    }
 }

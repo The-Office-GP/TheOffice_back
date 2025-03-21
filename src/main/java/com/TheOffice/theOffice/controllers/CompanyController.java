@@ -217,19 +217,32 @@ public class CompanyController {
         return ResponseEntity.ok(newCompanyDto);
     }
 
-    /*@PutMapping("/cycle/{id}")
+    @PutMapping("/cycle/{id}")
     public ResponseEntity<CompanyDto> runCycleCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+        cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+
         Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
-        Company updatedCompany = companyDao.update(id, companyForUpdate);
+        companyDao.update(id, companyForUpdate);
+        cycleDao.update(companyDtoFromBody.getCycle().getId(), CycleDto.dtoToEntity(companyDtoFromBody.getCycle()));
+        for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
+            employeeDao.update(companyDtoFromBody.getEmployees().get(i).getId(), EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));
+        }
+        for (int i = 0; i < companyDtoFromBody.getStockFinalMaterials().size(); i++) {
+            stockFinalMaterialDao.update(companyDtoFromBody.getStockFinalMaterials().get(i).getId(), StockFinalMaterialDto.dtoToEntity(companyDtoFromBody.getStockFinalMaterials().get(i)));
+        }
+        stockMaterialDao.update(companyDtoFromBody.getStockMaterial().getId(), StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
+        System.out.println("coucouFinale");
 
-        cycleService.runCycle1(companyDtoFromBody, companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterials());
 
-        CompanyDto newCompanyDto = getCompanyById2(id);
+
+        CompanyDto newCompanyDto = companyDtoFromBody;
 
 
         return ResponseEntity.ok(newCompanyDto);
-    }*/
+    }
 
 
 

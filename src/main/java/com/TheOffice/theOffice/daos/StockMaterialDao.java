@@ -80,19 +80,29 @@ public class StockMaterialDao {
 
 
     //PUT
-    /*public StockMaterial update(Long id, StockMaterial stockMaterial) {
+    public StockMaterial update(Long id, StockMaterial stockMaterial) {
         if (!stockMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE StockMaterial SET name = ?, quantity = ?, id_company = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, stockMaterial.getName(), stockMaterial.getQuantity(), stockMaterial.getCompanyId(), id);
+        // Requête SQL mise à jour pour inclure toutes les colonnes de la table StockMaterial
+        String sql = "UPDATE StockMaterial SET name = ?, quantity_low = ?, quantity_mid = ?, quantity_high = ?, id_company = ? WHERE id = ?";
+
+        int rowsAffected = jdbcTemplate.update(sql,
+                stockMaterial.getName(),
+                stockMaterial.getQuantityLow(),  // Mise à jour de quantity_low
+                stockMaterial.getQuantityMid(),  // Mise à jour de quantity_mid
+                stockMaterial.getQuantityHigh(), // Mise à jour de quantity_high
+                stockMaterial.getCompanyId(),    // Mise à jour de id_company
+                id                                // Mise à jour de l'ID
+        );
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits avec l'ID : " + id);
         }
         return stockMaterial;
-    }*/
+    }
+
 
     public boolean stockMaterialExists(Long id) {
         String sql = "SELECT COUNT(*) FROM StockMaterial WHERE id = ?";
