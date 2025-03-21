@@ -1,5 +1,7 @@
 package com.TheOffice.theOffice.staticModels.Suppliers;
 
+import java.util.List;
+
 public class SupplierName {
     private Long id;
     private String name;

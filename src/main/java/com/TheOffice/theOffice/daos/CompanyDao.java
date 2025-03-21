@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.dtos.SupplierResponseDto;
 import com.TheOffice.theOffice.entities.Company;
 import com.TheOffice.theOffice.entities.Employee.*;
 import com.TheOffice.theOffice.entities.Event;
@@ -7,6 +8,9 @@ import com.TheOffice.theOffice.services.SupplierService;
 import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import com.TheOffice.theOffice.staticModels.Machine.ProductionQuality;
+import com.TheOffice.theOffice.staticModels.Suppliers.SupplierName;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,6 +18,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Repository;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
@@ -26,9 +33,11 @@ import java.util.Optional;
 public class CompanyDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper objectMapper;
 
-    public CompanyDao(JdbcTemplate jdbcTemplate) {
+    public CompanyDao(JdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -65,6 +74,16 @@ public class CompanyDao {
             rs.getLong("recurrence"),
             rs.getString("image")
     );
+
+    public List<SupplierResponseDto> getAllSuppliers() {
+        try {
+                return objectMapper.readValue(new File("src/main/java/com/TheOffice/theOffice/json/supplierName.json"), new TypeReference<List<SupplierResponseDto>>() {;
+                });
+        } catch (IOException e) {
+            e.printStackTrace();
+            return List.of(); // Retourne une liste vide en cas d'erreur
+        }
+    }
 
     //GET par id
     public Company findById(Long id) {

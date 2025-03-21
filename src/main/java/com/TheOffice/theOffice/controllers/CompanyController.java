@@ -9,6 +9,8 @@ import com.TheOffice.theOffice.staticModels.Machine.Machine;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.security.JwtUtil;
 import com.TheOffice.theOffice.services.MachineService;
+import com.TheOffice.theOffice.staticModels.Suppliers.PriceSuppliers;
+import com.TheOffice.theOffice.staticModels.Suppliers.SupplierName;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +76,11 @@ public class CompanyController {
         return ResponseEntity.ok(companyDto);
     }
 
+    @GetMapping("/generate")
+    public ResponseEntity<List<SupplierResponseDto>> getAllSuppliers(){
+        return ResponseEntity.ok(companyDao.getAllSuppliers());
+    }
+
     // Récupère les employés associés à une entreprise spécifique
     @GetMapping("/{id}/employees")
     public ResponseEntity<List<Employee>> getEmployeesByCompanyId(@PathVariable Long id) {
@@ -102,12 +109,6 @@ public class CompanyController {
     public ResponseEntity<List<Machine>> getMachineForBuy(@RequestBody Company company){
         List<Machine> machineList = machineService.collectMachine(company);
         return ResponseEntity.ok(machineList);
-    }
-
-    @GetMapping("/generate")
-    public ResponseEntity<List<SupplierService>> supplierList() {
-        List<SupplierService> supplierServiceList = supplierService.collectSupplier();
-        return ResponseEntity.ok(employeeList);
     }
 
     // Création d'une nouvelle entreprise
