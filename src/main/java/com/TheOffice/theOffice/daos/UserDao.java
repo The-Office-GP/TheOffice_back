@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
+import com.TheOffice.theOffice.dtos.UserDto;
 import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -90,6 +91,20 @@ public class UserDao {
 
         String sql = "UPDATE User SET email = ?, username = ?, password = ?, role = ?, wallet = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.getPassword(), user.getRole(), user.getWallet(), id);
+
+        if (rowsAffected <= 0) {
+            throw new ResourceNotFoundException("Échec de la mise à jour de l'utilisateur avec l'ID : " + id);
+        }
+        return user;
+    }
+
+    public UserDto updateInfoGame(Long id, UserDto user) {
+        if (!userExists(id)) {
+            throw new ResourceNotFoundException("Utilisateur avec l'ID : " + id + " n'existe pas");
+        }
+
+        String sql = "UPDATE User SET email = ?, username = ?, role = ?, wallet = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.getRole(), user.getWallet(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'utilisateur avec l'ID : " + id);

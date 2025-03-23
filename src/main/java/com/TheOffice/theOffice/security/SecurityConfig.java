@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll() // Permet l'accès public aux endpoints /auth/** et /test/all
-                                .requestMatchers("/user/**", "/companies/**", "/employee/**").hasRole("USER") // Permet l'accès aux utilisateurs avec le rôle USER pour /user/** et /companies/**
+                                .requestMatchers("/user/**", "/companies/**", "/employee/**", "/users/**").hasRole("USER") // Permet l'accès aux utilisateurs avec le rôle USER pour /user/** et /companies/**
                                 .requestMatchers("/admin/**").hasRole("ADMIN") // Permet l'accès aux utilisateurs avec le rôle ADMIN pour /admin/**
                                 .anyRequest().authenticated() // Requiert une authentification pour toute autre requête
                 );
