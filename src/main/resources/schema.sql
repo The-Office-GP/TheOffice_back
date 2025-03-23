@@ -130,3 +130,24 @@ CREATE TABLE IF NOT EXISTS StockFinalMaterial
     id_company        INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
+
+CREATE TABLE IF NOT EXISTS Statistic
+(
+    id                 INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    year               INT NOT NULL,
+    month              INT NOT NULL,
+    product1_low_qty   INT NOT NULL,
+    product1_mid_qty   INT NOT NULL,
+    product1_high_qty  INT NOT NULL,
+    product2_low_qty   INT NOT NULL,
+    product2_mid_qty   INT NOT NULL,
+    product2_high_qty  INT NOT NULL,
+    product3_low_qty   INT NOT NULL,
+    product3_mid_qty   INT NOT NULL,
+    product3_high_qty  INT NOT NULL,
+    total_incomes      DECIMAL(10, 2) NOT NULL,
+    total_expenses     DECIMAL(10, 2) NOT NULL,
+    id_company         INT NOT NULL,
+    FOREIGN KEY (id_company) REFERENCES Company(id)
+);
+
