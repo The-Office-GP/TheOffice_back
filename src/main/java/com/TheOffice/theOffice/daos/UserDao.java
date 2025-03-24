@@ -89,8 +89,8 @@ public class UserDao {
             throw new ResourceNotFoundException("Utilisateur avec l'ID : " + id + " n'existe pas");
         }
 
-        String sql = "UPDATE User SET email = ?, username = ?, password = ?, role = ?, wallet = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.getPassword(), user.getRole(), user.getWallet(), id);
+        String sql = "UPDATE User SET username = ?, password = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), id);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour de l'utilisateur avec l'ID : " + id);
