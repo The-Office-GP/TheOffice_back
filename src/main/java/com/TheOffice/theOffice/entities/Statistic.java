@@ -6,41 +6,65 @@ public class Statistic {
     private Long id;
     private int year;
     private int month;
-    private int product1LowQty;
-    private int product1MidQty;
-    private int product1HighQty;
-    private int product2LowQty;
-    private int product2MidQty;
-    private int product2HighQty;
-    private int product3LowQty;
-    private int product3MidQty;
-    private int product3HighQty;
+    private int product1LowQtySell;
+    private int product1MidQtySell;
+    private int product1HighQtySell;
+    private int product2LowQtySell;
+    private int product2MidQtySell;
+    private int product2HighQtySell;
+    private int product3LowQtySell;
+    private int product3MidQtySell;
+    private int product3HighQtySell;
+    private int product1LowQtyProd;
+    private int product1MidQtyProd;
+    private int product1HighQtyProd;
+    private int product2LowQtyProd;
+    private int product2MidQtyProd;
+    private int product2HighQtyProd;
+    private int product3LowQtyProd;
+    private int product3MidQtyProd;
+    private int product3HighQtyProd;
+    private int materialLowQty;
+    private int materialMidQty;
+    private int materialHighQty;
     private BigDecimal totalIncomes;
     private BigDecimal totalExpenses;
+    private long popularity;
     private Long idCompany;
 
     public Statistic() {
     }
 
-    public Statistic(Long id, int year, int month, int product1LowQty, int product1MidQty, int product1HighQty, int product2LowQty, int product2MidQty, int product2HighQty, int product3LowQty, int product3MidQty, int product3HighQty, BigDecimal totalIncomes, BigDecimal totalExpenses, Long idCompany) {
+    public Statistic(Long id, int year, int month, int product1LowQtySell, int product1MidQtySell, int product1HighQtySell, int product2LowQtySell, int product2MidQtySell, int product2HighQtySell, int product3LowQtySell, int product3MidQtySell, int product3HighQtySell, int product1LowQtyProd, int product1MidQtyProd, int product1HighQtyProd, int product2LowQtyProd, int product2MidQtyProd, int product2HighQtyProd, int product3LowQtyProd, int product3MidQtyProd, int product3HighQtyProd, int materialLowQty, int materialMidQty, int materialHighQty, BigDecimal totalIncomes, BigDecimal totalExpenses, long popularity, Long idCompany) {
         this.id = id;
         this.year = year;
         this.month = month;
-        this.product1LowQty = product1LowQty;
-        this.product1MidQty = product1MidQty;
-        this.product1HighQty = product1HighQty;
-        this.product2LowQty = product2LowQty;
-        this.product2MidQty = product2MidQty;
-        this.product2HighQty = product2HighQty;
-        this.product3LowQty = product3LowQty;
-        this.product3MidQty = product3MidQty;
-        this.product3HighQty = product3HighQty;
+        this.product1LowQtySell = product1LowQtySell;
+        this.product1MidQtySell = product1MidQtySell;
+        this.product1HighQtySell = product1HighQtySell;
+        this.product2LowQtySell = product2LowQtySell;
+        this.product2MidQtySell = product2MidQtySell;
+        this.product2HighQtySell = product2HighQtySell;
+        this.product3LowQtySell = product3LowQtySell;
+        this.product3MidQtySell = product3MidQtySell;
+        this.product3HighQtySell = product3HighQtySell;
+        this.product1LowQtyProd = product1LowQtyProd;
+        this.product1MidQtyProd = product1MidQtyProd;
+        this.product1HighQtyProd = product1HighQtyProd;
+        this.product2LowQtyProd = product2LowQtyProd;
+        this.product2MidQtyProd = product2MidQtyProd;
+        this.product2HighQtyProd = product2HighQtyProd;
+        this.product3LowQtyProd = product3LowQtyProd;
+        this.product3MidQtyProd = product3MidQtyProd;
+        this.product3HighQtyProd = product3HighQtyProd;
+        this.materialLowQty = materialLowQty;
+        this.materialMidQty = materialMidQty;
+        this.materialHighQty = materialHighQty;
         this.totalIncomes = totalIncomes;
         this.totalExpenses = totalExpenses;
+        this.popularity = popularity;
         this.idCompany = idCompany;
     }
-
-    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -66,76 +90,172 @@ public class Statistic {
         this.month = month;
     }
 
-    public int getProduct1LowQty() {
-        return product1LowQty;
+    public int getProduct1LowQtySell() {
+        return product1LowQtySell;
     }
 
-    public void setProduct1LowQty(int product1LowQty) {
-        this.product1LowQty = product1LowQty;
+    public void setProduct1LowQtySell(int product1LowQtySell) {
+        this.product1LowQtySell = product1LowQtySell;
     }
 
-    public int getProduct1MidQty() {
-        return product1MidQty;
+    public int getProduct1MidQtySell() {
+        return product1MidQtySell;
     }
 
-    public void setProduct1MidQty(int product1MidQty) {
-        this.product1MidQty = product1MidQty;
+    public void setProduct1MidQtySell(int product1MidQtySell) {
+        this.product1MidQtySell = product1MidQtySell;
     }
 
-    public int getProduct1HighQty() {
-        return product1HighQty;
+    public int getProduct1HighQtySell() {
+        return product1HighQtySell;
     }
 
-    public void setProduct1HighQty(int product1HighQty) {
-        this.product1HighQty = product1HighQty;
+    public void setProduct1HighQtySell(int product1HighQtySell) {
+        this.product1HighQtySell = product1HighQtySell;
     }
 
-    public int getProduct2LowQty() {
-        return product2LowQty;
+    public int getProduct2LowQtySell() {
+        return product2LowQtySell;
     }
 
-    public void setProduct2LowQty(int product2LowQty) {
-        this.product2LowQty = product2LowQty;
+    public void setProduct2LowQtySell(int product2LowQtySell) {
+        this.product2LowQtySell = product2LowQtySell;
     }
 
-    public int getProduct2MidQty() {
-        return product2MidQty;
+    public int getProduct2MidQtySell() {
+        return product2MidQtySell;
     }
 
-    public void setProduct2MidQty(int product2MidQty) {
-        this.product2MidQty = product2MidQty;
+    public void setProduct2MidQtySell(int product2MidQtySell) {
+        this.product2MidQtySell = product2MidQtySell;
     }
 
-    public int getProduct2HighQty() {
-        return product2HighQty;
+    public int getProduct2HighQtySell() {
+        return product2HighQtySell;
     }
 
-    public void setProduct2HighQty(int product2HighQty) {
-        this.product2HighQty = product2HighQty;
+    public void setProduct2HighQtySell(int product2HighQtySell) {
+        this.product2HighQtySell = product2HighQtySell;
     }
 
-    public int getProduct3LowQty() {
-        return product3LowQty;
+    public int getProduct3LowQtySell() {
+        return product3LowQtySell;
     }
 
-    public void setProduct3LowQty(int product3LowQty) {
-        this.product3LowQty = product3LowQty;
+    public void setProduct3LowQtySell(int product3LowQtySell) {
+        this.product3LowQtySell = product3LowQtySell;
     }
 
-    public int getProduct3MidQty() {
-        return product3MidQty;
+    public int getProduct3MidQtySell() {
+        return product3MidQtySell;
     }
 
-    public void setProduct3MidQty(int product3MidQty) {
-        this.product3MidQty = product3MidQty;
+    public void setProduct3MidQtySell(int product3MidQtySell) {
+        this.product3MidQtySell = product3MidQtySell;
     }
 
-    public int getProduct3HighQty() {
-        return product3HighQty;
+    public int getProduct3HighQtySell() {
+        return product3HighQtySell;
     }
 
-    public void setProduct3HighQty(int product3HighQty) {
-        this.product3HighQty = product3HighQty;
+    public void setProduct3HighQtySell(int product3HighQtySell) {
+        this.product3HighQtySell = product3HighQtySell;
+    }
+
+    public int getProduct1LowQtyProd() {
+        return product1LowQtyProd;
+    }
+
+    public void setProduct1LowQtyProd(int product1LowQtyProd) {
+        this.product1LowQtyProd = product1LowQtyProd;
+    }
+
+    public int getProduct1MidQtyProd() {
+        return product1MidQtyProd;
+    }
+
+    public void setProduct1MidQtyProd(int product1MidQtyProd) {
+        this.product1MidQtyProd = product1MidQtyProd;
+    }
+
+    public int getProduct1HighQtyProd() {
+        return product1HighQtyProd;
+    }
+
+    public void setProduct1HighQtyProd(int product1HighQtyProd) {
+        this.product1HighQtyProd = product1HighQtyProd;
+    }
+
+    public int getProduct2LowQtyProd() {
+        return product2LowQtyProd;
+    }
+
+    public void setProduct2LowQtyProd(int product2LowQtyProd) {
+        this.product2LowQtyProd = product2LowQtyProd;
+    }
+
+    public int getProduct2MidQtyProd() {
+        return product2MidQtyProd;
+    }
+
+    public void setProduct2MidQtyProd(int product2MidQtyProd) {
+        this.product2MidQtyProd = product2MidQtyProd;
+    }
+
+    public int getProduct2HighQtyProd() {
+        return product2HighQtyProd;
+    }
+
+    public void setProduct2HighQtyProd(int product2HighQtyProd) {
+        this.product2HighQtyProd = product2HighQtyProd;
+    }
+
+    public int getProduct3LowQtyProd() {
+        return product3LowQtyProd;
+    }
+
+    public void setProduct3LowQtyProd(int product3LowQtyProd) {
+        this.product3LowQtyProd = product3LowQtyProd;
+    }
+
+    public int getProduct3MidQtyProd() {
+        return product3MidQtyProd;
+    }
+
+    public void setProduct3MidQtyProd(int product3MidQtyProd) {
+        this.product3MidQtyProd = product3MidQtyProd;
+    }
+
+    public int getProduct3HighQtyProd() {
+        return product3HighQtyProd;
+    }
+
+    public void setProduct3HighQtyProd(int product3HighQtyProd) {
+        this.product3HighQtyProd = product3HighQtyProd;
+    }
+
+    public int getMaterialLowQty() {
+        return materialLowQty;
+    }
+
+    public void setMaterialLowQty(int materialLowQty) {
+        this.materialLowQty = materialLowQty;
+    }
+
+    public int getMaterialMidQty() {
+        return materialMidQty;
+    }
+
+    public void setMaterialMidQty(int materialMidQty) {
+        this.materialMidQty = materialMidQty;
+    }
+
+    public int getMaterialHighQty() {
+        return materialHighQty;
+    }
+
+    public void setMaterialHighQty(int materialHighQty) {
+        this.materialHighQty = materialHighQty;
     }
 
     public BigDecimal getTotalIncomes() {
@@ -152,6 +272,14 @@ public class Statistic {
 
     public void setTotalExpenses(BigDecimal totalExpenses) {
         this.totalExpenses = totalExpenses;
+    }
+
+    public long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(long popularity) {
+        this.popularity = popularity;
     }
 
     public Long getIdCompany() {

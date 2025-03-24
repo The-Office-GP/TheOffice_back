@@ -1,59 +1,73 @@
 package com.TheOffice.theOffice.services;
 
 import com.TheOffice.theOffice.dtos.*;
-import com.TheOffice.theOffice.entities.Cycle;
 import com.TheOffice.theOffice.entities.Employee.Mood;
-import com.TheOffice.theOffice.entities.Employee.PriorityAction;
-import com.TheOffice.theOffice.staticModels.EmployeeName;
-import com.TheOffice.theOffice.staticModels.Local;
+import com.TheOffice.theOffice.entities.Statistic;
+import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import com.TheOffice.theOffice.staticModels.Machine.Machine;
-import com.TheOffice.theOffice.staticModels.Machine.ProductionQuality;
-import com.TheOffice.theOffice.staticModels.Salary;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
 public class CycleService {
+    private static Map<Long, Machine> machineMap = new HashMap<>();
+    static {
+        loadMachines();
+    }
 
-    public void runCycle1(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
+    private static void loadMachines() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/machine.json");
+            List<Machine> machineList = objectMapper.readValue(jsonFile, new TypeReference<List<Machine>>() {});
+            for (Machine machine : machineList) {
+                machineMap.put(machine.getId(), machine);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur lors du chargement des machines depuis le fichier JSON", e);
+        }
+    }
+
+    public void runCycle1(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial, Statistic statistic){
         int dayCycle = 0;
 
         while(dayCycle < 30) {
-            companyProduct(cycle, employeeList, machineInCompany, stockProduct, stockMaterial);
-            dayCycle++;
-
+            companyProduct(cycle, machineInCompany, employeeList, stockProduct, stockMaterial, statistic);
             if (dayCycle >= 6) {
-                companySell(employeeList, stockProduct, cycle);
+                companySell(employeeList, stockProduct, cycle, statistic, company);
             }
 
-            companyMarket(cycle, company, employeeList);
+            companyMarket(cycle, company, employeeList, statistic);
 
             for (int i = 0; i < employeeList.size(); i++) {
-                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue() * 30);
+                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue());
+                statistic.setTotalExpenses(statistic.getTotalExpenses().add(employeeList.get(i).getSalary()));
             }
+            dayCycle++;
         }
-
+        cycle.setStep(cycle.getStep()+1);
     }
 
 
-    public void lastRunCycle(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
+    public void lastRunCycle(CompanyDto company, CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial, Statistic statistic){
         int dayCycle = 0;
 
         while(dayCycle < 30) {
-            companyProduct(cycle, employeeList, machineInCompany, stockProduct, stockMaterial);
-            dayCycle++;
+            companyProduct(cycle, machineInCompany, employeeList, stockProduct, stockMaterial, statistic);
             if (dayCycle >= 6) {
-                companySell(employeeList, stockProduct, cycle);
+                companySell(employeeList, stockProduct, cycle, statistic, company);
             }
-            companyMarket(cycle, company,employeeList);
+            companyMarket(cycle, company,employeeList, statistic);
 
             for (int i = 0; i < employeeList.size(); i++) {
-                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue()*30);
+                company.setWallet(company.getWallet() - employeeList.get(i).getSalary().doubleValue());
+                statistic.setTotalExpenses(statistic.getTotalExpenses().add(employeeList.get(i).getSalary()));
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -69,31 +83,126 @@ public class CycleService {
 
             for (int i = 0; i < machineList.size(); i++) {
                 company.setWallet(company.getWallet() - machineList.get(i).getMaintenanceCost().doubleValue());
+                statistic.setTotalExpenses(statistic.getTotalExpenses().add(machineList.get(i).getMaintenanceCost()));
             }
+            dayCycle++;
+        }
+        cycle.setStep(cycle.getStep()+1);
+    }
+
+    public void companyProduct(CycleDto cycle, List<MachineInCompanyDto> machineInCompany, List<EmployeeDto> employeeList, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial, Statistic statistic){
+        double coeffProductionSpeed = (double)cycle.getProductionSpeed() / 100;
+        double coeffPriorityProduction = (double)cycle.getPriorityProduction() / 100;
+        int totalProduction = 0;
+
+        defineThePriorityProduction(machineInCompany, totalProduction, employeeList, stockProduct, coeffProductionSpeed, coeffPriorityProduction);
+
+        startProduct(cycle, employeeList, machineInCompany, stockProduct, stockMaterial, coeffProductionSpeed, coeffPriorityProduction, statistic);
+    }
+
+    public Integer employeeProductionCapacity(EmployeeDto employee, MachineInCompanyDto machineInCompany, double coeffPriorityProduction, double coeffProductionSpeed) {
+        Integer productionCapacity = levelEmployee(employee);
+
+        Double machineContribution = fetchTheMachineContribution(machineInCompany);
+
+        return (int)((productionCapacity * machineContribution * coeffProductionSpeed + 1) * coeffPriorityProduction);
+    }
+
+    public Integer levelEmployee(EmployeeDto employee) {
+        Integer levelForAction = 0;
+
+        int adjustmentFactor;
+        switch (employee.getMood()) {
+            case Mood.MAUVAISE:
+                adjustmentFactor = -4;
+                break;
+            case Mood.BOF:
+                adjustmentFactor = -2;
+                break;
+            case Mood.NEUTRE:
+                adjustmentFactor = 0;
+                break;
+            case Mood.BONNE:
+                adjustmentFactor = 1;
+                break;
+            case Mood.HEUREUSE:
+                adjustmentFactor = 3;
+                break;
+            default:
+                adjustmentFactor = 0;
+                break;
+        }
+
+        double healthFactor;
+        if (employee.getHealth() > 50) {
+            healthFactor = 0.5;
+        } else if (employee.getHealth() > 25) {
+            healthFactor = 0.25;
+        } else {
+            healthFactor = 0;
+        }
+
+        levelForAction = (int) ((employee.getLevel() + adjustmentFactor) * healthFactor);
+
+        return levelForAction;
+    }
+
+    public Double fetchTheMachineContribution(MachineInCompanyDto machineInCompany) {
+        Machine machine = machineMap.get(machineInCompany.getMachineId());
+
+        if (machine == null) {
+            throw new ResourceNotFoundException("Machine avec l'ID : " + machineInCompany.getMachineId() + " non trouvée");
+        }
+
+        int apportMachine = 0;
+        switch (machine.getProductionQuality()) {
+            case MEDIOCRE:
+                apportMachine = 50;
+                break;
+            case NORMAL:
+                apportMachine = 100;
+                break;
+            case BONNE:
+                apportMachine = 150;
+                break;
+            case PERFORMANTE:
+                apportMachine = 200;
+                break;
+        }
+
+        return apportMachine / 100.0;
+    }
+
+    public void defineThePriorityProduction(List<MachineInCompanyDto> machineInCompany, int totalProduction, List<EmployeeDto> employeeList, List<StockFinalMaterialDto> stockProduct, double coeffProductionSpeed, double coeffPriorityProduction){
+        for (int i = 0; i < machineInCompany.size(); i++) {
+            totalProduction += employeeProductionCapacity(employeeList.get(i), machineInCompany.get(i), coeffProductionSpeed, coeffPriorityProduction);
+        }
+        for (int i = 0; i < stockProduct.size(); i++) {
+            stockProduct.get(i).setQuantityToProduct((int) Math.round((double)totalProduction * (double)stockProduct.get(i).getProportionProduct()/100));
         }
     }
 
-    public void companyProduct(CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial){
-        Integer companyProduction = 0;
-        double coeffProductionSpeed = (double)cycle.getProductionSpeed() / 100;
-        double coeffPriorityProduction = (double)cycle.getPriorityProduction() / 100;
-
-
-        for (int i = 0; i < employeeList.size(); i++) {
-            companyProduction += employeeProductionCapacity(employeeList.get(i), employeeList, machineInCompany, coeffPriorityProduction, coeffProductionSpeed);
-        }
-        for (int i = 0; i < stockProduct.size(); i++) {
-            stockProduct.get(i).setQuantityToProduct((int) Math.round(companyProduction * (double)stockProduct.get(i).getProportionProduct()/100));
-        }
-
+    public void startProduct(CycleDto cycle, List<EmployeeDto> employeeList, List<MachineInCompanyDto> machineInCompany, List<StockFinalMaterialDto> stockProduct, StockMaterialDto stockMaterial, double coeffProductionSpeed, double coeffPriorityProduction, Statistic statistic){
         int index = 0;
-        for (int i = 0; i < employeeList.size(); i++) {
-            int productionCapacity = employeeProductionCapacity(employeeList.get(i), employeeList, machineInCompany, coeffPriorityProduction, coeffProductionSpeed);
+
+        for (int i = 0; i < machineInCompany.size(); i++) {
+            int productionCapacity = employeeProductionCapacity(employeeList.get(i), machineInCompany.get(i), coeffPriorityProduction, coeffProductionSpeed);
+
             for (int j = 0; j < productionCapacity; j++) {
                 if (index < stockProduct.size()) {
                     if (stockProduct.get(index).getQuantityToProduct() > 0) {
-                        if(stockMaterial.totalStock() > 0){
-                            defineQualityOfProduction(productionEmployee(employeeList.get(i)), stockProduct.get(index), cycle.getProductionSpeed(), stockMaterial);
+                        if(stockMaterial.getQuantityHigh() > 0){
+                            defineQualityOfProduction(employeeProductionCapacity(employeeList.get(i), machineInCompany.get(i), coeffPriorityProduction, coeffProductionSpeed), stockProduct.get(index), cycle.getProductionSpeed(), stockMaterial, 3, statistic);
+                            stockMaterial.setQuantityHigh(stockMaterial.getQuantityHigh()-1);
+                            statistic.setMaterialHighQty(statistic.getMaterialHighQty() + 1);
+                        } else if (stockMaterial.getQuantityMid() > 0) {
+                            defineQualityOfProduction(employeeProductionCapacity(employeeList.get(i), machineInCompany.get(i), coeffPriorityProduction, coeffProductionSpeed), stockProduct.get(index), cycle.getProductionSpeed(), stockMaterial, 0, statistic);
+                            stockMaterial.setQuantityMid(stockMaterial.getQuantityMid()-1);
+                            statistic.setMaterialMidQty(statistic.getMaterialMidQty() + 1);
+                        } else if (stockMaterial.getQuantityLow() > 0) {
+                            defineQualityOfProduction(employeeProductionCapacity(employeeList.get(i), machineInCompany.get(i), coeffPriorityProduction, coeffProductionSpeed), stockProduct.get(index), cycle.getProductionSpeed(), stockMaterial, -2, statistic);
+                            stockMaterial.setQuantityLow(stockMaterial.getQuantityLow()-1);
+                            statistic.setMaterialLowQty(statistic.getMaterialLowQty() + 1);
                         }
                         stockProduct.get(index).setQuantityToProduct(stockProduct.get(index).getQuantityToProduct()-1);
                     }
@@ -105,114 +214,8 @@ public class CycleService {
         }
     }
 
-    public Integer employeeProductionCapacity(EmployeeDto employee, List<EmployeeDto> employeeInCompany, List<MachineInCompanyDto> machineInCompany, double coeffPriorityProduction, double coeffProductionSpeed) {
-        Integer productionCapacity = productionEmployee(employee);
-        int idForMachine = employeeInCompany.indexOf(employee);
-        if (idForMachine < machineInCompany.size()) {
-            double machineProduction = fetchTheProductionOfMachine(machineInCompany.get(idForMachine));
-            return (int)((productionCapacity * coeffProductionSpeed + 1) * coeffPriorityProduction);
-        } else {
-            return 0;
-        }
-    }
-
-    public Integer productionEmployee(EmployeeDto employee) {
-        Integer productionEmployee = 0;
-        switch (employee.getMood()) {
-            case Mood.MAUVAISE: {
-                if(employee.getHealth() > 50){
-                    productionEmployee = (employee.getLevel()- 4) / 2;
-                } else if (employee.getHealth() > 25) {
-                    productionEmployee = (employee.getLevel() - 4) / 4;
-                }else{
-                    productionEmployee = 0;
-                }
-                break;
-            }
-            case Mood.BOF : {
-                if(employee.getHealth() > 50){
-                    productionEmployee = (employee.getLevel()- 2) / 2;
-                } else if (employee.getHealth() > 25) {
-                    productionEmployee = (employee.getLevel() - 2) / 4;
-                }else{
-                    productionEmployee = 0;
-                }
-                break;
-            }
-            case Mood.NEUTRE: {
-                if(employee.getHealth() > 50){
-                    productionEmployee = (employee.getLevel()) / 2;
-                } else if (employee.getHealth() > 25) {
-                    productionEmployee = (employee.getLevel()) / 4;
-                }else{
-                    productionEmployee = 0;
-                }
-                break;
-            }
-            case Mood.BONNE: {
-                if(employee.getHealth() > 50){
-                    productionEmployee = (employee.getLevel()+1) / 2;
-                } else if (employee.getHealth() > 25) {
-                    productionEmployee = (employee.getLevel()+1) / 4;
-                }else{
-                    productionEmployee = 0;
-                }
-                break;
-            }
-            case Mood.HEUREUSE: {
-                if(employee.getHealth() > 50){
-                    productionEmployee = (employee.getLevel()+ 3) / 2;
-                } else if (employee.getHealth() > 25) {
-                    productionEmployee = (employee.getLevel() + 3) / 4;
-                }else{
-                    productionEmployee = 0;
-                }
-                break;
-            }
-        }
-        return productionEmployee;
-    }
-
-    public double fetchTheProductionOfMachine(MachineInCompanyDto machineInCompany) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Machine> machineList = new ArrayList<>();
-
-        try{
-            File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/machine.json");
-            machineList = objectMapper.readValue(jsonFile, new TypeReference<List<Machine>>() {});
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Machine machine = machineList.get(0);
-
-        for (int i = 0; i < machineList.size(); i++) {
-            if(machineList.get(i).getId() == machineInCompany.getMachineId()){
-                machine = machineList.get(i);
-            }
-        }
-
-        Integer apportMachine = 0;
-
-        switch (machine.getProductionQuality()) {
-            case ProductionQuality.MEDIOCRE:
-                apportMachine += 50;
-                break;
-            case ProductionQuality.NORMAL:
-                apportMachine += 100;
-                break;
-            case ProductionQuality.BONNE:
-                apportMachine += 150;
-                break;
-            case ProductionQuality.PERFORMANTE:
-                apportMachine += 200;
-                break;
-        }
-        return (double)apportMachine / 100;
-    }
-
-    public void defineQualityOfProduction(int productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, StockMaterialDto stockMaterial){
-        int tresholdProductivity = Math.round(productivityEmployee * 100 / 30);
+    public void defineQualityOfProduction(int productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, StockMaterialDto stockMaterial, int bonusMaterial, Statistic statistic){
+        int tresholdProductivity = Math.round((productivityEmployee + bonusMaterial) * 100 / 30);
         int ecart = (int) (-Math.pow((double)(productionSpeed - 50)/ 10, 2)  + 50);
 
         double choice = Math.floor(Math.random() * 100);
@@ -221,34 +224,79 @@ public class CycleService {
             int highTreshold = (int) Math.round(lowTreshold + ecart / 1.5);
             if (choice < lowTreshold) {
                 stockProduct.setQuantityHigh(stockProduct.getQuantityHigh()+1);
+                if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct1HighQtyProd(statistic.getProduct1HighQtyProd() + 1);
+                }else if(stockProduct.getName() == "Product2"){
+                    statistic.setProduct2HighQtyProd(statistic.getProduct2HighQtyProd() + 1);
+                }else {
+                    statistic.setProduct3HighQtyProd(statistic.getProduct3HighQtyProd() + 1);
+                }
             } else if (choice <= highTreshold) {
                 stockProduct.setQuantityMid(stockProduct.getQuantityMid()+1);
+                if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct1MidQtyProd(statistic.getProduct1MidQtyProd() + 1);
+                }else if(stockProduct.getName() == "Product2"){
+                    statistic.setProduct2MidQtyProd(statistic.getProduct2MidQtyProd() + 1);
+                }else {
+                    statistic.setProduct3MidQtyProd(statistic.getProduct3MidQtyProd() + 1);
+                }
             } else {
                 stockProduct.setQuantityLow(stockProduct.getQuantityLow()+1);
+                if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct1LowQtyProd(statistic.getProduct1LowQtyProd() + 1);
+                }else if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct2LowQtyProd(statistic.getProduct2LowQtyProd() + 1);
+                }else {
+                    statistic.setProduct3LowQtyProd(statistic.getProduct3LowQtyProd() + 1);
+
+                }
             }
         } else {
             int lowTreshold = 100 - Math.round(tresholdProductivity + ecart / 2);
             int highTreshold = (int) Math.round(lowTreshold + ecart / 1.5);
             if (choice < lowTreshold) {
                 stockProduct.setQuantityLow(stockProduct.getQuantityLow()+1);
+                if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct1LowQtyProd(statistic.getProduct1LowQtyProd() + 1);
+                }else if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct2LowQtyProd(statistic.getProduct2LowQtyProd() + 1);
+                }else {
+                    statistic.setProduct3LowQtyProd(statistic.getProduct3LowQtyProd() + 1);
+                }
             } else if (choice <= highTreshold) {
                 stockProduct.setQuantityMid(stockProduct.getQuantityMid()+1);
+                if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct1MidQtyProd(statistic.getProduct1MidQtyProd() + 1);
+                }else if(stockProduct.getName() == "Product2"){
+                    statistic.setProduct2MidQtyProd(statistic.getProduct2MidQtyProd() + 1);
+                }else {
+                    statistic.setProduct3MidQtyProd(statistic.getProduct3MidQtyProd() + 1);
+                }
+
             } else {
                 stockProduct.setQuantityHigh(stockProduct.getQuantityHigh()+1);
+                if(stockProduct.getName() == "Product1"){
+                    statistic.setProduct1HighQtyProd(statistic.getProduct1HighQtyProd() + 1);
+                }else if(stockProduct.getName() == "Product2"){
+                    statistic.setProduct2HighQtyProd(statistic.getProduct2HighQtyProd() + 1);
+                }else {
+                    statistic.setProduct3HighQtyProd(statistic.getProduct3HighQtyProd() + 1);
+                }
             }
         }
         stockProduct.setMonthProduction(stockProduct.getMonthProduction()+1);
-
-        stockMaterial.setQuantityMid(stockMaterial.getQuantityMid()-1);
     }
 
-    public void companySell(List<EmployeeDto> employeeList, List<StockFinalMaterialDto> stockProduct, CycleDto cycle){
+
+
+
+    public void companySell(List<EmployeeDto> employeeList, List<StockFinalMaterialDto> stockProduct, CycleDto cycle, Statistic statistic, CompanyDto company){
         for (int i = 0; i < employeeList.size(); i++) {
-            employeeSell(employeeList.get(i), stockProduct, cycle);
+            employeeSell(employeeList.get(i), stockProduct, cycle, statistic, company);
         }
     }
 
-    public void employeeSell(EmployeeDto employee, List<StockFinalMaterialDto> stockProduct, CycleDto cycle){
+    public void employeeSell(EmployeeDto employee, List<StockFinalMaterialDto> stockProduct, CycleDto cycle, Statistic statistic, CompanyDto company){
         int capacityToSell = sellCapacity(employee);
         double chanceToSell = (double)capacityToSell * 100 / 15;
 
@@ -264,18 +312,45 @@ public class CycleService {
                         stockProduct.get(index).setQuantityHigh(stockProduct.get(index).getQuantityHigh()-1);
                         stockProduct.get(index).setSell(stockProduct.get(index).getSell()+1);
                         stockProduct.get(index).setMonthSell(stockProduct.get(index).getMonthSell()+1);
+                        if(stockProduct.get(index).getName() == "Product1"){
+                            statistic.setProduct1HighQtySell(statistic.getProduct1HighQtySell() + 1);
+                        }else if(stockProduct.get(index).getName() == "Product2"){
+                                statistic.setProduct2HighQtySell(statistic.getProduct2HighQtySell() + 1);
+                        }else {
+                            statistic.setProduct3HighQtySell(statistic.getProduct3HighQtySell() + 1);
+                        }
                         cycle.setCountGoodSell(cycle.getCountGoodSell()+1);
+                        company.setWallet(company.getWallet() + 20);
+                        statistic.setTotalIncomes(statistic.getTotalIncomes().add(new BigDecimal(20)));
                         i++;
                     } else if (stockProduct.get(index).getQuantityMid() > 0) {
                         stockProduct.get(index).setQuantityMid(stockProduct.get(index).getQuantityMid()-1);
                         stockProduct.get(index).setSell(stockProduct.get(index).getSell()+1);
                         stockProduct.get(index).setMonthSell(stockProduct.get(index).getMonthSell()+1);
+                        if(stockProduct.get(index).getName() == "Product1"){
+                            statistic.setProduct1MidQtySell(statistic.getProduct1MidQtySell() + 1);
+                        }else if(stockProduct.get(index).getName() == "Product2"){
+                            statistic.setProduct2MidQtySell(statistic.getProduct2MidQtySell() + 1);
+                        }else {
+                            statistic.setProduct3MidQtySell(statistic.getProduct3MidQtySell() + 1);
+                        }
+                        company.setWallet(company.getWallet() + 20);
+                        statistic.setTotalIncomes(statistic.getTotalIncomes().add(new BigDecimal(20)));
                         i++;
                     } else if (stockProduct.get(index).getQuantityLow() > 0) {
                         stockProduct.get(index).setQuantityLow(stockProduct.get(index).getQuantityLow()-1);
                         stockProduct.get(index).setSell(stockProduct.get(index).getSell()+1);
                         stockProduct.get(index).setMonthSell(stockProduct.get(index).getMonthSell()+1);
+                        if(stockProduct.get(index).getName() == "Product1"){
+                            statistic.setProduct1LowQtySell(statistic.getProduct1LowQtySell() + 1);
+                        }else if(stockProduct.get(index).getName() == "Product2"){
+                            statistic.setProduct2LowQtySell(statistic.getProduct2LowQtySell() + 1);
+                        }else {
+                            statistic.setProduct3LowQtySell(statistic.getProduct3LowQtySell() + 1);
+                        }
                         cycle.setCountBadSell(cycle.getCountBadSell()+1);
+                        company.setWallet(company.getWallet() + 20);
+                        statistic.setTotalIncomes(statistic.getTotalIncomes().add(new BigDecimal(20)));
                         i++;
                     }else {
                         index++;
@@ -372,17 +447,19 @@ public class CycleService {
         return Integer.compare(p1.totalStock(), p2.totalStock());
     }
 
-    public void companyMarket(CycleDto cycle, CompanyDto company, List<EmployeeDto> employeeList){
+    public void companyMarket(CycleDto cycle, CompanyDto company, List<EmployeeDto> employeeList, Statistic statistic){
         if (cycle.getCountGoodSell() > (100- (double)company.getPopularity()/100000)) {
             for (int i = 0; i < employeeList.size(); i++) {
                 company.setPopularity(company.getPopularity() + marketEmployee(employeeList.get(i)));
+                statistic.setPopularity(statistic.getPopularity() - marketEmployee(employeeList.get(i)));
                 cycle.setCountGoodSell(0);
             }
         }
 
         if (cycle.getCountBadSell() > (100-(double)company.getPopularity()/100000)) {
             for (int i = 0; i < employeeList.size(); i++) {
-                company.setPopularity(company.getPopularity() - 20);
+                company.setPopularity(company.getPopularity() - 5);
+                statistic.setPopularity(statistic.getPopularity() - 5);
                 cycle.setCountGoodSell(0);
             }
         }

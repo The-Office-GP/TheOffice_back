@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,10 +35,10 @@ public class CompanyController {
     private final JwtUtil jwtUtil;
     private final MachineService machineService;
     private final CycleService cycleService;
-    private final StatiticDao statiticDao;
+    private final StatisticDao statiticDao;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService, StatiticDao statiticDao) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService, StatisticDao statiticDao) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -231,9 +232,10 @@ public class CompanyController {
     @PutMapping("/cycle/{id}")
     public ResponseEntity<CompanyDto> runCycleCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
-        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
-        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
-        cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+        Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
+        cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
 
         Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
         companyDao.update(id, companyForUpdate);
@@ -245,8 +247,8 @@ public class CompanyController {
             stockFinalMaterialDao.update(companyDtoFromBody.getStockFinalMaterials().get(i).getId(), StockFinalMaterialDto.dtoToEntity(companyDtoFromBody.getStockFinalMaterials().get(i)));
         }
         stockMaterialDao.update(companyDtoFromBody.getStockMaterial().getId(), StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
-        System.out.println("coucouFinale");
-
+        statiticDao.save(statistic);
+        companyDtoFromBody.setStatistics(statiticDao.findAllCompanyStatistic(id));
 
 
         CompanyDto newCompanyDto = companyDtoFromBody;
