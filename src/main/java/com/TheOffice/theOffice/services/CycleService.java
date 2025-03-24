@@ -311,7 +311,7 @@ public class CycleService {
                     if (stockProduct.get(index).getQuantityHigh() > 0) {
                         stockProduct.get(index).setQuantityHigh(stockProduct.get(index).getQuantityHigh()-1);
                         stockProduct.get(index).setSell(stockProduct.get(index).getSell()+1);
-                        stockProduct.get(index).setMonthSell(stockProduct.get(index).getMonthSell()+1);
+                        stockProduct.get(index).setPrice(stockProduct.get(index).getPrice()+1);
                         if(stockProduct.get(index).getName() == "Product1"){
                             statistic.setProduct1HighQtySell(statistic.getProduct1HighQtySell() + 1);
                         }else if(stockProduct.get(index).getName() == "Product2"){
@@ -320,13 +320,13 @@ public class CycleService {
                             statistic.setProduct3HighQtySell(statistic.getProduct3HighQtySell() + 1);
                         }
                         cycle.setCountGoodSell(cycle.getCountGoodSell()+1);
-                        company.setWallet(company.getWallet() + 20);
+                        company.setWallet(company.getWallet() + stockProduct.get(index).getPrice());
                         statistic.setTotalIncomes(statistic.getTotalIncomes().add(new BigDecimal(20)));
                         i++;
                     } else if (stockProduct.get(index).getQuantityMid() > 0) {
                         stockProduct.get(index).setQuantityMid(stockProduct.get(index).getQuantityMid()-1);
                         stockProduct.get(index).setSell(stockProduct.get(index).getSell()+1);
-                        stockProduct.get(index).setMonthSell(stockProduct.get(index).getMonthSell()+1);
+                        stockProduct.get(index).setPrice(stockProduct.get(index).getPrice()+1);
                         if(stockProduct.get(index).getName() == "Product1"){
                             statistic.setProduct1MidQtySell(statistic.getProduct1MidQtySell() + 1);
                         }else if(stockProduct.get(index).getName() == "Product2"){
@@ -340,7 +340,7 @@ public class CycleService {
                     } else if (stockProduct.get(index).getQuantityLow() > 0) {
                         stockProduct.get(index).setQuantityLow(stockProduct.get(index).getQuantityLow()-1);
                         stockProduct.get(index).setSell(stockProduct.get(index).getSell()+1);
-                        stockProduct.get(index).setMonthSell(stockProduct.get(index).getMonthSell()+1);
+                        stockProduct.get(index).setPrice(stockProduct.get(index).getPrice()+1);
                         if(stockProduct.get(index).getName() == "Product1"){
                             statistic.setProduct1LowQtySell(statistic.getProduct1LowQtySell() + 1);
                         }else if(stockProduct.get(index).getName() == "Product2"){
