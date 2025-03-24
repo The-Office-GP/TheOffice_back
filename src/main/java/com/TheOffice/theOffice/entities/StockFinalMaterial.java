@@ -10,13 +10,13 @@ public class StockFinalMaterial {
     private Integer quantityToProduct;
     private Integer monthProduction;
     private Integer sell;
-    private Integer monthSell;
+    private Integer price;
     private Long companyId;
 
     public StockFinalMaterial() {
     }
 
-    public StockFinalMaterial(Long id, String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
+    public StockFinalMaterial(Long id, String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer price, Long companyId) {
         this.id = id;
         this.name = name;
         this.quantityLow = quantityLow;
@@ -26,7 +26,7 @@ public class StockFinalMaterial {
         this.quantityToProduct = quantityToProduct;
         this.monthProduction = monthProduction;
         this.sell = sell;
-        this.monthSell = monthSell;
+        this.price = price;
         this.companyId = companyId;
     }
 
@@ -38,12 +38,12 @@ public class StockFinalMaterial {
         this.companyId = companyId;
     }
 
-    public Integer getMonthSell() {
-        return monthSell;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setMonthSell(Integer monthSell) {
-        this.monthSell = monthSell;
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
     public Integer getSell() {

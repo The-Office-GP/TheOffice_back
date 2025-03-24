@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,9 +35,10 @@ public class CompanyController {
     private final JwtUtil jwtUtil;
     private final MachineService machineService;
     private final CycleService cycleService;
+    private final StatisticDao statiticDao;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService, StatisticDao statiticDao) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -49,6 +51,7 @@ public class CompanyController {
         this.machineService = machineService;
         this.machineInCompanyDao = machineInCompanyDao;
         this.cycleService = cycleService;
+        this.statiticDao = statiticDao;
     }
 
     // Récupère toutes les entreprises
@@ -64,9 +67,7 @@ public class CompanyController {
         String token = authorizationHeader.substring(7);
         String email = jwtUtil.getEmailFromToken(token);
         User user = userDao.findByEmail(email);
-
-        System.out.println(company.getUserId());
-        System.out.println(user.getId());
+        List<Statistic> statisticListForDto = statiticDao.findAllCompanyStatistic(id);
 
         if (!company.getUserId().equals(user.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403 Forbidden
@@ -82,7 +83,7 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService, statisticListForDto);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -93,6 +94,7 @@ public class CompanyController {
         Double wallet = userDao.findWalletByUserId(company.getUserId());
         CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
         StockMaterialDto stockMaterials = StockMaterialDto.fromEntity(stockMaterialDao.findByIdCompany(id));
+        List<Statistic> statisticListForDto = statiticDao.findAllCompanyStatistic(id);
 
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
@@ -100,7 +102,7 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService, statisticListForDto);
 
         return companyDto;
     }
@@ -172,7 +174,7 @@ public class CompanyController {
 
             // Enregistrement en base de données
             Company companyResponse = companyDao.save(company);
-            cycleDao.save(1, 100, 50, 50, 0, 0, companyResponse.getId());
+            cycleDao.save(1, 100, 50, 50, 0, 0,"None", companyResponse.getId());
             stockMaterialDao.save("Product",0, 0, 0, companyResponse.getId());
             for (int i = 0; i < 4; i++) {
                 stockFinalMaterialDao.save("Product"+(i+1), 0, 0, 0, 0, 0, 0, 0, 0, companyResponse.getId());
@@ -230,9 +232,10 @@ public class CompanyController {
     @PutMapping("/cycle/{id}")
     public ResponseEntity<CompanyDto> runCycleCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
-        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
-        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
-        cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial());
+        Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
+        cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
+        cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
 
         Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
         companyDao.update(id, companyForUpdate);
@@ -244,8 +247,8 @@ public class CompanyController {
             stockFinalMaterialDao.update(companyDtoFromBody.getStockFinalMaterials().get(i).getId(), StockFinalMaterialDto.dtoToEntity(companyDtoFromBody.getStockFinalMaterials().get(i)));
         }
         stockMaterialDao.update(companyDtoFromBody.getStockMaterial().getId(), StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
-        System.out.println("coucouFinale");
-
+        statiticDao.save(statistic);
+        companyDtoFromBody.setStatistics(statiticDao.findAllCompanyStatistic(id));
 
 
         CompanyDto newCompanyDto = companyDtoFromBody;

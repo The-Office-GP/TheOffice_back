@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS Cycle
     count_good_sell         INT                NOT NULL,
     count_bad_sell         INT                NOT NULL,
     id_company   INT,
+    trend   VARCHAR(50),
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
 
@@ -126,7 +127,41 @@ CREATE TABLE IF NOT EXISTS StockFinalMaterial
     quantity_to_product INT             NOT NULL,
     month_production  INT                NOT NULL,
     sell              INT                NOT NULL,
-    month_sell        INT                NOT NULL,
+    price        INT                NOT NULL,
     id_company        INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
+
+CREATE TABLE IF NOT EXISTS Statistic
+(
+    id                 INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    year               INT NOT NULL,
+    month              INT NOT NULL,
+    product1_low_qty_sell   INT NOT NULL,
+    product1_mid_qty_sell   INT NOT NULL,
+    product1_high_qty_sell  INT NOT NULL,
+    product2_low_qty_sell   INT NOT NULL,
+    product2_mid_qty_sell   INT NOT NULL,
+    product2_high_qty_sell  INT NOT NULL,
+    product3_low_qty_sell   INT NOT NULL,
+    product3_mid_qty_sell   INT NOT NULL,
+    product3_high_qty_sell  INT NOT NULL,
+    product1_low_qty_prod   INT NOT NULL,
+    product1_mid_qty_prod   INT NOT NULL,
+    product1_high_qty_prod  INT NOT NULL,
+    product2_low_qty_prod   INT NOT NULL,
+    product2_mid_qty_prod   INT NOT NULL,
+    product2_high_qty_prod  INT NOT NULL,
+    product3_low_qty_prod   INT NOT NULL,
+    product3_mid_qty_prod   INT NOT NULL,
+    product3_high_qty_prod  INT NOT NULL,
+    material_low_qty   INT NOT NULL,
+    material_mid_qty   INT NOT NULL,
+    material_high_qty  INT NOT NULL,
+    total_incomes      DECIMAL(10, 2) NOT NULL,
+    total_expenses     DECIMAL(10, 2) NOT NULL,
+    popularity         INT NOT NULL,
+    id_company         INT NOT NULL,
+    FOREIGN KEY (id_company) REFERENCES Company(id)
+);
+

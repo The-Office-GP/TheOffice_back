@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.StockFinalMaterial;
-import com.TheOffice.theOffice.entities.StockMaterial;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,7 +32,7 @@ public class StockFinalMaterialDao {
             rs.getInt("quantity_to_product"),
             rs.getInt("month_production"),
             rs.getInt("sell"),
-            rs.getInt("month_sell"),
+            rs.getInt("price"),
             rs.getLong("companyId")
     );
 
@@ -66,16 +65,16 @@ public class StockFinalMaterialDao {
                         rs.getInt("quantity_to_product"),
                         rs.getInt("month_production"),
                         rs.getInt("sell"),
-                        rs.getInt("month_sell"),
+                        rs.getInt("price"),
                         companyId
                 )
         );
     }
 
     //POST
-    public int save(String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer monthSell, Long companyId) {
+    public int save(String name, Integer quantityLow, Integer quantityMid, Integer quantityHigh, Integer proportionProduct, Integer quantityToProduct, Integer monthProduction, Integer sell, Integer price, Long companyId) {
         // Requête SQL corrigée pour inclure les trois quantités distinctes
-        String sql = "INSERT INTO StockFinalMaterial (name, quantity_low, quantity_mid, quantity_high, proportion_product, quantity_to_product, month_production, sell, month_sell, id_company) " +
+        String sql = "INSERT INTO StockFinalMaterial (name, quantity_low, quantity_mid, quantity_high, proportion_product, quantity_to_product, month_production, sell, price, id_company) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -90,7 +89,7 @@ public class StockFinalMaterialDao {
             ps.setInt(6, quantityToProduct);
             ps.setInt(7, monthProduction);
             ps.setInt(8, sell);
-            ps.setInt(9, monthSell);
+            ps.setInt(9, price);
             ps.setLong(10, companyId);   // Insertion dans id_company
             return ps;
         }, keyHolder);
@@ -119,7 +118,7 @@ public class StockFinalMaterialDao {
                 stockFinalMaterial.getQuantityToProduct(),
                 stockFinalMaterial.getMonthProduction(),
                 stockFinalMaterial.getSell(),
-                stockFinalMaterial.getMonthSell(),
+                stockFinalMaterial.getPrice(),
                 stockFinalMaterial.getCompanyId(),
                 id
         );

@@ -73,9 +73,9 @@ public class UserController {
 
     // Méthode pour mettre à jour un utilisateur existant
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserDto> updateUserInfoGame(@PathVariable Long id, @RequestBody UserDto user) {
         // Mise à jour de l'utilisateur via le DAO et récupération de l'utilisateur mis à jour
-        User updatedUser = userDao.update(id, user);
+        UserDto updatedUser = userDao.updateInfoGame(id, user);
         return ResponseEntity.ok(updatedUser);  // Renvoie l'utilisateur mis à jour
     }
 

@@ -10,12 +10,13 @@ public class Cycle {
     private Integer priorityMarketing;
     private Integer countGoodSell;
     private Integer countBadSell;
+    private String trend;
     private Long companyId;
 
     public Cycle(){
     }
 
-    public Cycle(Long id, Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, Long companyId) {
+    public Cycle(Long id, Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, String trend, Long companyId) {
         this.id = id;
         this.step = step;
         this.productionSpeed = productionSpeed;
@@ -23,6 +24,7 @@ public class Cycle {
         this.priorityMarketing = priorityMarketing;
         this.countGoodSell = countGoodSell;
         this.countBadSell = countBadSell;
+        this.trend = trend;
         this.companyId = companyId;
     }
 
@@ -88,5 +90,13 @@ public class Cycle {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getTrend() {
+        return trend;
+    }
+
+    public void setTrend(String trend) {
+        this.trend = trend;
     }
 }

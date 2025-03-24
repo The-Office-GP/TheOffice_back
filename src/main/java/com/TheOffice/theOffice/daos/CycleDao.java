@@ -30,6 +30,7 @@ public class CycleDao {
             rs.getInt("priority_marketing"),
             rs.getInt("count_good_sell"),
             rs.getInt("count_bad_sell"),
+            rs.getString("trend"),
             rs.getLong("id_company")
     );
 
@@ -57,8 +58,8 @@ public class CycleDao {
     }
 
     // POST
-    public int save(Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, Long companyId) {
-        String sql = "INSERT INTO Cycle (step, production_speed, priority_production, priority_marketing, count_good_sell, count_bad_sell, id_company) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int save(Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, String trend, Long companyId) {
+        String sql = "INSERT INTO Cycle (step, production_speed, priority_production, priority_marketing, count_good_sell, count_bad_sell, trend, id_company) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -71,7 +72,8 @@ public class CycleDao {
             ps.setInt(4, priorityMarketing);
             ps.setInt(5, countGoodSell);
             ps.setInt(6, countBadSell);
-            ps.setLong(7, companyId);
+            ps.setString(7, trend);
+            ps.setLong(8, companyId);
 
             return ps;
         }, keyHolder);
