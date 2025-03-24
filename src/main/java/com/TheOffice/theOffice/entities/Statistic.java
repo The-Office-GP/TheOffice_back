@@ -24,6 +24,9 @@ public class Statistic {
     private int product3LowQtyProd;
     private int product3MidQtyProd;
     private int product3HighQtyProd;
+    private int product4LowQtyProd;
+    private int product4MidQtyProd;
+    private int product4HighQtyProd;
     private int materialLowQty;
     private int materialMidQty;
     private int materialHighQty;
@@ -35,7 +38,7 @@ public class Statistic {
     public Statistic() {
     }
 
-    public Statistic(Long id, int year, int month, int product1LowQtySell, int product1MidQtySell, int product1HighQtySell, int product2LowQtySell, int product2MidQtySell, int product2HighQtySell, int product3LowQtySell, int product3MidQtySell, int product3HighQtySell, int product1LowQtyProd, int product1MidQtyProd, int product1HighQtyProd, int product2LowQtyProd, int product2MidQtyProd, int product2HighQtyProd, int product3LowQtyProd, int product3MidQtyProd, int product3HighQtyProd, int materialLowQty, int materialMidQty, int materialHighQty, BigDecimal totalIncomes, BigDecimal totalExpenses, long popularity, Long idCompany) {
+    public Statistic(Long id, int year, int month, int product1LowQtySell, int product1MidQtySell, int product1HighQtySell, int product2LowQtySell, int product2MidQtySell, int product2HighQtySell, int product3LowQtySell, int product3MidQtySell, int product3HighQtySell, int product1LowQtyProd, int product1MidQtyProd, int product1HighQtyProd, int product2LowQtyProd, int product2MidQtyProd, int product2HighQtyProd, int product3LowQtyProd, int product3MidQtyProd, int product3HighQtyProd, int product4LowQtyProd, int product4MidQtyProd, int product4HighQtyProd, int materialLowQty, int materialMidQty, int materialHighQty, BigDecimal totalIncomes, BigDecimal totalExpenses, long popularity, Long idCompany) {
         this.id = id;
         this.year = year;
         this.month = month;
@@ -57,6 +60,9 @@ public class Statistic {
         this.product3LowQtyProd = product3LowQtyProd;
         this.product3MidQtyProd = product3MidQtyProd;
         this.product3HighQtyProd = product3HighQtyProd;
+        this.product4LowQtyProd = product4LowQtyProd;
+        this.product4MidQtyProd = product4MidQtyProd;
+        this.product4HighQtyProd = product4HighQtyProd;
         this.materialLowQty = materialLowQty;
         this.materialMidQty = materialMidQty;
         this.materialHighQty = materialHighQty;
@@ -288,6 +294,30 @@ public class Statistic {
 
     public void setIdCompany(Long idCompany) {
         this.idCompany = idCompany;
+    }
+
+    public int getProduct4LowQtyProd() {
+        return product4LowQtyProd;
+    }
+
+    public void setProduct4LowQtyProd(int product4LowQtyProd) {
+        this.product4LowQtyProd = product4LowQtyProd;
+    }
+
+    public int getProduct4MidQtyProd() {
+        return product4MidQtyProd;
+    }
+
+    public void setProduct4MidQtyProd(int product4MidQtyProd) {
+        this.product4MidQtyProd = product4MidQtyProd;
+    }
+
+    public int getProduct4HighQtyProd() {
+        return product4HighQtyProd;
+    }
+
+    public void setProduct4HighQtyProd(int product4HighQtyProd) {
+        this.product4HighQtyProd = product4HighQtyProd;
     }
 }
 

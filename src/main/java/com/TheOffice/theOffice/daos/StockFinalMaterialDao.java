@@ -107,7 +107,7 @@ public class StockFinalMaterialDao {
         }
 
         // Requête SQL mise à jour pour inclure toutes les colonnes pertinentes
-        String sql = "UPDATE StockFinalMaterial SET name = ?, quantity_low = ?, quantity_mid = ?, quantity_high = ?, proportion_product = ?, quantity_to_product = ?, month_production = ?, sell = ?, month_sell = ?, id_company = ? WHERE id = ?";
+        String sql = "UPDATE StockFinalMaterial SET name = ?, quantity_low = ?, quantity_mid = ?, quantity_high = ?, proportion_product = ?, quantity_to_product = ?, month_production = ?, sell = ?, price = ?, id_company = ? WHERE id = ?";
 
         int rowsAffected = jdbcTemplate.update(sql,
                 stockFinalMaterial.getName(),

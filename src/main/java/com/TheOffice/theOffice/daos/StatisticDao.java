@@ -40,6 +40,9 @@ public class StatisticDao {
             rs.getInt("product3_low_qty_prod"),
             rs.getInt("product3_mid_qty_prod"),
             rs.getInt("product3_high_qty_prod"),
+            rs.getInt("product4_low_qty_prod"),
+            rs.getInt("product4_mid_qty_prod"),
+            rs.getInt("product4_high_qty_prod"),
             rs.getInt("material_low_qty"),
             rs.getInt("material_mid_qty"),
             rs.getInt("material_high_qty"),
@@ -70,9 +73,9 @@ public class StatisticDao {
                 "product2_low_qty_sell, product2_mid_qty_sell, product2_high_qty_sell, product3_low_qty_sell, product3_mid_qty_sell, " +
                 "product3_high_qty_sell, product1_low_qty_prod, product1_mid_qty_prod, product1_high_qty_prod, " +
                 "product2_low_qty_prod, product2_mid_qty_prod, product2_high_qty_prod, product3_low_qty_prod, " +
-                "product3_mid_qty_prod, product3_high_qty_prod, material_low_qty, material_mid_qty, material_high_qty, " +
+                "product3_mid_qty_prod, product3_high_qty_prod, product4_low_qty_prod, product4_mid_qty_prod, product4_high_qty_prod, material_low_qty, material_mid_qty, material_high_qty, " +
                 "total_incomes, total_expenses, popularity, id_company) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 statistic.getYear(),
@@ -95,6 +98,9 @@ public class StatisticDao {
                 statistic.getProduct3LowQtyProd(),
                 statistic.getProduct3MidQtyProd(),
                 statistic.getProduct3HighQtyProd(),
+                statistic.getProduct4LowQtyProd(),
+                statistic.getProduct4MidQtyProd(),
+                statistic.getProduct4HighQtyProd(),
                 statistic.getMaterialLowQty(),
                 statistic.getMaterialMidQty(),
                 statistic.getMaterialHighQty(),

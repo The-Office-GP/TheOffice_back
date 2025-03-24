@@ -232,7 +232,7 @@ public class CompanyController {
     @PutMapping("/cycle/{id}")
     public ResponseEntity<CompanyDto> runCycleCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
-        Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
+        Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
         cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
         cycleService.runCycle1(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
         cycleService.lastRunCycle(companyDtoFromBody,companyDtoFromBody.getCycle(), companyDtoFromBody.getEmployees(), companyDtoFromBody.getMachinesInCompany(), companyDtoFromBody.getStockFinalMaterials(), companyDtoFromBody.getStockMaterial(), statistic);
