@@ -6,11 +6,13 @@ import com.TheOffice.theOffice.entities.User;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class StatiticDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -46,7 +48,7 @@ public class StatiticDao {
         return statistic;
     }
 
-    public List<Statistic> findAll(Long idCompany) {
+    public List<Statistic> findAllCompanyStatistic(Long idCompany) {
         String sql = "SELECT * FROM Statistic WHERE id_company = ?";
         return jdbcTemplate.query(sql, statisticRowMapper, idCompany);
     }

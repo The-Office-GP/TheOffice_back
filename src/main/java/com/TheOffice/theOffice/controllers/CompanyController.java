@@ -34,9 +34,10 @@ public class CompanyController {
     private final JwtUtil jwtUtil;
     private final MachineService machineService;
     private final CycleService cycleService;
+    private final StatiticDao statiticDao;
 
     // Injection des dépendances via le constructeur
-    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService) {
+    public CompanyController(CompanyDao companyDao, UserDao userDao, CycleDao cycleDao, EmployeeDao employeeDao, SupplierDao supplierDao, EventDao eventDao, StockMaterialDao stockMaterialDao, StockFinalMaterialDao stockFinalMaterialDao, MachineInCompanyDao machineInCompanyDao, JwtUtil jwtUtil, MachineService machineService, CycleService cycleService, StatiticDao statiticDao) {
         this.companyDao = companyDao;
         this.userDao = userDao;
         this.cycleDao = cycleDao;
@@ -49,6 +50,7 @@ public class CompanyController {
         this.machineService = machineService;
         this.machineInCompanyDao = machineInCompanyDao;
         this.cycleService = cycleService;
+        this.statiticDao = statiticDao;
     }
 
     // Récupère toutes les entreprises
@@ -64,9 +66,7 @@ public class CompanyController {
         String token = authorizationHeader.substring(7);
         String email = jwtUtil.getEmailFromToken(token);
         User user = userDao.findByEmail(email);
-
-        System.out.println(company.getUserId());
-        System.out.println(user.getId());
+        List<Statistic> statisticListForDto = statiticDao.findAllCompanyStatistic(id);
 
         if (!company.getUserId().equals(user.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403 Forbidden
@@ -82,7 +82,7 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService, statisticListForDto);
 
         return ResponseEntity.ok(companyDto);
     }
@@ -93,6 +93,7 @@ public class CompanyController {
         Double wallet = userDao.findWalletByUserId(company.getUserId());
         CycleDto cycle = CycleDto.fromEntity(cycleDao.findByIdCompany(id));
         StockMaterialDto stockMaterials = StockMaterialDto.fromEntity(stockMaterialDao.findByIdCompany(id));
+        List<Statistic> statisticListForDto = statiticDao.findAllCompanyStatistic(id);
 
         List<EmployeeDto> employees = employeeDao.findByIdCompany(id).stream().map(EmployeeDto::fromEntity).collect(Collectors.toList());
         List<SupplierDto> suppliers = supplierDao.findByIdCompany(id).stream().map(SupplierDto::fromEntity).collect(Collectors.toList());
@@ -100,7 +101,7 @@ public class CompanyController {
         List<StockFinalMaterialDto> stockFinalMaterials = stockFinalMaterialDao.findByIdCompany(id).stream().map(StockFinalMaterialDto::fromEntity).collect(Collectors.toList());
         List<MachineInCompanyDto> machinesInCompany = machineInCompanyDao.findByIdCompany(id).stream().map(MachineInCompanyDto::fromEntity).collect(Collectors.toList());
 
-        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService);
+        CompanyDto companyDto = CompanyDto.fromEntity(company, wallet, cycle, employees, suppliers, events, stockMaterials, stockFinalMaterials,machinesInCompany ,machineService, statisticListForDto);
 
         return companyDto;
     }

@@ -1,5 +1,6 @@
 package com.TheOffice.theOffice.dtos;
 
+import com.TheOffice.theOffice.entities.Statistic;
 import com.TheOffice.theOffice.services.MachineService;
 import com.TheOffice.theOffice.staticModels.Local;
 import com.TheOffice.theOffice.entities.Company;
@@ -32,15 +33,153 @@ public class CompanyDto {
     private List<EventDto> events;
     private List<StockFinalMaterialDto> stockFinalMaterials;
     private List<MachineInCompanyDto> machinesInCompany;
-    private MachineService machineService;
+    private List<Statistic> statistics;
 
     public CompanyDto() {}
+
+    public CompanyDto(String sector, String name, Long popularity, Long userId, Local local, List<Machine> machines, Double wallet, CycleDto cycle, StockMaterialDto stockMaterial, List<EmployeeDto> employees, List<SupplierDto> suppliers, List<EventDto> events, List<StockFinalMaterialDto> stockFinalMaterials, List<MachineInCompanyDto> machinesInCompany, List<Statistic> statistics) {
+        this.sector = sector;
+        this.name = name;
+        this.popularity = popularity;
+        this.userId = userId;
+        this.local = local;
+        this.machines = machines;
+        this.wallet = wallet;
+        this.cycle = cycle;
+        this.stockMaterial = stockMaterial;
+        this.employees = employees;
+        this.suppliers = suppliers;
+        this.events = events;
+        this.stockFinalMaterials = stockFinalMaterials;
+        this.machinesInCompany = machinesInCompany;
+        this.statistics = statistics;
+    }
+
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Long popularity) {
+        this.popularity = popularity;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
+    }
+
+    public List<Machine> getMachines() {
+        return machines;
+    }
+
+    public void setMachines(List<Machine> machines) {
+        this.machines = machines;
+    }
+
+    public Double getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Double wallet) {
+        this.wallet = wallet;
+    }
+
+    public CycleDto getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(CycleDto cycle) {
+        this.cycle = cycle;
+    }
+
+    public StockMaterialDto getStockMaterial() {
+        return stockMaterial;
+    }
+
+    public void setStockMaterial(StockMaterialDto stockMaterial) {
+        this.stockMaterial = stockMaterial;
+    }
+
+    public List<EmployeeDto> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<EmployeeDto> employees) {
+        this.employees = employees;
+    }
+
+    public List<SupplierDto> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(List<SupplierDto> suppliers) {
+        this.suppliers = suppliers;
+    }
+
+    public List<EventDto> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<EventDto> events) {
+        this.events = events;
+    }
+
+    public List<StockFinalMaterialDto> getStockFinalMaterials() {
+        return stockFinalMaterials;
+    }
+
+    public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) {
+        this.stockFinalMaterials = stockFinalMaterials;
+    }
+
+    public List<MachineInCompanyDto> getMachinesInCompany() {
+        return machinesInCompany;
+    }
+
+    public void setMachinesInCompany(List<MachineInCompanyDto> machinesInCompany) {
+        this.machinesInCompany = machinesInCompany;
+    }
+
+    public List<Statistic> getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(List<Statistic> statistics) {
+        this.statistics = statistics;
+    }
 
     public static CompanyDto fromEntity(Company company, Double wallet,
                                         CycleDto cycleDtos, List<EmployeeDto> employeeDtos, List<SupplierDto> supplierDtos,
                                         List<EventDto> eventDtos, StockMaterialDto stockMaterialDtos,
-                                        List<StockFinalMaterialDto> stockFinalMaterialDtos,List<MachineInCompanyDto> machinesInCompany,
-                                        MachineService machineService) {
+                                        List<StockFinalMaterialDto> stockFinalMaterialDtos, List<MachineInCompanyDto> machinesInCompany,
+                                        MachineService machineService, List<Statistic> statistic) {
         Local companyLocal = new Local();
         try{
             File jsonFile = new File("src/main/java/com/TheOffice/theOffice/json/local.json");
@@ -80,6 +219,7 @@ public class CompanyDto {
         dto.setStockMaterial(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
         dto.setMachinesInCompany(machinesInCompany);
+        dto.setStatistics(statistic);
 
         return dto;
     }
@@ -88,56 +228,5 @@ public class CompanyDto {
         return new Company(company.getId(), companyDto.getSector(), companyDto.getName(), company.getCreationDate(), companyDto.getPopularity(), company.getLocalId(),company.getMachineId(), company.getUserId());
     }
 
-    // Getters & Setters
-    public String getSector() { return sector; }
-    public void setSector(String sector) { this.sector = sector; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Long getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(Long popularity) {
-        this.popularity = popularity;
-    }
-
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
-    public Local getLocal() {return local;}
-    public void setLocal(Local local) {this.local = local;}
-
-    public List<Machine> getMachines() {
-        return machines;
-    }
-
-    public void setMachines(List<Machine> machines) {
-        this.machines = machines;
-    }
-
-    public Double getWallet() { return wallet; }
-    public void setWallet(Double wallet) { this.wallet = wallet; }
-
-    public CycleDto getCycle() { return cycle; }
-    public void setCycle(CycleDto cycle) { this.cycle = cycle; }
-
-    public List<EmployeeDto> getEmployees() { return employees; }
-    public void setEmployees(List<EmployeeDto> employees) { this.employees = employees; }
-
-    public List<SupplierDto> getSuppliers() { return suppliers; }
-    public void setSuppliers(List<SupplierDto> suppliers) { this.suppliers = suppliers; }
-
-    public List<EventDto> getEvents() { return events; }
-    public void setEvents(List<EventDto> events) { this.events = events; }
-
-    public StockMaterialDto getStockMaterial() { return stockMaterial; }
-    public void setStockMaterial(StockMaterialDto stockMaterial) { this.stockMaterial = stockMaterial; }
-
-    public List<StockFinalMaterialDto> getStockFinalMaterials() { return stockFinalMaterials; }
-    public void setStockFinalMaterials(List<StockFinalMaterialDto> stockFinalMaterials) { this.stockFinalMaterials = stockFinalMaterials; }
-
-    public List<MachineInCompanyDto> getMachinesInCompany() { return machinesInCompany; }
-    public void setMachinesInCompany(List<MachineInCompanyDto> machinesInCompany) { this.machinesInCompany = machinesInCompany; }
 }
