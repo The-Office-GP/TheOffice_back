@@ -73,7 +73,7 @@ public class CycleDao {
             ps.setInt(5, countGoodSell);
             ps.setInt(6, countBadSell);
             ps.setString(7, trend);
-            ps.setLong(7, companyId);
+            ps.setLong(8, companyId);
 
             return ps;
         }, keyHolder);

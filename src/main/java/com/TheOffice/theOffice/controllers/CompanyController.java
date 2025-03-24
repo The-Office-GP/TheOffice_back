@@ -174,7 +174,7 @@ public class CompanyController {
 
             // Enregistrement en base de données
             Company companyResponse = companyDao.save(company);
-            cycleDao.save(1, 100, 50, 50, 0, 0, companyResponse.getId());
+            cycleDao.save(1, 100, 50, 50, 0, 0,"None", companyResponse.getId());
             stockMaterialDao.save("Product",0, 0, 0, companyResponse.getId());
             for (int i = 0; i < 4; i++) {
                 stockFinalMaterialDao.save("Product"+(i+1), 0, 0, 0, 0, 0, 0, 0, 0, companyResponse.getId());
