@@ -10,11 +10,12 @@ public class CycleDto {
     private Integer priorityMarketing;
     private Integer countGoodSell;
     private Integer countBadSell;
+    private String trend;
     private Long companyId;
 
     public CycleDto() {}
 
-    public CycleDto(Long id, Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, Long companyId) {
+    public CycleDto(Long id, Integer step, Integer productionSpeed, Integer priorityProduction, Integer priorityMarketing, Integer countGoodSell, Integer countBadSell, String trend, Long companyId) {
         this.id = id;
         this.step = step;
         this.productionSpeed = productionSpeed;
@@ -22,6 +23,7 @@ public class CycleDto {
         this.priorityMarketing = priorityMarketing;
         this.countGoodSell = countGoodSell;
         this.countBadSell = countBadSell;
+        this.trend = trend;
         this.companyId = companyId;
     }
 
@@ -89,11 +91,19 @@ public class CycleDto {
         this.companyId = companyId;
     }
 
+    public String getTrend() {
+        return trend;
+    }
+
+    public void setTrend(String trend) {
+        this.trend = trend;
+    }
+
     public static CycleDto fromEntity(Cycle cycle){
-        return new CycleDto(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getCompanyId());
+        return new CycleDto(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getTrend(), cycle.getCompanyId());
     }
 
     public static Cycle dtoToEntity(CycleDto cycle){
-        return new Cycle(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getCompanyId());
+        return new Cycle(cycle.getId(), cycle.getStep(), cycle.getProductionSpeed(), cycle.getPriorityProduction(), cycle.getPriorityMarketing(), cycle.getCountGoodSell() , cycle.getCountBadSell(), cycle.getTrend(), cycle.getCompanyId());
     }
 }

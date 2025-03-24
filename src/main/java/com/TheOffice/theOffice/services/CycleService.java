@@ -80,12 +80,12 @@ public class CycleService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            for (int i = 0; i < machineList.size(); i++) {
-                company.setWallet(company.getWallet() - machineList.get(i).getMaintenanceCost().doubleValue());
-                statistic.setTotalExpenses(statistic.getTotalExpenses().add(machineList.get(i).getMaintenanceCost()));
-            }
             dayCycle++;
+        }
+        for (int i = 0; i < machineInCompany.size(); i++) {
+            Machine machine = machineMap.get(machineInCompany.get(i).getMachineId());
+            company.setWallet(company.getWallet() - machine.getMaintenanceCost().doubleValue());
+            statistic.setTotalExpenses(statistic.getTotalExpenses().add(machine.getMaintenanceCost()));
         }
         cycle.setStep(cycle.getStep()+1);
     }
@@ -458,8 +458,8 @@ public class CycleService {
 
         if (cycle.getCountBadSell() > (100-(double)company.getPopularity()/100000)) {
             for (int i = 0; i < employeeList.size(); i++) {
-                company.setPopularity(company.getPopularity() - 5);
-                statistic.setPopularity(statistic.getPopularity() - 5);
+                company.setPopularity(company.getPopularity() - 1);
+                statistic.setPopularity(statistic.getPopularity() - 1);
                 cycle.setCountGoodSell(0);
             }
         }

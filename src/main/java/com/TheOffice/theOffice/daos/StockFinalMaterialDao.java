@@ -1,7 +1,6 @@
 package com.TheOffice.theOffice.daos;
 
 import com.TheOffice.theOffice.entities.StockFinalMaterial;
-import com.TheOffice.theOffice.entities.StockMaterial;
 import com.TheOffice.theOffice.exceptions.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,7 +32,7 @@ public class StockFinalMaterialDao {
             rs.getInt("quantity_to_product"),
             rs.getInt("month_production"),
             rs.getInt("sell"),
-            rs.getInt("month_sell"),
+            rs.getInt("price"),
             rs.getLong("companyId")
     );
 
@@ -66,7 +65,7 @@ public class StockFinalMaterialDao {
                         rs.getInt("quantity_to_product"),
                         rs.getInt("month_production"),
                         rs.getInt("sell"),
-                        rs.getInt("month_sell"),
+                        rs.getInt("price"),
                         companyId
                 )
         );
@@ -119,7 +118,7 @@ public class StockFinalMaterialDao {
                 stockFinalMaterial.getQuantityToProduct(),
                 stockFinalMaterial.getMonthProduction(),
                 stockFinalMaterial.getSell(),
-                stockFinalMaterial.getMonthSell(),
+                stockFinalMaterial.getPrice(),
                 stockFinalMaterial.getCompanyId(),
                 id
         );

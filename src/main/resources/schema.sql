@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS Cycle
     count_good_sell         INT                NOT NULL,
     count_bad_sell         INT                NOT NULL,
     id_company   INT,
+    trend   VARCHAR(50),
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );
 
@@ -126,7 +127,7 @@ CREATE TABLE IF NOT EXISTS StockFinalMaterial
     quantity_to_product INT             NOT NULL,
     month_production  INT                NOT NULL,
     sell              INT                NOT NULL,
-    month_sell        INT                NOT NULL,
+    price        INT                NOT NULL,
     id_company        INT,
     FOREIGN KEY (id_company) REFERENCES Company (id)
 );

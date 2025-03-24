@@ -133,7 +133,7 @@ public class StockFinalMaterialDto { private Long id;
                 stockFinalMaterial.getQuantityToProduct(),
                 stockFinalMaterial.getMonthProduction(),
                 stockFinalMaterial.getSell(),
-                stockFinalMaterial.getMonthSell(),
+                stockFinalMaterial.getPrice(),
                 stockFinalMaterial.getCompanyId()
         );
     }
