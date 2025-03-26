@@ -81,27 +81,31 @@ public class StockMaterialDao {
 
     //PUT
     public StockMaterial update(Long id, StockMaterial stockMaterial) {
+        // Vérification si le stock avec l'ID existe
         if (!stockMaterialExists(id)) {
             throw new ResourceNotFoundException("Stock des produits avec l'ID : " + id + " n'existe pas");
         }
 
-        // Requête SQL mise à jour pour inclure toutes les colonnes de la table StockMaterial
-        String sql = "UPDATE StockMaterial SET name = ?, quantity_low = ?, quantity_mid = ?, quantity_high = ?, id_company = ? WHERE id = ?";
+        // Requête SQL mise à jour
+        String sql = "UPDATE StockMaterial SET name = ?, quantity_low = ?, quantity_mid = ?, quantity_high = ? WHERE id = ?";
 
+        // Mise à jour de la base de données
         int rowsAffected = jdbcTemplate.update(sql,
-                stockMaterial.getName(),
-                stockMaterial.getQuantityLow(),  // Mise à jour de quantity_low
-                stockMaterial.getQuantityMid(),  // Mise à jour de quantity_mid
-                stockMaterial.getQuantityHigh(), // Mise à jour de quantity_high
-                stockMaterial.getCompanyId(),    // Mise à jour de id_company
-                id                                // Mise à jour de l'ID
+                stockMaterial.getName(),          // Mise à jour du nom
+                stockMaterial.getQuantityLow(),   // Mise à jour de quantity_low
+                stockMaterial.getQuantityMid(),   // Mise à jour de quantity_mid
+                stockMaterial.getQuantityHigh(),  // Mise à jour de quantity_high
+                id                                 // ID de l'enregistrement à mettre à jour
         );
 
+        // Vérification si la mise à jour a échoué
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du stock des produits avec l'ID : " + id);
         }
-        return stockMaterial;
+
+        return stockMaterial;  // Retourne l'objet stockMaterial mis à jour
     }
+
 
 
     public boolean stockMaterialExists(Long id) {

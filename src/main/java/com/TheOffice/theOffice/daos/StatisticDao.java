@@ -31,6 +31,9 @@ public class StatisticDao {
             rs.getInt("product3_low_qty_sell"),
             rs.getInt("product3_mid_qty_sell"),
             rs.getInt("product3_high_qty_sell"),
+            rs.getInt("product4_low_qty_sell"),
+            rs.getInt("product4_mid_qty_sell"),
+            rs.getInt("product4_high_qty_sell"),
             rs.getInt("product1_low_qty_prod"),
             rs.getInt("product1_mid_qty_prod"),
             rs.getInt("product1_high_qty_prod"),
@@ -71,11 +74,11 @@ public class StatisticDao {
     public void save(Statistic statistic) {
         String sql = "INSERT INTO Statistic (year, month, product1_low_qty_sell, product1_mid_qty_sell, product1_high_qty_sell, " +
                 "product2_low_qty_sell, product2_mid_qty_sell, product2_high_qty_sell, product3_low_qty_sell, product3_mid_qty_sell, " +
-                "product3_high_qty_sell, product1_low_qty_prod, product1_mid_qty_prod, product1_high_qty_prod, " +
+                "product3_high_qty_sell, product4_low_qty_sell, product4_mid_qty_sell, product4_high_qty_sell, product1_low_qty_prod, product1_mid_qty_prod, product1_high_qty_prod, " +
                 "product2_low_qty_prod, product2_mid_qty_prod, product2_high_qty_prod, product3_low_qty_prod, " +
                 "product3_mid_qty_prod, product3_high_qty_prod, product4_low_qty_prod, product4_mid_qty_prod, product4_high_qty_prod, material_low_qty, material_mid_qty, material_high_qty, " +
                 "total_incomes, total_expenses, popularity, id_company) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Add 1 more placeholder
 
         jdbcTemplate.update(sql,
                 statistic.getYear(),
@@ -89,6 +92,9 @@ public class StatisticDao {
                 statistic.getProduct3LowQtySell(),
                 statistic.getProduct3MidQtySell(),
                 statistic.getProduct3HighQtySell(),
+                statistic.getProduct4LowQtySell(),  // Added this value
+                statistic.getProduct4MidQtySell(),  // Added this value
+                statistic.getProduct4HighQtySell(),  // Added this value
                 statistic.getProduct1LowQtyProd(),
                 statistic.getProduct1MidQtyProd(),
                 statistic.getProduct1HighQtyProd(),
@@ -107,8 +113,9 @@ public class StatisticDao {
                 statistic.getTotalIncomes(),
                 statistic.getTotalExpenses(),
                 statistic.getPopularity(),
-                statistic.getIdCompany()); // Assurez-vous qu'il y a bien 24 paramètres ici
+                statistic.getIdCompany()); // Now it has 33 parameters
     }
+
 
 
     // Méthode pour supprimer une statistique par son id

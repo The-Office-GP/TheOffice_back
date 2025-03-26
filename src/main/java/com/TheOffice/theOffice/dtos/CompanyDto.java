@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +31,11 @@ public class CompanyDto {
     private List<EventDto> events;
     private List<StockFinalMaterialDto> stockFinalMaterials;
     private List<MachineInCompanyDto> machinesInCompany;
-    private List<Statistic> statistics;
+    private List<Statistic> statistic;
 
     public CompanyDto() {}
 
-    public CompanyDto(String sector, String name, Long popularity, Long userId, Local local, List<Machine> machines, Double wallet, CycleDto cycle, StockMaterialDto stockMaterial, List<EmployeeDto> employees, List<SupplierDto> suppliers, List<EventDto> events, List<StockFinalMaterialDto> stockFinalMaterials, List<MachineInCompanyDto> machinesInCompany, List<Statistic> statistics) {
+    public CompanyDto(String sector, String name, Long popularity, Long userId, Local local, List<Machine> machines, Double wallet, CycleDto cycle, StockMaterialDto stockMaterial, List<EmployeeDto> employees, List<SupplierDto> suppliers, List<EventDto> events, List<StockFinalMaterialDto> stockFinalMaterials, List<MachineInCompanyDto> machinesInCompany, List<Statistic> statistic) {
         this.sector = sector;
         this.name = name;
         this.popularity = popularity;
@@ -52,7 +50,7 @@ public class CompanyDto {
         this.events = events;
         this.stockFinalMaterials = stockFinalMaterials;
         this.machinesInCompany = machinesInCompany;
-        this.statistics = statistics;
+        this.statistic = statistic;
     }
 
     public String getSector() {
@@ -167,12 +165,12 @@ public class CompanyDto {
         this.machinesInCompany = machinesInCompany;
     }
 
-    public List<Statistic> getStatistics() {
-        return statistics;
+    public List<Statistic> getStatistic() {
+        return statistic;
     }
 
-    public void setStatistics(List<Statistic> statistics) {
-        this.statistics = statistics;
+    public void setStatistic(List<Statistic> statistic) {
+        this.statistic = statistic;
     }
 
     public static CompanyDto fromEntity(Company company, Double wallet,
@@ -219,7 +217,7 @@ public class CompanyDto {
         dto.setStockMaterial(stockMaterialDtos);
         dto.setStockFinalMaterials(stockFinalMaterialDtos);
         dto.setMachinesInCompany(machinesInCompany);
-        dto.setStatistics(statistic);
+        dto.setStatistic(statistic);
 
         return dto;
     }
