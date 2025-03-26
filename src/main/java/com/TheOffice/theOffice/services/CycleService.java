@@ -48,18 +48,16 @@ public class CycleService {
             if(company.getMachinesInCompany().size() < productionEmployee.size()){
                 for (int i = 0; i < company.getMachinesInCompany().size(); i++) {
                     employeeProduct(productionEmployee.get(i), company.getCycle(), company.getMachinesInCompany().get(i), company.getStockFinalMaterials(), company.getStockMaterial(), company.getStatistic().getLast() );
-                    productionEmployee.get(i).setHealth(productionEmployee.get(i).getHealth() - (int)(Math.random() * 5));
                 }
             }else{
                 for (int i = 0; i < productionEmployee.size(); i++) {
                     employeeProduct(productionEmployee.get(i), company.getCycle(), company.getMachinesInCompany().get(i), company.getStockFinalMaterials(), company.getStockMaterial(), company.getStatistic().getLast() );
-                    productionEmployee.get(i).setHealth(productionEmployee.get(i).getHealth() - (int)(Math.random() * 5));
+
                 }
             }
 
             for (int i = 0; i < sellEmployee.size(); i++) {
                 employeesSell(company.getCycle(), sellEmployee.get(i), company.getStockFinalMaterials(), company, company.getStatistic().getLast(), stockPopularity);
-                sellEmployee.get(i).setHealth(sellEmployee.get(i).getHealth() - (int)(Math.random() * 5));
 
             }
 
@@ -76,7 +74,9 @@ public class CycleService {
         for (int i = 0; i < company.getEmployees().size(); i++) {
             company.setWallet(company.getWallet() - company.getEmployees().get(i).getSalary().doubleValue());
             company.getStatistic().getLast().setTotalExpenses(company.getStatistic().getLast().getTotalExpenses().add(company.getEmployees().get(i).getSalary()));
-            if (company.getEmployees().get(i).getStatus() != Status.ACTIF){
+            if (company.getEmployees().get(i).getStatus() == Status.ACTIF){
+                productionEmployee.get(i).setHealth(productionEmployee.get(i).getHealth() - (int)(Math.random() * 5));
+            }else{
                 company.getEmployees().get(i).setHealth(100);
             }
         }
