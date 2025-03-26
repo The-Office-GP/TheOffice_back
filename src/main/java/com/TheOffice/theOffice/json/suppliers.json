@@ -1,0 +1,189 @@
+{
+  "carpentry":[
+  {
+    "id" : 1,
+    "name": "Tronc Commun"
+  },
+  {
+    "id" : 2,
+    "name": "Planche-Moi Ça"
+  },
+  {
+    "id" : 3,
+    "name": "Bois Tant Pis"
+  },
+  {
+    "id" : 4,
+    "name": "Scie Bon"
+  },
+  {
+    "id" : 5,
+    "name": "Les Frères Branchés"
+  },
+  {
+    "id" : 6,
+    "name": "Troncs Pile"
+  },
+  {
+    "id" : 7,
+    "name": "Chêne Pas Une Blague"
+  },
+  {
+    "id" : 8,
+    "name": "Au Bûcheron Rieur"
+  },
+  {
+    "id" : 9,
+    "name": "Cèdre Facile"
+  },
+  {
+    "id" : 10,
+    "name": "Le Bois Sans Soif"
+  },
+  {
+    "id" : 11,
+    "name": "Pin Pon Pin Pon"
+  },
+  {
+    "id" : 12,
+    "name": "Le Petit Sapin"
+  },
+  {
+    "id" : 13,
+    "name": "Hêtre ou ne pas Hêtre"
+  },
+  {
+    "id" : 14,
+    "name": "Planche à Part"
+  },
+  {
+    "id" : 15,
+    "name": "Les Boules de Peuplier"
+  },
+  {
+    "id" : 16,
+    "name": "Rabote & Compagnie"
+  },
+  {
+    "id" : 17,
+    "name": "Bûche & Co"
+  },
+  {
+    "id" : 18,
+    "name": "Ça Scie Net"
+  },
+  {
+    "id" : 19,
+    "name": "La Bonne Écorce"
+  },
+  {
+    "id" : 20,
+    "name": "Élagueurs Sans Frontières"
+  },
+  {
+    "id" : 21,
+    "name": "La Maison du Pin"
+  },
+  {
+    "id" : 22,
+    "name": "Tronc de Vie"
+  },
+  {
+    "id" : 23,
+    "name": "Pied de Biche & Fils"
+  },
+  {
+    "id" : 24,
+    "name": "Le Chêne Rigolo"
+  },
+  {
+    "id" : 25,
+    "name": "Bûcheron et Fiston"
+  },
+  {
+    "id" : 26,
+    "name": "Au Bois Dormant"
+  },
+  {
+    "id" : 27,
+    "name": "Sciure et Sci-Fiction"
+  },
+  {
+    "id" : 28,
+    "name": "Les Branchés du Bois"
+  },
+  {
+    "id" : 29,
+    "name": "Sapin pas du Bon Bois"
+  },
+  {
+    "id" : 30,
+    "name": "Le Tronc Qui Fume"
+  }
+  ],
+  "creamery": [
+    { "id": 1, "name": "Lait It Be" },
+    { "id": 2, "name": "Crème de la Crème" },
+    { "id": 3, "name": "Lactose Story" },
+    { "id": 4, "name": "Beurre & Contes" },
+    { "id": 5, "name": "La Vache Sérieuse" },
+    { "id": 6, "name": "Holy Cow Laitiers" },
+    { "id": 7, "name": "Moo’gic Farm" },
+    { "id": 8, "name": "Lait’s Go" },
+    { "id": 9, "name": "Lactosapiens" },
+    { "id": 10, "name": "Beurr’ifique" },
+    { "id": 11, "name": "Moo-rice & Co" },
+    { "id": 12, "name": "Lait’s Play" },
+    { "id": 13, "name": "Vachement Bon" },
+    { "id": 14, "name": "Lait’xcellence" },
+    { "id": 15, "name": "Fermooerie du Bonheur" },
+    { "id": 16, "name": "La Crème Rit" },
+    { "id": 17, "name": "Moo’ve Your Milk" },
+    { "id": 18, "name": "Beurrément Top" },
+    { "id": 19, "name": "Lait’ernelle Ferme" },
+    { "id": 20, "name": "Vach’ment Frais" },
+    { "id": 21, "name": "Lait’s Dance" },
+    { "id": 22, "name": "Crèm’inalement Bon" },
+    { "id": 23, "name": "Fromooagerie Fine" },
+    { "id": 24, "name": "Beurre & Fils" },
+    { "id": 25, "name": "Moo’stro Laitier" },
+    { "id": 26, "name": "Lait'tendance" },
+    { "id": 27, "name": "Lacto’stique" },
+    { "id": 28, "name": "Moo’lympe du Lait" },
+    { "id": 29, "name": "Fermier Sans Frontlait" },
+    { "id": 30, "name": "Ash'Lait" }
+  ],
+  "quarry": [
+    { "id": 1, "name": "Rock'n'Stone" },
+    { "id": 2, "name": "Granibloc" },
+    { "id": 3, "name": "Pierre & Vacarme" },
+    { "id": 4, "name": "Rochefort & Cie" },
+    { "id": 5, "name": "La Pierre Philosophale" },
+    { "id": 6, "name": "BlocBuster" },
+    { "id": 7, "name": "Gravière Sans Frontière" },
+    { "id": 8, "name": "Roc & Roll" },
+    { "id": 9, "name": "GigaRoche" },
+    { "id": 10, "name": "StoneXpress" },
+    { "id": 11, "name": "Carrières du Futur" },
+    { "id": 12, "name": "Hard Roc Café" },
+    { "id": 13, "name": "Pierres Précieuses & Associés" },
+    { "id": 14, "name": "Massif Supply" },
+    { "id": 15, "name": "Bloc & Co" },
+    { "id": 16, "name": "Marbrerie Express" },
+    { "id": 17, "name": "Terre & Granit" },
+    { "id": 18, "name": "Béton Brut" },
+    { "id": 19, "name": "Roches de Légende" },
+    { "id": 20, "name": "La Firme du Quartz" },
+    { "id": 21, "name": "Gros Caillou Distribution" },
+    { "id": 22, "name": "Mine de Rien" },
+    { "id": 23, "name": "Marbre & Merveilles" },
+    { "id": 24, "name": "Stonex" },
+    { "id": 25, "name": "Granite Supreme" },
+    { "id": 26, "name": "Caillou & Fils" },
+    { "id": 27, "name": "Full Roc" },
+    { "id": 28, "name": "Gravier d'Or" },
+    { "id": 29, "name": "Pierres & Hommes" },
+    { "id": 30, "name": "La Carrière Éternelle" }
+  ]
+}
+

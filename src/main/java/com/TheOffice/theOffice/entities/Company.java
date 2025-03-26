@@ -1,26 +1,37 @@
 package com.TheOffice.theOffice.entities;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Company {
-    Long id;
-    String sector;
+    private Long id;
+    @NotBlank (message = "Le secteur de l'entreprise ne peut pas être vide")
+    private String sector;
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
-    String name;
-    Date creation_date;
-    Long id_user;
+    private String name;
+    private LocalDate creationDate;
+    @Max(100)
+    private Long popularity;
+    private Long localId;
+    private Long machineId;
+    private Long userId;
 
     public Company (){
     }
 
-    public Company(Long id, String sector, String name, Date creation_date, Long id_user) {
+    public Company(Long id, String sector, String name, LocalDate creationDate,Long popularity, Long localId,Long machineId, Long userId) {
         this.id = id;
         this.sector = sector;
         this.name = name;
-        this.creation_date = creation_date;
-        this.id_user = id_user;
+        this.creationDate = creationDate;
+        this.popularity = popularity;
+        this.localId = localId;
+        this.machineId = machineId;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -47,19 +58,43 @@ public class Company {
         this.name = name;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Long getId_user() {
-        return id_user;
+    public Long getPopularity() {
+        return popularity;
     }
 
-    public void setId_user(Long id_user) {
-        this.id_user = id_user;
+    public void setPopularity(Long popularity) {
+        this.popularity = popularity;
+    }
+
+    public Long getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(Long localId) {
+        this.localId = localId;
+    }
+
+    public Long getMachineId() {
+        return machineId;
+    }
+
+    public void setMachineId(Long machineId) {
+        this.machineId = machineId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

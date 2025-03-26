@@ -1,0 +1,83 @@
+[
+    {
+      "id" : 1,
+      "level": "Niveau 1",
+      "size": 20000,
+      "rent": 100000,
+      "maxEmployees": 10,
+      "maxMachines": 5,
+      "pathBackgroundImage": "/assets/backgroundsLocal/carpentry1.png"
+    },
+    {
+      "id" : 2,
+      "level": "Niveau 2",
+      "size": 12000,
+      "rent": 1000000,
+      "maxEmployees": 100,
+      "maxMachines": 15,
+      "pathBackgroundImage": "/assets/backgroundsLocal/carpentry2.png"
+    },
+    {
+      "id" : 3,
+      "level": "Niveau 3",
+      "size": 100000,
+      "rent": 5000000,
+      "maxEmployees": 500,
+      "maxMachines": 350,
+      "pathBackgroundImage": "/assets/backgroundsLocal/carpentry3.png"
+    },
+    {
+      "id" : 4,
+      "level": "Niveau 1",
+      "size": 5000,
+      "rent": 100000,
+      "maxEmployees": 10,
+      "maxMachines": 3,
+      "pathBackgroundImage": "/assets/backgroundsLocal/creamery1.png"
+    },
+    {
+      "id" : 5,
+      "level": "Niveau 2",
+      "size": 12000,
+      "rent": 1000000,
+      "maxEmployees": 100,
+      "maxMachines": 15,
+      "pathBackgroundImage": "/assets/backgroundsLocal/creamery2.png"
+    },
+    {
+      "id" : 6,
+      "level": "Niveau 3",
+      "size": 100000,
+      "rent": 5000000,
+      "maxEmployees": 500,
+      "maxMachines": 350,
+      "pathBackgroundImage": "/assets/backgroundsLocal/creamery3.png"
+    },
+    {
+      "id" : 7,
+      "level": "Niveau 1",
+      "size": 5000,
+      "rent": 100000,
+      "maxEmployees": 10,
+      "maxMachines": 3,
+      "pathBackgroundImage": "/assets/backgroundsLocal/quarry1.png"
+    },
+    {
+      "id" : 8,
+      "level": "Niveau 2",
+      "size": 12000,
+      "rent": 1000000,
+      "maxEmployees": 100,
+      "maxMachines": 15,
+      "pathBackgroundImage": "/assets/backgroundsLocal/quarry2.png"
+    },
+    {
+      "id" : 9,
+      "level": "Niveau 3",
+      "size": 100000,
+      "rent": 5000000,
+      "maxEmployees": 500,
+      "maxMachines": 350,
+      "pathBackgroundImage": "/assets/backgroundsLocal/quarry3.png"
+    }
+]
