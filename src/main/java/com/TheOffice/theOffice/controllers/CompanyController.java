@@ -238,13 +238,14 @@ public class CompanyController {
     public ResponseEntity<CompanyDto> runCycleCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
         User userForUpdateWallet = userDao.findById(companyDtoFromBody.getUserId());
+
         userForUpdateWallet.setWallet(new BigDecimal(companyDtoFromBody.getWallet()));
-        Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(),0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
-        companyDtoFromBody.getStatistic().add(statistic);
 
         for (int j = 0; j < 2; j++) {
+            Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(),0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
+            companyDtoFromBody.getStatistic().add(statistic);
+            System.out.println(companyDtoFromBody.getStatistic());
             cycleService.runCycle(companyDtoFromBody);
-
 
             Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
             companyDao.update(id, companyForUpdate);
@@ -259,6 +260,9 @@ public class CompanyController {
             stockMaterialDao.update(companyDtoFromBody.getStockMaterial().getId(), StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
             statisticDao.save(companyDtoFromBody.getStatistic().getLast());
         }
+
+        Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(),0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
+        companyDtoFromBody.getStatistic().add(statistic);
 
         cycleService.runCycle(companyDtoFromBody);
 
@@ -278,7 +282,6 @@ public class CompanyController {
 
 
         CompanyDto newCompanyDto = companyDtoFromBody;
-
 
         return ResponseEntity.ok(newCompanyDto);
     }
