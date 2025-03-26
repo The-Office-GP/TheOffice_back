@@ -14,7 +14,6 @@ public class Company {
     @NotBlank (message = "Le nom de l'entreprise ne peut pas être vide")
     private String name;
     private LocalDate creationDate;
-    @Max(100)
     private Long popularity;
     private Long localId;
     private Long machineId;

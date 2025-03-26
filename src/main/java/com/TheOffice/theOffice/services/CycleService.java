@@ -48,27 +48,22 @@ public class CycleService {
             if(company.getMachinesInCompany().size() < productionEmployee.size()){
                 for (int i = 0; i < company.getMachinesInCompany().size(); i++) {
                     employeeProduct(productionEmployee.get(i), company.getCycle(), company.getMachinesInCompany().get(i), company.getStockFinalMaterials(), company.getStockMaterial(), company.getStatistic().getLast() );
-                    productionEmployee.get(i).setHealth(productionEmployee.get(i).getHealth() - (int)(Math.random() * 5));
                 }
             }else{
                 for (int i = 0; i < productionEmployee.size(); i++) {
                     employeeProduct(productionEmployee.get(i), company.getCycle(), company.getMachinesInCompany().get(i), company.getStockFinalMaterials(), company.getStockMaterial(), company.getStatistic().getLast() );
-                    productionEmployee.get(i).setHealth(productionEmployee.get(i).getHealth() - (int)(Math.random() * 5));
+
                 }
             }
-
             for (int i = 0; i < sellEmployee.size(); i++) {
                 employeesSell(company.getCycle(), sellEmployee.get(i), company.getStockFinalMaterials(), company, company.getStatistic().getLast(), stockPopularity);
-                sellEmployee.get(i).setHealth(sellEmployee.get(i).getHealth() - (int)(Math.random() * 5));
 
             }
-
             for (int i = 0; i < marketingEmployee.size(); i++) {
                 employeeMakeMarketing(marketingEmployee.get(i), company);
-                marketingEmployee.get(i).setHealth(marketingEmployee.get(i).getHealth() - (int)(Math.random() * 5));
             }
 
-
+            System.out.println("Envide de caner3");
             dayForCycle++;
 
         }
@@ -76,13 +71,15 @@ public class CycleService {
         for (int i = 0; i < company.getEmployees().size(); i++) {
             company.setWallet(company.getWallet() - company.getEmployees().get(i).getSalary().doubleValue());
             company.getStatistic().getLast().setTotalExpenses(company.getStatistic().getLast().getTotalExpenses().add(company.getEmployees().get(i).getSalary()));
-            if (company.getEmployees().get(i).getStatus() != Status.ACTIF){
+            if (company.getEmployees().get(i).getStatus() == Status.ACTIF){
+                company.getEmployees().get(i).setHealth(company.getEmployees().get(i).getHealth() - (int)(Math.random() * 5));
+
+            }else{
                 company.getEmployees().get(i).setHealth(100);
             }
         }
 
         company.getStatistic().getLast().setMonth(company.getCycle().getStep());
-
         company.getStatistic().getLast().setPopularity(company.getPopularity());
     }
 
@@ -107,7 +104,7 @@ public class CycleService {
         int employeeCapacity = (int)((double)(productionCapacity * machineContribution * coeffProductionSpeed + +0.5) * coeffPriorityProduction);
 
         for (int i = 0; i < stockToProduct.size(); i++) {
-            int quantityToProduct = (int)((double)stockToProduct.get(i).getQuantityToProduct() * (double)employeeCapacity / 100)+1;
+            int quantityToProduct = (int)((double)stockToProduct.get(i).getProportionProduct() * (double)employeeCapacity / 100)+1;
             for (int j = 0; j < quantityToProduct; j++) {
                 defineQualityOfProduction(employeeCapacity, stockToProduct.get(i), cycle.getProductionSpeed(), stockMaterial, statistic);
             }
@@ -261,11 +258,13 @@ public class CycleService {
     }
 
     public void successSell(List<StockFinalMaterialDto> stockProduct, int capacityToSell, CompanyDto company, Statistic statistic, long popularityStack) {
-        int chanceToSell = capacityToSell * 100 / 15;
+        int chanceToSell = (int)((double)capacityToSell * 100 / 15);
+
         if (popularityStack > 0){
             chanceToSell = 100;
             popularityStack--;
         }
+
         if (stockProduct.size() > 0) {
             int index = 0;
             int i = 0;
@@ -333,7 +332,6 @@ public class CycleService {
     }
 
     private boolean sellProduct(StockFinalMaterialDto product, CompanyDto company, Statistic statistic) {
-        // Tente de vendre le produit en fonction de ses quantités (High, Mid, Low)
         if (product.getQuantityHigh() > 0) {
             updateProductSale(product, "High", company, statistic);
             return true;
@@ -348,11 +346,11 @@ public class CycleService {
     }
 
     private void updateProductSale(StockFinalMaterialDto product, String quality, CompanyDto company, Statistic statistic) {
-        // Mise à jour des quantités et des statistiques de vente
         switch (quality) {
             case "High":
                 product.setQuantityHigh(product.getQuantityHigh() - 1);
                 updateStatisticsForSale(product.getName(), statistic, "High");
+                company.setPopularity(company.getPopularity() + 1);
                 break;
             case "Mid":
                 product.setQuantityMid(product.getQuantityMid() - 1);
@@ -361,11 +359,14 @@ public class CycleService {
             case "Low":
                 product.setQuantityLow(product.getQuantityLow() - 1);
                 updateStatisticsForProduct(product.getName(), statistic, "Low");
+                int rng = (int)(Math.random() * 100);
+                if(rng < 100){
+                    company.setPopularity(company.getPopularity() - 1);
+                }
                 break;
         }
 
         product.setSell(product.getSell() + 1);
-        product.setPrice(product.getPrice() + 1);
         company.setWallet(company.getWallet() + 35);
         statistic.setTotalIncomes(statistic.getTotalIncomes().add(new BigDecimal(35)));
     }
