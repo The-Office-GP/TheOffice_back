@@ -123,7 +123,6 @@ public class EmployeeDao {
         if (!employeeExists(id)) {
             throw new ResourceNotFoundException("Salarié avec l'ID : " + id + " n'existe pas");
         }
-        System.out.println(employee.getPriorityAction());
         String sql = "UPDATE Employee SET name = ?, gender = ?, seniority = ?, salary = ?, level = ?, mood = ?, status = ?, job = ?, health = ?, priority_action = ?, image = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql,
                 employee.getName(),
@@ -155,6 +154,11 @@ public class EmployeeDao {
     public boolean employeeExists(Long id) {
         String sql = "SELECT COUNT(*) FROM Employee WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
+    }
+
+    public boolean employeeExistsInCompany(Long id, String name) {
+        String sql = "SELECT COUNT(*) FROM Employee WHERE id = ? and name = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, id, name) > 0;
     }
 
     //Lier un salarié à une entreprise

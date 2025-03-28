@@ -173,7 +173,8 @@ public class CompanyController {
             }
 
             // Enregistrement en base de données
-            Company companyResponse = companyDao.save(company);
+            companyDao.save(company);
+            Company companyResponse = companyDao.findLastCompanyByUserId(company.getUserId());
             cycleDao.save(1, 100, 50, 50, 0, 0,"None", companyResponse.getId());
             stockMaterialDao.save("Product",0, 0, 0, companyResponse.getId());
             for (int i = 0; i < 4; i++) {
@@ -206,7 +207,7 @@ public class CompanyController {
     public ResponseEntity<CompanyDto> updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoFromBody) {
         Company companyFromBody = companyDao.findById(id);
         Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
-        Company updatedCompany = companyDao.update(id, companyForUpdate);
+        companyDao.update(id, companyForUpdate);
 
 
         machineInCompanyDao.deleteAllByCompanyId(id);
@@ -215,7 +216,8 @@ public class CompanyController {
         }
 
         for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
-            if(employeeDao.employeeExists(companyDtoFromBody.getEmployees().get(i).getId())){
+            System.out.println(companyDtoFromBody.getEmployees().get(i).getId());
+            if(employeeDao.employeeExistsInCompany(companyDtoFromBody.getEmployees().get(i).getId(), companyDtoFromBody.getEmployees().get(i).getName())){
                 employeeDao.update(companyDtoFromBody.getEmployees().get(i).getId(), EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));
             }
             else{
@@ -226,10 +228,9 @@ public class CompanyController {
         stockMaterialDao.update(id, StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
         User newInfos = userDao.findById(companyDao.findById(id).getId());
 
-        userDao.update(companyDao.findById(id).getId(), new User(newInfos.getId(), newInfos.getEmail(), newInfos.getUsername(), newInfos.getPassword(), newInfos.getRole(), new BigDecimal(companyDtoFromBody.getWallet())));
+        userDao.updateInfoGame(companyDao.findById(id).getId(), new UserDto(newInfos.getId(), newInfos.getEmail(), newInfos.getUsername(), newInfos.getRole(), new BigDecimal(companyDtoFromBody.getWallet())));
 
         CompanyDto newCompanyDto = getCompanyById2(id);
-
 
         return ResponseEntity.ok(newCompanyDto);
     }
@@ -239,27 +240,6 @@ public class CompanyController {
         Company companyFromBody = companyDao.findById(id);
         User userForUpdateWallet = userDao.findById(companyDtoFromBody.getUserId());
 
-        userForUpdateWallet.setWallet(new BigDecimal(companyDtoFromBody.getWallet()));
-
-        for (int j = 0; j < 2; j++) {
-            Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(),0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
-            companyDtoFromBody.getStatistic().add(statistic);
-            System.out.println(companyDtoFromBody.getStatistic());
-            cycleService.runCycle(companyDtoFromBody);
-
-            Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
-            companyDao.update(id, companyForUpdate);
-            userDao.update(companyDtoFromBody.getUserId(), userForUpdateWallet);
-            cycleDao.update(companyDtoFromBody.getCycle().getId(), CycleDto.dtoToEntity(companyDtoFromBody.getCycle()));
-            for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
-                employeeDao.update(companyDtoFromBody.getEmployees().get(i).getId(), EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));
-            }
-            for (int i = 0; i < companyDtoFromBody.getStockFinalMaterials().size(); i++) {
-                stockFinalMaterialDao.update(companyDtoFromBody.getStockFinalMaterials().get(i).getId(), StockFinalMaterialDto.dtoToEntity(companyDtoFromBody.getStockFinalMaterials().get(i)));
-            }
-            stockMaterialDao.update(companyDtoFromBody.getStockMaterial().getId(), StockMaterialDto.dtoToEntity(companyDtoFromBody.getStockMaterial()));
-            statisticDao.save(companyDtoFromBody.getStatistic().getLast());
-        }
 
         Statistic statistic = new Statistic(0L, 1, companyDtoFromBody.getCycle().getStep(),0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , new BigDecimal(0), new BigDecimal(0), 0, id);
         companyDtoFromBody.getStatistic().add(statistic);
@@ -269,7 +249,8 @@ public class CompanyController {
 
         Company companyForUpdate = CompanyDto.companyFromDto(companyFromBody, companyDtoFromBody);
         companyDao.update(id, companyForUpdate);
-        userDao.update(companyDtoFromBody.getUserId(), userForUpdateWallet);
+        User newInfos = userDao.findById(companyDao.findById(id).getId());
+        userDao.updateInfoGame(companyDao.findById(id).getId(), new UserDto(newInfos.getId(), newInfos.getEmail(), newInfos.getUsername(), newInfos.getRole(), new BigDecimal(companyDtoFromBody.getWallet())));
         cycleDao.update(companyDtoFromBody.getCycle().getId(), CycleDto.dtoToEntity(companyDtoFromBody.getCycle()));
         for (int i = 0; i < companyDtoFromBody.getEmployees().size(); i++) {
             employeeDao.update(companyDtoFromBody.getEmployees().get(i).getId(), EmployeeDto.convertInEntity(companyDtoFromBody.getEmployees().get(i)));

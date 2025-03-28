@@ -84,6 +84,14 @@ public class CompanyDao {
                 .orElseThrow(() -> new AccessDeniedException("Vous n'avez pas accès à cette entreprise"));
     }
 
+    public Company findLastCompanyByUserId(Long userId){
+        String sql = "SELECT * FROM Company WHERE id_user = ? order by id desc limit 1;";
+        return jdbcTemplate.query(sql, companyRowMapper, userId)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new AccessDeniedException("Vous n'avez pas accès à cette entreprise"));
+    }
+
     //GET par nom
     public Optional<Company> findByName(String name) {
         String sql = "SELECT * FROM Company WHERE name = ?";
