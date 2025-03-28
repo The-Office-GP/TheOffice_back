@@ -39,7 +39,7 @@ public class CycleService {
     public void runCycle(CompanyDto company){
         int dayForCycle = 0;
         company.getCycle().setStep(company.getCycle().getStep() + 1);
-        long stockPopularity = company.getPopularity();
+        long stockPopularity = Math.round((double)company.getPopularity()/10);
         List<EmployeeDto> productionEmployee = jobFilter(company.getEmployees(), Job.PRODUCTION);
         List<EmployeeDto> sellEmployee = jobFilter(company.getEmployees(), Job.VENTE);
         List<EmployeeDto> marketingEmployee = jobFilter(company.getEmployees(), Job.MARKETING);
@@ -55,12 +55,15 @@ public class CycleService {
 
                 }
             }
-            for (int i = 0; i < sellEmployee.size(); i++) {
-                employeesSell(company.getCycle(), sellEmployee.get(i), company.getStockFinalMaterials(), company, company.getStatistic().getLast(), stockPopularity);
 
-            }
-            for (int i = 0; i < marketingEmployee.size(); i++) {
-                employeeMakeMarketing(marketingEmployee.get(i), company);
+            if(dayForCycle > 6){
+                for (int i = 0; i < sellEmployee.size(); i++) {
+                    employeesSell(company.getCycle(), sellEmployee.get(i), company.getStockFinalMaterials(), company, company.getStatistic().getLast(), stockPopularity);
+
+                }
+                for (int i = 0; i < marketingEmployee.size(); i++) {
+                    employeeMakeMarketing(marketingEmployee.get(i), company);
+                }
             }
 
             System.out.println("Envide de caner3");
@@ -95,16 +98,19 @@ public class CycleService {
 
     // Product part
     public void employeeProduct(EmployeeDto employee, CycleDto cycle, MachineInCompanyDto machineInCompanyDto, List<StockFinalMaterialDto> stockToProduct, StockMaterialDto stockMaterial, Statistic statistic){
-        double coeffProductionSpeed = (double)cycle.getProductionSpeed() / 100;
-        double coeffPriorityProduction = (double)cycle.getPriorityProduction() / 100;
-        int productionCapacity = capacityEmployee(employee);
+        double coeffProductionSpeed = (150.0 - (double)cycle.getProductionSpeed()) / 100.0;
+        double coeffPriorityProduction = (double)cycle.getPriorityProduction() / 100.0;
+        long productionCapacity = capacityEmployee(employee);
+
+        System.out.println((150.0 - (double)cycle.getProductionSpeed()));
 
         double machineContribution = fetchTheMachineContribution(machineInCompanyDto);
 
-        int employeeCapacity = (int)((double)(productionCapacity * machineContribution * coeffProductionSpeed + +0.5) * coeffPriorityProduction);
-
+        long employeeCapacity = Math.round(((double)productionCapacity * machineContribution * coeffProductionSpeed + 0.5) * coeffPriorityProduction);
         for (int i = 0; i < stockToProduct.size(); i++) {
-            int quantityToProduct = (int)((double)stockToProduct.get(i).getProportionProduct() * (double)employeeCapacity / 100)+1;
+            System.out.println((double)employeeCapacity / 100);
+            System.out.println((int)((double)stockToProduct.get(i).getProportionProduct() * (double)employeeCapacity / 100));
+            long quantityToProduct = Math.round((double)stockToProduct.get(i).getProportionProduct() * (double)employeeCapacity / 100);
             for (int j = 0; j < quantityToProduct; j++) {
                 defineQualityOfProduction(employeeCapacity, stockToProduct.get(i), cycle.getProductionSpeed(), stockMaterial, statistic);
             }
@@ -137,19 +143,97 @@ public class CycleService {
         return apportMachine / 100.0;
     }
 
-    public void defineQualityOfProduction(int productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, StockMaterialDto stockMaterial, Statistic statistic) {
-        double choice = Math.floor(Math.random() * 100);
-
+    public void defineQualityOfProduction(long productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, StockMaterialDto stockMaterial, Statistic statistic) {
         if (stockMaterial.getQuantityHigh() > 0) {
-            processProduction(choice, productivityEmployee, stockProduct, productionSpeed, statistic, 5, stockMaterial, "High");
+            processProduction(productivityEmployee, stockProduct, productionSpeed, statistic, 15, 0, stockMaterial, "High");
         } else if (stockMaterial.getQuantityMid() > 0) {
-            processProduction(choice, productivityEmployee, stockProduct, productionSpeed, statistic, 3, stockMaterial, "Mid");
+            processProduction(productivityEmployee, stockProduct, productionSpeed, statistic, -5, 10, stockMaterial, "Mid");
         } else if (stockMaterial.getQuantityLow() > 0) {
-            processProduction(choice, productivityEmployee, stockProduct, productionSpeed, statistic, 0, stockMaterial, "Low");
+            processProduction(productivityEmployee, stockProduct, productionSpeed, statistic, -8, -7, stockMaterial, "Low");
         }
     }
 
-    private void processProduction(double choice, int productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, Statistic statistic, int bonusMaterial, StockMaterialDto stockMaterial, String materialQuality) {
+    private void processProduction(long productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, Statistic statistic, int bonusMaterialForLow, int bonusMaterialForHigh, StockMaterialDto stockMaterial, String materialQuality) {
+        switch ((int)productivityEmployee){
+            case 1:
+                choseTheQuality(6, 4, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 2:
+                choseTheQuality(12, 5, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 3:
+                choseTheQuality(18, 10, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 4:
+                choseTheQuality(24, 15, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 5:
+                choseTheQuality(30, 20, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 6:
+                choseTheQuality(36, 30, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 7:
+                choseTheQuality(42, 25, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 8:
+                choseTheQuality(48, 30, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 9:
+                choseTheQuality(54, 25, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 10:
+                choseTheQuality(60, 25, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 11:
+                choseTheQuality(66, 15, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 12:
+                choseTheQuality(72, 15, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 13:
+                choseTheQuality(78, 15, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 14:
+                choseTheQuality(84, 10, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            case 15:
+                choseTheQuality(90, 10, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+            default:
+                choseTheQuality(90, 10, stockProduct, productionSpeed, statistic, bonusMaterialForLow, bonusMaterialForHigh, stockMaterial, materialQuality);
+                break;
+        }
+    }
+
+    private void choseTheQuality(int lowTreshold, int highTreshold, StockFinalMaterialDto stockProduct, int productionSpeed, Statistic statistic, int bonusMaterialForLow, int bonusMaterialForHigh, StockMaterialDto stockMaterial, String materialQuality){
+        double choice = Math.floor(Math.random() * 100);
+        lowTreshold += lowTreshold + bonusMaterialForLow;
+        highTreshold += lowTreshold + bonusMaterialForHigh;
+
+        if(productionSpeed<= 50){
+            lowTreshold += Math.round((50 - (double)productionSpeed) / 5.0);
+        } else {
+            lowTreshold -= Math.round(((double)productionSpeed - 50) / 10.0);
+            highTreshold -= Math.round(((double)productionSpeed - 50) / 10.0);
+        }
+
+        if (choice < lowTreshold) {
+            stockProduct.setQuantityHigh(stockProduct.getQuantityHigh() + 1);
+            updateStatisticsForProduct(stockProduct.getName(), statistic, "High");
+        } else if (choice <= lowTreshold + highTreshold) {
+            stockProduct.setQuantityMid(stockProduct.getQuantityMid() + 1);
+            updateStatisticsForProduct(stockProduct.getName(), statistic, "Mid");
+        } else {
+            stockProduct.setQuantityLow(stockProduct.getQuantityLow() + 1);
+            updateStatisticsForProduct(stockProduct.getName(), statistic, "Low");
+        }
+
+        updateStockAndProduction(stockMaterial, materialQuality, stockProduct);
+    }
+
+
+    /*private void processProduction(double choice, int productivityEmployee, StockFinalMaterialDto stockProduct, int productionSpeed, Statistic statistic, int bonusMaterial, StockMaterialDto stockMaterial, String materialQuality) {
         int tresholdProductivity = (int) Math.floor((productivityEmployee + bonusMaterial) * 100.0 / 30);
         int ecart = (int) (-Math.pow((double) (productionSpeed - 50) / 10, 2) + 50);
 
@@ -168,7 +252,7 @@ public class CycleService {
         }
 
         updateStockAndProduction(stockMaterial, materialQuality, stockProduct);
-    }
+    }*/
 
     private void updateStatisticsForProduct(String productName, Statistic statistic, String quality) {
         if ("Product1".equals(productName)) {
@@ -224,7 +308,7 @@ public class CycleService {
 
         //Sell part
     public void employeesSell(CycleDto cycle, EmployeeDto employee, List<StockFinalMaterialDto> stockProduct, CompanyDto company, Statistic statistic, long popularityStack){
-        int sellCapacity = capacityEmployee(employee);
+        long sellCapacity = capacityEmployee(employee);
 
         for (int i = 0; i < sellCapacity; i++) {
             chooseTheProductForSell(employee, stockProduct);
@@ -257,8 +341,8 @@ public class CycleService {
         return Double.compare(p1.getQuantityHigh(), p2.getQuantityHigh());
     }
 
-    public void successSell(List<StockFinalMaterialDto> stockProduct, int capacityToSell, CompanyDto company, Statistic statistic, long popularityStack) {
-        int chanceToSell = (int)((double)capacityToSell * 100 / 15);
+    public void successSell(List<StockFinalMaterialDto> stockProduct, long capacityToSell, CompanyDto company, Statistic statistic, long popularityStack) {
+        long chanceToSell = Math.round((double)capacityToSell * 100 / 30);
 
         if (popularityStack > 0){
             chanceToSell = 100;
@@ -270,7 +354,7 @@ public class CycleService {
             int i = 0;
 
             while (i < capacityToSell / 4) {
-                int successSell = (int) Math.floor(Math.random() * 100);
+                long successSell =  Math.round(Math.floor(Math.random() * 100));
                 if (successSell <= chanceToSell && index < stockProduct.size()) {
                     StockFinalMaterialDto product = stockProduct.get(index);
                     if (sellProduct(product, company, statistic)) {
@@ -288,8 +372,8 @@ public class CycleService {
         }
     }
 
-    public Integer capacityEmployee(EmployeeDto employee) {
-        Integer levelForAction = 0;
+    public Long capacityEmployee(EmployeeDto employee) {
+        Long levelForAction = 0L;
 
         int moodFactor;
         switch (employee.getMood()) {
@@ -314,20 +398,21 @@ public class CycleService {
         }
 
         double healthFactor;
+        double bonus;
         if (employee.getHealth() > 70){
             healthFactor = 1.0;
-            levelForAction = (int) ((employee.getLevel() + moodFactor) * healthFactor + 0.5);
+            bonus = 0.5;
         } else if (employee.getHealth() > 40) {
             healthFactor = 0.5;
-            levelForAction = (int) ((employee.getLevel() + moodFactor) * healthFactor + 0.5);
+            bonus = 0.5;
         } else if (employee.getHealth() > 20) {
             healthFactor = 0.25;
-            levelForAction = (int) ((employee.getLevel() + moodFactor) * healthFactor + 0.5);
+            bonus = 0.5;
         }else {
             healthFactor = 0;
-            levelForAction = (int) ((employee.getLevel() + moodFactor) * healthFactor) ;
+            bonus = 0;
         }
-
+        levelForAction = Math.round((double)(employee.getLevel() + (double)moodFactor) * healthFactor + bonus);
         return levelForAction;
     }
 
@@ -350,18 +435,22 @@ public class CycleService {
             case "High":
                 product.setQuantityHigh(product.getQuantityHigh() - 1);
                 updateStatisticsForSale(product.getName(), statistic, "High");
-                company.setPopularity(company.getPopularity() + 1);
+                double rng = Math.round(Math.random() * 100);
+                company.setPopularity(company.getPopularity() + Math.round(Math.random()));
+                company.setPopularity(company.getPopularity() + 1 );
                 break;
             case "Mid":
                 product.setQuantityMid(product.getQuantityMid() - 1);
                 updateStatisticsForProduct(product.getName(), statistic, "Mid");
+                company.setPopularity(company.getPopularity() - Math.round(Math.random()));
+                company.setPopularity(company.getPopularity() + Math.round(Math.random()));
                 break;
             case "Low":
                 product.setQuantityLow(product.getQuantityLow() - 1);
                 updateStatisticsForProduct(product.getName(), statistic, "Low");
-                int rng = (int)(Math.random() * 100);
-                if(rng < 100){
-                    company.setPopularity(company.getPopularity() - 1);
+                company.setPopularity(company.getPopularity() - Math.round(Math.random()*6.0+1));
+                if(company.getPopularity() < 0){
+                    company.setPopularity(0L);
                 }
                 break;
         }
@@ -408,11 +497,10 @@ public class CycleService {
     }
 
     public void employeeMakeMarketing(EmployeeDto employee, CompanyDto companyDto){
-        int marketingEmployee = capacityEmployee(employee);
+        long marketingEmployee = capacityEmployee(employee);
 
-        companyDto.setPopularity((long)(0.5+((double)companyDto.getPopularity() * marketingEmployee * 100 / 15)/30));
 
-        companyDto.setPopularity(companyDto.getPopularity() * marketingEmployee );
+        companyDto.setPopularity(companyDto.getPopularity() + (companyDto.getCycle().getPriorityMarketing() * marketingEmployee/50) );
     }
 }
 

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Company
     sector       VARCHAR(255)       NOT NULL,
     name          VARCHAR(35)       NOT NULL,
     creation_date DATE,
-    popularity    INT                NOT NULL,
+    popularity    BIGINT                NOT NULL,
     id_local INT NOT NULL,
     id_machine INT,
     id_user       INT,
