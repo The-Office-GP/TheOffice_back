@@ -15,15 +15,14 @@ public class JwtUtil {
 
     // Lecture des valeurs de configuration depuis application.properties
     @Value("${jwt.secret}")
-    private String jwtSecret; // Clé secrète pour la signature des tokens JWT
+    private String jwtSecret;
     @Value("${jwt.expiration}")
-    private int jwtExpirationMs; // Durée d'expiration des tokens JWT en millisecondes
-    private SecretKey key; // La clé secrète pour signer et valider les tokens
+    private int jwtExpirationMs;
+    private SecretKey key;
 
-    // Méthode appelée après la construction de l'objet (via @PostConstruct) pour initialiser la clé secrète
+    // Méthode appelée après la construction de l'objet pour initialiser la clé secrète
     @PostConstruct
     public void init() {
-        // La clé secrète est générée en utilisant un algorithme de hachage avec la clé secrète provenant de la configuration
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -33,14 +32,13 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(email) // Le sujet du token est l'email de l'utilisateur
                 .setIssuedAt(new Date()) // Date de création du token
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)) // Définition de l'expiration à partir de la date actuelle + expiration configurée
-                .signWith(key, SignatureAlgorithm.HS256) // Signature du token avec la clé et l'algorithme HS256
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)) // Définition de l'expiration à partir de la date actuelle
+                .signWith(key, SignatureAlgorithm.HS256) // Signature du token avec la clé
                 .compact(); // Génération du token compacté
     }
 
     // Méthode pour extraire l'email (sujet) à partir du token JWT
     public String getEmailFromToken(String token) {
-        // Décodage du token pour obtenir le sujet (email)
         return Jwts.parserBuilder()
                 .setSigningKey(key).build() // Configuration du parser avec la clé secrète
                 .parseClaimsJws(token) // Parsing du token JWT
